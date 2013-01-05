@@ -17,7 +17,7 @@ public class Join implements Listener {
         String JoinMsg = plugin.getConfig().getString("JoinMsg-On");
         if(JoinMsg.equalsIgnoreCase("true")){
     	Player player = join.getPlayer();
-    	player.sendMessage(ChatColor.YELLOW + "Running" + ChatColor.GREEN + " AntiAd"  + ChatColor.YELLOW + ", Made By 08jne01 and XxCoolGamesxX");
+    	player.sendMessage(ChatColor.YELLOW + "Running" + ChatColor.GREEN + " AntiAd"  + ChatColor.YELLOW + ", Author By 08jne01 and Developers By XxCoolGamesxX and franzmedia.");
         }
     }
 }

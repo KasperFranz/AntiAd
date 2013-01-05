@@ -85,7 +85,7 @@ public class AntiAd extends JavaPlugin {
 				write.newLine();
 				write.flush();
 				write.close();
-				sender.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] URL/IP added to Whitelist!");
+				sender.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] The URL/IP added to Whitelist!");
 				return true;
 				}catch (IOException e){
 					Bukkit.getServer().getLogger().info("File not found IOException!");
