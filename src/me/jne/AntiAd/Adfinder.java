@@ -397,20 +397,22 @@ public class Adfinder implements Listener {
      * Method to load the whitelist in again! (if changed)
      */
     public void loadWhitelist() {
-        BufferedReader read = null;
+       
         try {
-            read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
-        } catch (FileNotFoundException ex) {
-       plugin.getLogger().log(Level.WARNING, "error while loading file "+ex.getMessage());
-        }
+        BufferedReader  read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
+       
         lines = new ArrayList<>();
-        String line;
+        
         try {
+        String line ="";
             while ((line = read.readLine()) != null) {
                 lines.add(line);
             }
         } catch (IOException ex) {
            plugin.getLogger().log(Level.WARNING, "error while loading whittelist "+ex.getMessage());
+        }
+         } catch (FileNotFoundException ex) {
+       plugin.getLogger().log(Level.WARNING, "error while loading file "+ex.getMessage());
         }
     }
 }
