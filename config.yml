@@ -14,10 +14,6 @@ Notification-Message: true
 #Says Server is running AntiAd
 JoinMsg-On: true
 Spam-Detection-On: true
-#Reason for the action defined above when spamming
-Reason-Spam: Spamming!
-#Reason for the action defined above when advertising
-Reason-Ad: Advertising!
 #Says whether it will detect url's or not
 URL-Detection: true
 #Number of characters without a space that become spam
