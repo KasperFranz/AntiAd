@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,76 +34,12 @@ public class Adfinder implements Listener {
         loadWhitelist();
         spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
-        warn  = new HashMap<>();
-        
+        warn = new HashMap<>();
+
         spamPattern = Pattern.compile("((\\S{20,})|([A-Z]{3,}\\s){3,})");
         ipPattern = Pattern.compile("([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])");
         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl))|(\\.us)|(\\.mobi)");
     }
-
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        boolean ipurl = false;
-        boolean spam = false;
-        String message = chat.getMessage();
-
-        Matcher regexMatcher = ipPattern.matcher(message);
-        while (regexMatcher.find()) {
-            if (regexMatcher.group().length() != 0) {
-                String ip = regexMatcher.group().trim();
-
-
-                if (!lines.contains(ip)) {
-
-                    if (ipPattern.matcher(message).find()) {
-                        ipurl = true;
-                        if (!chat.getPlayer().hasPermission("antiad.bypass.ad")) {
-                            sendWarning(chat, 1);
-                        }
-                    }
-                }
-            }
-        }
-        Matcher regexMatcherurl = webpattern.matcher(message);
-        while (regexMatcherurl.find()) {
-            if (regexMatcherurl.group().length() != 0) {
-                String url = regexMatcherurl.group().trim();
-
-                if (!lines.contains(url)) {
-                    if (webpattern.matcher(message).find()) {
-                        if (urlDetection && ipurl != true && !chat.getPlayer().hasPermission("antiad.bypass.ad")) {
-
-
-                            sendWarning(chat, 1);
-
-                            for (Player players : Bukkit.getServer().getOnlinePlayers()) {
-                                if (players.hasPermission("antiad.see")) {
-                                    players.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + chat.getPlayer().getDisplayName() + ChatColor.DARK_GREEN + " has advertised" + " " + message);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!(spam == true || ipurl == true)){
-        
-            if (spamDetection) {
-                String spamnum = plugin.getConfig().getString("Spam-Number-Letters");
-                String spamletterword = plugin.getConfig().getString("Spam-Number-Letters-Word");
-                String spamnumberword = plugin.getConfig().getString("Spam-Number-Words");
-                //Pattern spamPattern = Pattern.compile("(\\S{" + Pattern.quote(spamnum) + ",}) || (([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
-                final Pattern spamPatterns = Pattern.compile("((\\S{" + Pattern.quote(spamnum) + ",})|([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
-                if (spamPattern.matcher(message).find() && !ipPattern.matcher(message).find() && !webpattern.matcher(message).find()) {
-                    if (!chat.getPlayer().hasPermission("antiad.bypass.spam")) {
-                        sendWarning(chat, 2);
-                    }
-                }
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onCommandSent(PlayerCommandPreprocessEvent chat) {
 //        String[] arr2 = chat.getMessage().split("\\s+");
@@ -250,13 +185,81 @@ public class Adfinder implements Listener {
 //        }
     }
 
-    private void checkForSpam(String message) {
-    }
+    /**
+     * Command for checking if it is spam or advertising.
+     *
+     * @param player the player there issued this.
+     * @param message the message the user sent!
+     * @return true if it is spam/advertising and else false.
+     */
+    public boolean check(Player player, String message) {
+        boolean rtnbool = false;
 
-    private void checkforIP(String message) {
-    }
+        boolean ipurl = false;
+        boolean spam = false;
 
-    private void checkforWeb(String message) {
+
+        Matcher regexMatcher = ipPattern.matcher(message);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group().length() != 0) {
+                String ip = regexMatcher.group().trim();
+
+
+                if (!lines.contains(ip)) {
+
+                    if (ipPattern.matcher(message).find()) {
+                        ipurl = true;
+                        if (!player.hasPermission("antiad.bypass.ad")) {
+                            sendWarning(player, message, 1);
+                            rtnbool = true;
+                        }
+                    }
+                }
+            }
+        }
+        Matcher regexMatcherurl = webpattern.matcher(message);
+        if (!ipurl) {
+            while (regexMatcherurl.find()) {
+                if (regexMatcherurl.group().length() != 0) {
+                    String url = regexMatcherurl.group().trim();
+
+                    if (!lines.contains(url)) {
+                        if (webpattern.matcher(message).find()) {
+                            if (urlDetection && !player.hasPermission("antiad.bypass.ad")) {
+
+                                rtnbool = true;
+                                sendWarning(player, message, 1);
+
+                                for (Player players : Bukkit.getServer().getOnlinePlayers()) {
+                                    if (players.hasPermission("antiad.see")) {
+                                        players.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has advertised" + " " + message);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!(spam == true || ipurl == true)) {
+
+            if (spamDetection) {
+                String spamnum = plugin.getConfig().getString("Spam-Number-Letters");
+                String spamletterword = plugin.getConfig().getString("Spam-Number-Letters-Word");
+                String spamnumberword = plugin.getConfig().getString("Spam-Number-Words");
+                //Pattern spamPattern = Pattern.compile("(\\S{" + Pattern.quote(spamnum) + ",}) || (([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
+                final Pattern spamPatterns = Pattern.compile("((\\S{" + Pattern.quote(spamnum) + ",})|([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
+                if (spamPattern.matcher(message).find() && !ipPattern.matcher(message).find() && !webpattern.matcher(message).find()) {
+                    if (!player.hasPermission("antiad.bypass.spam")) {
+                        sendWarning(player, message, 2);
+                        rtnbool = true;
+                    }
+                }
+            }
+        }
+        return rtnbool;
+
     }
 
     public void log(String message) {
@@ -273,16 +276,13 @@ public class Adfinder implements Listener {
 
     /**
      *
-     * @param chat the chat object from the playerchat
+     * @param message the message the player has send!
+     * @param player the player there sent the message!
      * @param type 1 for AD 2 for spam. (gets logged)
      */
-    private void sendWarning(AsyncPlayerChatEvent chat, int type) {
+    private void sendWarning(Player player, String message, int type) {
 
-
-        Player player = chat.getPlayer();
-
-        chat.setCancelled(true);
-        log(DateTime.now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + chat.getMessage() + ", in chat.");
+        log(DateTime.now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in chat.");
         Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in chat.");
         if (!warn.containsKey(player)) {
             warn.put(player, 0);
@@ -398,22 +398,22 @@ public class Adfinder implements Listener {
      * Method to load the whitelist in again! (if changed)
      */
     public void loadWhitelist() {
-       
+
         try {
-        BufferedReader  read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
-       
-        lines = new ArrayList<>();
-        
-        try {
-        String line ="";
-            while ((line = read.readLine()) != null) {
-                lines.add(line);
+            BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
+
+            lines = new ArrayList<>();
+
+            try {
+                String line = "";
+                while ((line = read.readLine()) != null) {
+                    lines.add(line);
+                }
+            } catch (IOException ex) {
+                plugin.getLogger().log(Level.WARNING, "error while loading whittelist " + ex.getMessage());
             }
-        } catch (IOException ex) {
-           plugin.getLogger().log(Level.WARNING, "error while loading whittelist "+ex.getMessage());
-        }
-         } catch (FileNotFoundException ex) {
-       plugin.getLogger().log(Level.WARNING, "error while loading file "+ex.getMessage());
+        } catch (FileNotFoundException ex) {
+            plugin.getLogger().log(Level.WARNING, "error while loading file " + ex.getMessage());
         }
     }
 }

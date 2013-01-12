@@ -15,6 +15,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiAd extends JavaPlugin {
 
+    private Adfinder adfinder;
+
     @Override
     public void onDisable() {
         getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Disabled");
@@ -22,17 +24,19 @@ public class AntiAd extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        adfinder = new Adfinder(this);
         getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Enabled");
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new Adfinder(this), this);
-        pm.registerEvents(new Join(this), this);
+        
+        //Setting op the plugin listener to listen on this :) 
+        this.getServer().getPluginManager()
+                .registerEvents(new ADListener(this), this);
         final FileConfiguration config = getConfig();
         config.addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
         config.addDefault("Stealth-Mode", "true");
         config.options().copyDefaults(true);
         saveConfig();
-        
+
         File whitelistFile = new File("plugins/AntiAd/Whitelist.txt");
         if (!whitelistFile.exists()) {
             try {
@@ -51,23 +55,22 @@ public class AntiAd extends JavaPlugin {
             }
         }
 
-        
-      
-            
+
+
+
         try {
             MetricsLite metrics = new MetricsLite(this);
-             metrics.start();
+            metrics.start();
         } catch (IOException ex) {
             getLogger().log(Level.INFO, "Anti Ad error while Setting up metrics!");
         }
-       
+
 
 
     }
 
-    
     @Override
-        public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
         boolean rtnbool = false;
 
@@ -105,5 +108,9 @@ public class AntiAd extends JavaPlugin {
 
         return rtnbool;
 
+    }
+
+    public Adfinder getAdfinder() {
+        return adfinder;
     }
 }
