@@ -85,6 +85,7 @@ public class AntiAd extends JavaPlugin {
                 if (args.length < 2) {
                     sender.sendMessage(ChatColor.RED + "You must specify an IP/URL!");
                     rtnbool = true;
+                    adfinder.loadWhitelist();
                 } else {
                     String ip = args[1];
                     try {
