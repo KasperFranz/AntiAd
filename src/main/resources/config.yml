@@ -1,0 +1,24 @@
+
+#Command sent to console when someone advertises
+Command-Ad: tempban <player> <reasonad> <time>
+#Command sent to console when someone spams
+Command-Spam: kick <player> <reasonspam>
+#The Amount of time they are banned for
+Time: 5
+#The message players are given if not banned.
+Spam_Message: DO NOT SPAM!
+#The message players are given if not banned.
+Ad_Message: DO NOT ADVERTISE!
+#Broadcasts a notification that someone has been punished for advertising
+Notification-Message: true
+#Says Server is running AntiAd
+JoinMsg-On: true
+Spam-Detection-On: true
+#Says whether it will detect url's or not
+URL-Detection: true
+#Number of characters without a space that become spam
+Spam-Number-Letters: 20
+#Number of Capital Letters that become spam per word Eg More than 3 Letters Per Word Become Spam
+Spam-Number-Letters-Word: 3
+#Number of words that contain the number of capital letters to become spam - Eg More than 3 Words Trigger
+Spam-Number-Words: 3

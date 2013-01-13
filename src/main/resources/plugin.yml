@@ -1,0 +1,38 @@
+name: AntiAd
+main: me.jne.AntiAd.AntiAd
+version: 1.8
+description: >
+             Prevents Advertising of ip's and web-url's and reduces spamming.
+commands:
+   antiad:
+         aliases: 
+         description: Commands for AntiAd.
+         usage: |
+             /<command> reload - reload the configuration from disk. 
+             /<command> add <URL/IP> - Adds a URL/IP to the whitelist.
+         permission: antiad.reload
+permissions:
+        antiad.*:
+                 description: Gives all AntiAd permissions
+                 children:
+                     antiad.bypass.spam: true
+                     antiad.bypass.ad: true
+                     antiad.see: true
+                     antiad.reload: true
+                     antiad.whitelist: true
+        antiad.bypass.spam:
+                 description: Allows a player to bypass Spam restriction.
+                 default: op
+        antiad.bypass.ad:
+                 description: Allows a player to bypass Advertising restriction.
+                 default: op
+        antiad.see:
+                 description: Allows a player to see other players advertising.
+                 default: op
+        antiad.reload:
+                 description: Allows a player to use the /antiad reload command to reload the antiad config. 
+                 default: op
+        antiad.whitelist:
+                 description: Allows a player to use the /antiad add command.
+                 default: op
+                      
