@@ -23,7 +23,7 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
 
-        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage()));
+        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(),1));
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -38,7 +38,7 @@ public class ADListener implements Listener {
 
         for (int i = 0; i < sign.getLines().length; i++) {
 
-            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i))) {
+            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i),3)) {
                 i = sign.getLines().length;
                 sign.setCancelled(true);
                 sign.getBlock().breakNaturally();

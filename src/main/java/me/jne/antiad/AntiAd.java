@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiAd extends JavaPlugin {
@@ -25,19 +24,16 @@ public class AntiAd extends JavaPlugin {
     @Override
     public void onEnable() {
         adfinder = new Adfinder(this);
-        getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Enabled");
-        PluginManager pm = getServer().getPluginManager();
-        
+
+
         //Setting op the plugin listener to listen on this :) 
-        this.getServer().getPluginManager()
-                .registerEvents(new ADListener(this), this);
+        getServer().getPluginManager().registerEvents(new ADListener(this), this);
         final FileConfiguration config = getConfig();
         config.addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
         config.addDefault("Stealth-Mode", "true");
         config.options().copyDefaults(true);
         saveConfig();
-
-        File whitelistFile = new File("plugins/AntiAd/Whitelist.txt");
+        File whitelistFile = new File(getDataFolder(), "Whitelist.txt");
         if (!whitelistFile.exists()) {
             try {
                 whitelistFile.createNewFile();
@@ -46,12 +42,12 @@ public class AntiAd extends JavaPlugin {
             }
         }
 
-        File logFile = new File("plugin/AntiAd/Log.txt");
+        File logFile = new File(getDataFolder(), "Log.txt");
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
-            } catch (IOException e1) {
-                getLogger().log(Level.WARNING, "Anti Ad error while making new whitelist file!");
+            } catch (IOException ex) {
+                getLogger().log(Level.WARNING, "Anti Ad error while making new Log file file!");
             }
         }
 
@@ -65,7 +61,7 @@ public class AntiAd extends JavaPlugin {
             getLogger().log(Level.INFO, "Anti Ad error while Setting up metrics!");
         }
 
-
+        getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Enabled");
 
     }
 
