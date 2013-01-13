@@ -1,11 +1,13 @@
 package me.jne.AntiAd;
 
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
@@ -23,7 +25,7 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
 
-        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(),1));
+        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1));
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -38,11 +40,22 @@ public class ADListener implements Listener {
 
         for (int i = 0; i < sign.getLines().length; i++) {
 
-            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i),3)) {
+            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i), 3)) {
                 i = sign.getLines().length;
                 sign.setCancelled(true);
                 sign.getBlock().breakNaturally();
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onCommandSent(PlayerCommandPreprocessEvent chat) {
+
+
+        String CL = chat.getMessage().split("\\s+")[0];
+        List<String> Commands = plugin.getConfig().getStringList("Detected-Commands");
+        if (Commands.contains(CL)) {
+            chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 2));
         }
     }
 }
