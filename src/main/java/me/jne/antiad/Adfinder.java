@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class Adfinder implements Listener {
@@ -40,7 +39,7 @@ public class Adfinder implements Listener {
         ipPattern = Pattern.compile("([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])");
         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl))|(\\.us)|(\\.mobi)|(\\.dk)");
     }
-      
+
     @EventHandler(priority = EventPriority.LOW)
     public void onCommandSent(PlayerCommandPreprocessEvent chat) {
 //        String[] arr2 = chat.getMessage().split("\\s+");
@@ -191,9 +190,10 @@ public class Adfinder implements Listener {
      *
      * @param player the player there issued this.
      * @param message the message the user sent!
+     * @param type The type of where it is written (1 chat, 2 msg, 3 sign!
      * @return true if it is spam/advertising and else false.
      */
-    public boolean check(Player player, String message) {
+    public boolean check(Player player, String message, int type) {
         boolean rtnbool = false;
 
         boolean ipurl = false;
@@ -211,7 +211,7 @@ public class Adfinder implements Listener {
                     if (ipPattern.matcher(message).find()) {
                         ipurl = true;
                         if (!player.hasPermission("antiad.bypass.ad")) {
-                            sendWarning(player, message, 1);
+                            sendWarning(player, message, 1, type);
                             rtnbool = true;
                         }
                     }
@@ -229,7 +229,7 @@ public class Adfinder implements Listener {
                             if (urlDetection && !player.hasPermission("antiad.bypass.ad")) {
 
                                 rtnbool = true;
-                                sendWarning(player, message, 1);
+                                sendWarning(player, message, 1, type);
 
                                 for (Player players : Bukkit.getServer().getOnlinePlayers()) {
                                     if (players.hasPermission("antiad.see")) {
@@ -253,7 +253,7 @@ public class Adfinder implements Listener {
                 final Pattern spamPatterns = Pattern.compile("((\\S{" + Pattern.quote(spamnum) + ",})|([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
                 if (spamPattern.matcher(message).find() && !ipPattern.matcher(message).find() && !webpattern.matcher(message).find()) {
                     if (!player.hasPermission("antiad.bypass.spam")) {
-                        sendWarning(player, message, 2);
+                        sendWarning(player, message, 2, type);
                         rtnbool = true;
                     }
                 }
@@ -281,10 +281,10 @@ public class Adfinder implements Listener {
      * @param player the player there sent the message!
      * @param type 1 for AD 2 for spam. (gets logged)
      */
-    private void sendWarning(Player player, String message, int type) {
+    private void sendWarning(Player player, String message, int type, int where) {
 
-        log(DateTime.now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in chat.");
-        Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in chat.");
+        log(DateTime.now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+        Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in " + whereToTXT(where) + ".");
         if (!warn.containsKey(player)) {
             warn.put(player, 0);
         }
@@ -320,10 +320,10 @@ public class Adfinder implements Listener {
         }
         command = command.replaceAll("<player>", player.getDisplayName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
-       if(!player.getServer().dispatchCommand(player.getServer().getConsoleSender(), command)){
+        if (!player.getServer().dispatchCommand(player.getServer().getConsoleSender(), command)) {
             plugin.getServer().broadcastMessage("error while trying to execute cmd!");
-       }
-        
+        }
+
         if (plugin.getConfig().getBoolean("Notification-Message")) {
             plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has been " + getActionType(command) + " for " + typeToX(type, 2));
             plugin.getServer().broadcastMessage(command);
@@ -419,5 +419,27 @@ public class Adfinder implements Listener {
         } catch (FileNotFoundException ex) {
             plugin.getLogger().log(Level.WARNING, "error while loading file " + ex.getMessage());
         }
+    }
+
+    /**
+     *
+     * @param where The type of where it is written (1 chat, 2 msg, 3 sign!
+     * @return returns where it was executed.
+     */
+    private String whereToTXT(int where) {
+        String wheres = "Unknown";
+        switch (where) {
+            case 1:
+                wheres = "chat";
+                break;
+            case 2:
+                wheres = "command";
+                break;
+            case 3:
+                wheres = "sign";
+                break;
+        }
+        return wheres;
+
     }
 }
