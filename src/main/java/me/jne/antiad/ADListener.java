@@ -1,10 +1,10 @@
 package me.jne.AntiAd;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -20,15 +20,29 @@ public class ADListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-            chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(),chat.getMessage()));
+
+        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage()));
     }
-    
-    
-    public void onPlayerJoin(PlayerJoinEvent join){
-        if(plugin.getConfig().getBoolean("JoinMsg-On")){
-        	join.getPlayer().sendMessage(ChatColor.YELLOW + "Running" + ChatColor.GREEN + " AntiAd"  + ChatColor.YELLOW + ", Author By 08jne01 and Developers By XxCoolGamesxX and FranzMedia.");
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerJoin(PlayerJoinEvent join) {
+        if (plugin.getConfig().getBoolean("JoinMsg-On")) {
+            join.getPlayer().sendMessage(ChatColor.YELLOW + "Running" + ChatColor.GREEN + " AntiAd" + ChatColor.YELLOW + ", Author By 08jne01 and Developers By XxCoolGamesxX and FranzMedia.");
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onSignCreation(SignChangeEvent sign) {
+
+        for (int i = 0; i < sign.getLines().length; i++) {
+
+            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i))) {
+                i = sign.getLines().length;
+                sign.setCancelled(true);
+                sign.getBlock().breakNaturally();
+            }
         }
     }
 }
