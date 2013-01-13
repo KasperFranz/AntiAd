@@ -319,8 +319,8 @@ public class Adfinder implements Listener {
         }
         command = command.replaceAll("<player>", player.getDisplayName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
-        
-        plugin.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+       
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
         if (plugin.getConfig().getBoolean("Notification-Message")) {
             plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has been " + getActionType(command) + " for " + typeToX(type, 2));
             plugin.getServer().broadcastMessage(command);
