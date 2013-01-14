@@ -317,11 +317,12 @@ public class Adfinder {
         return wheres;
 
     }
-        public static String now(String dateFormat) {
-          Calendar cal = Calendar.getInstance();
-          SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-          return sdf.format(cal.getTime());
-         
 
-        }
+    public static String now(String dateFormat) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        return sdf.format(cal.getTime());
+
+
+    }
 }

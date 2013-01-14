@@ -1,14 +1,10 @@
 package me.jne.AntiAd;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import me.jne.antiad.ADCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +24,11 @@ public class AntiAd extends JavaPlugin {
 
         //Setting op the plugin listener to listen on this :) 
         getServer().getPluginManager().registerEvents(new ADListener(this), this);
+
+        //Setting up the command Executer (antiAD)
+        getCommand("antiad").setExecutor(new ADCommand(this));
+
+
         final FileConfiguration config = getConfig();
         config.addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
         config.addDefault("Stealth-Mode", "true");
@@ -62,48 +63,6 @@ public class AntiAd extends JavaPlugin {
         }
 
         getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Enabled");
-
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
-        boolean rtnbool = false;
-
-        if (commandLabel.equalsIgnoreCase("AntiAd")) {
-            if (args.length == 0) {
-                rtnbool = false;
-            } else if (args[0].equalsIgnoreCase("reload") && (sender.isOp() || sender.hasPermission("antiad.reload"))) {
-                reloadConfig();
-                sender.sendMessage(ChatColor.GREEN + "AntiAd" + ChatColor.YELLOW + " configuration file reloaded!");
-                rtnbool = true;
-            } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
-                if (args.length < 2) {
-                    sender.sendMessage(ChatColor.RED + "You must specify an IP/URL!");
-                    rtnbool = true;
-                    adfinder.loadWhitelist();
-                } else {
-                    String ip = args[1];
-                    try {
-                        BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Whitelist.txt", true));
-                        write.append(ip);
-                        write.newLine();
-                        write.flush();
-                        write.close();
-                        sender.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] The URL/IP added to Whitelist!");
-                        rtnbool = true;
-                    } catch (IOException e) {
-                        getLogger().info("AntiAid Whitelist file not found IOException!" + e.getMessage());
-                        rtnbool = false;
-                    }
-                }
-
-            } else {
-                rtnbool = false;
-            }
-        }
-
-        return rtnbool;
 
     }
 
