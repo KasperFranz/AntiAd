@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -143,7 +145,7 @@ public class Adfinder {
      */
     private void sendWarning(Player player, String message, int type, int where) {
 
-        log(DateTime.now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+        log(now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
         Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in " + whereToTXT(where) + ".");
         if (!warn.containsKey(player)) {
             warn.put(player, 0);
@@ -315,4 +317,11 @@ public class Adfinder {
         return wheres;
 
     }
+        public static String now(String dateFormat) {
+          Calendar cal = Calendar.getInstance();
+          SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+          return sdf.format(cal.getTime());
+         
+
+        }
 }
