@@ -97,6 +97,7 @@ public class Adfinder {
         Matcher regexMatcher = ipPattern.matcher(message);
         while (regexMatcher.find()) {
             if (regexMatcher.group().length() != 0) {
+                
                 if (!lines.contains(regexMatcher.group().trim())) {
                     if (ipPattern.matcher(message).find() && !player.hasPermission("antiad.bypass.ad")) {
                         advertising = true;
@@ -110,6 +111,10 @@ public class Adfinder {
 
             while (regexMatcherurl.find()) {
                 if (regexMatcherurl.group().length() != 0) {
+                    for (int i = 0; i < lines.size(); i++) {
+                        System.out.println(lines.get(i));
+                        
+                    }
                     if (!lines.contains(regexMatcherurl.group().trim())) {
                         if (webpattern.matcher(message).find()) {
                             if (urlDetection && !player.hasPermission("antiad.bypass.ad")) {
