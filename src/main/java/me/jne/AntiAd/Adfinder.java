@@ -35,7 +35,7 @@ public class Adfinder {
 
         spamPattern = Pattern.compile("((\\S{20,})|([A-Z]{3,}\\s){3,})");
         ipPattern = Pattern.compile("([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])");
-        webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl))|(\\.us)|(\\.mobi)|(\\.dk)");
+        webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))");
     }
 
     /**
@@ -112,7 +112,7 @@ public class Adfinder {
             while (regexMatcherurl.find()) {
                 if (regexMatcherurl.group().length() != 0) {
                     for (int i = 0; i < lines.size(); i++) {
-                        System.out.println(lines.get(i));
+                        System.out.println(lines.get(i) +" this is what we found "+ regexMatcherurl.group().trim()+ "EX: "+regexMatcherurl.group());
                         
                     }
                     if (!lines.contains(regexMatcherurl.group().trim())) {
@@ -288,7 +288,7 @@ public class Adfinder {
             lines = new ArrayList<String>();
 
             try {
-                String line = "";
+                String line;
                 while ((line = read.readLine()) != null) {
                     lines.add(line);
 
