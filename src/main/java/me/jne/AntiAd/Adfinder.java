@@ -176,7 +176,7 @@ public class Adfinder {
      * @param player the player the action is going agenst!
      * @param type what type 1 = ad 2 = spam
      */
-    private void takeAction(Player player, int type) {
+     private void takeAction(Player player, int type) {
         String command;
 
         switch (type) {
@@ -191,16 +191,12 @@ public class Adfinder {
 
                 break;
         }
-        command = command.replaceAll("<player>", player.getDisplayName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
-        warn.remove(player);
-        if (!player.getServer().dispatchCommand(player.getServer().getConsoleSender(), command)) {
-            plugin.getServer().broadcastMessage("error while trying to execute cmd!");
-        }
 
-        if (plugin.getConfig().getBoolean("Notification-Message")) {
-            plugin.getServer().broadcastMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has been " + getActionType(command) + " for " + typeToX(type, 2));
-            plugin.getServer().broadcastMessage(command);
-        }
+        String broadcastMessage = ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has been " + getActionType(command) + " for " + typeToX(type, 2);
+        command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
+        warn.remove(player);
+        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage));
+
 
 
     }
