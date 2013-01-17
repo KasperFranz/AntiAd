@@ -13,9 +13,12 @@ Ad_Message: DO NOT ADVERTISE!
 Notification-Message: true
 #Says Server is running AntiAd
 JoinMsg-On: true
+#Check if there are spam
 Spam-Detection-On: true
 #Says whether it will detect url's or not
 URL-Detection: true
+#check if there are any URLS ex. google.com
+AD-Detection: true
 #Number of characters without a space that become spam
 Spam-Number-Letters: 20
 #Number of Capital Letters that become spam per word Eg More than 3 Letters Per Word Become Spam
