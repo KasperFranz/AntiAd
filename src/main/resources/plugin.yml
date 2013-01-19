@@ -1,6 +1,6 @@
 name: AntiAd
 main: me.jne.AntiAd.AntiAd
-version: 1.8
+version: ${project.version}
 description: >
              Prevents Advertising of ip's and web-url's and reduces spamming.
 commands:
