@@ -33,7 +33,6 @@ public class Adfinder {
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
         warn = new HashMap<Player, Integer>();
 
-        spamPattern = Pattern.compile("((\\S{20,})|([A-Z]{3,}\\s){3,})");
         ipPattern = Pattern.compile("([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])");
         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))");
     }
@@ -48,21 +47,19 @@ public class Adfinder {
      */
     public boolean check(Player player, String message, int type) {
         boolean rtnbool = false;
-
-        if (checkForAdvertising(player, message)) {
-            sendWarning(player, message, 1, type);
-            rtnbool = true;
-        } else {
-            //check for spam
-            if (spamDetection) {
-                if (checkForSpam(player, message)) {
-                    sendWarning(player, message, 1, type);
-                    rtnbool = true;
-                }
+        if (plugin.getConfig().getBoolean("Ad-Detection")) {
+            if (checkForAdvertising(player, message)) {
+                sendWarning(player, message, 1, type);
+                rtnbool = true;
             }
         }
-
-
+        //check for spam
+        if (spamDetection && !rtnbool) {
+            if (checkForSpam(player, message)) {
+                sendWarning(player, message, 1, type);
+                rtnbool = true;
+            }
+        }
         return rtnbool;
 
     }
@@ -97,7 +94,7 @@ public class Adfinder {
         Matcher regexMatcher = ipPattern.matcher(message);
         while (regexMatcher.find()) {
             if (regexMatcher.group().length() != 0) {
-                
+
                 if (!lines.contains(regexMatcher.group().trim())) {
                     if (ipPattern.matcher(message).find() && !player.hasPermission("antiad.bypass.ad")) {
                         advertising = true;
@@ -105,15 +102,15 @@ public class Adfinder {
                 }
             }
         }
-
+        // Checks web pattern!
         if (!advertising) {
             Matcher regexMatcherurl = webpattern.matcher(message);
 
             while (regexMatcherurl.find()) {
                 if (regexMatcherurl.group().length() != 0) {
                     for (int i = 0; i < lines.size(); i++) {
-                        System.out.println(lines.get(i) +" this is what we found "+ regexMatcherurl.group().trim()+ "EX: "+regexMatcherurl.group());
-                        
+                        System.out.println(lines.get(i) + " this is what we found " + regexMatcherurl.group().trim() + "EX: " + regexMatcherurl.group());
+
                     }
                     if (!lines.contains(regexMatcherurl.group().trim())) {
                         if (webpattern.matcher(message).find()) {
@@ -176,7 +173,7 @@ public class Adfinder {
      * @param player the player the action is going agenst!
      * @param type what type 1 = ad 2 = spam
      */
-     private void takeAction(Player player, int type) {
+    private void takeAction(Player player, int type) {
         String command;
 
         switch (type) {
