@@ -14,6 +14,6 @@ Redistributions of source code must retain the above copyright notice, this list
 
 Builds
 ======
-we make auto builds every time a commit is made using jenkins.
+We make auto builds every time a commit is made using jenkins.
 
-the builds is located at --> https://buildhive.cloudbees.com/job/XxCoolGamesxX/job/AntiAd/
+The builds is located at --> https://buildhive.cloudbees.com/job/XxCoolGamesxX/job/AntiAd/
