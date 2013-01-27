@@ -208,10 +208,10 @@ public class Adfinder {
 
         switch (type) {
             case 1:
-                command = plugin.getConfig().getString("Command-Ad");
+                command = plugin.getConfig().getString("Command-Ad").replaceAll(">reasonad>", typeToX(1, 3)).replaceAll("<time>", plugin.getConfig().getString("Time"));
                 break;
             case 2:
-                command = plugin.getConfig().getString("Command-Spam");
+                command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));;
                 break;
             default:
                 command = "";
