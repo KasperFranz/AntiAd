@@ -56,7 +56,7 @@ public class Adfinder {
             //check for spam
             if (spamDetection) {
                 if (checkForSpam(player, message)) {
-                    sendWarning(player, message, 1, type);
+                    sendWarning(player, message, 2, type);
                     rtnbool = true;
                 }
             }
@@ -76,16 +76,43 @@ public class Adfinder {
      */
     private boolean checkForSpam(Player player, String message) {
         boolean spam = false;
-        String spamnum = plugin.getConfig().getString("Spam-Number-Letters");
-        String spamletterword = plugin.getConfig().getString("Spam-Number-Letters-Word");
-        String spamnumberword = plugin.getConfig().getString("Spam-Number-Words");
-        //Pattern spamPattern = Pattern.compile("(\\S{" + Pattern.quote(spamnum) + ",}) || (([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
-        final Pattern spamPatterns = Pattern.compile("((\\S{" + Pattern.quote(spamnum) + ",})|([A-Z]{" + Pattern.quote(spamletterword) + ",}\\s){" + Pattern.quote(spamnumberword) + ",})");
-        if (spamPatterns.matcher(message).find()) {
-            if (!player.hasPermission("antiad.bypass.spam")) {
+
+        int number = plugin.getConfig().getInt("Spam-Number-Letters");
+        int procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
+        String[] words = message.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() >= number) {
                 spam = true;
+                i = words.length;
+                player.sendMessage("1" + spam);
+            } else if ( words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i])) {
+                spam = true;
+                i = words.length;
+                player.sendMessage("2" + spam);
+            } else if(words[i].length() >= 4) {
+                int upper = 0;
+                char[] charArray = words[i].toCharArray();
+                for (int j = 0; j < charArray.length; j++) {
+                    String letter = charArray[j]+"";
+                    if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
+                        upper++;
+                        player.sendMessage(letter);
+                    }
+
+
+
+                }
+
+                if (upper * 100 / charArray.length * 100 >= procentCapital*100) {
+                    spam = true;
+                    i = words.length;
+                    player.sendMessage("3" + spam + upper * 100 / charArray.length * 100 + " >=" + procentCapital);
+                }
             }
+
         }
+
+
         return spam;
     }
 
@@ -97,7 +124,7 @@ public class Adfinder {
         Matcher regexMatcher = ipPattern.matcher(message);
         while (regexMatcher.find()) {
             if (regexMatcher.group().length() != 0) {
-                
+
                 if (!lines.contains(regexMatcher.group().trim())) {
                     if (ipPattern.matcher(message).find() && !player.hasPermission("antiad.bypass.ad")) {
                         advertising = true;
@@ -112,8 +139,8 @@ public class Adfinder {
             while (regexMatcherurl.find()) {
                 if (regexMatcherurl.group().length() != 0) {
                     for (int i = 0; i < lines.size(); i++) {
-                        System.out.println(lines.get(i) +" this is what we found "+ regexMatcherurl.group().trim()+ "EX: "+regexMatcherurl.group());
-                        
+                        System.out.println(lines.get(i) + " this is what we found " + regexMatcherurl.group().trim() + "EX: " + regexMatcherurl.group());
+
                     }
                     if (!lines.contains(regexMatcherurl.group().trim())) {
                         if (webpattern.matcher(message).find()) {
@@ -176,7 +203,7 @@ public class Adfinder {
      * @param player the player the action is going agenst!
      * @param type what type 1 = ad 2 = spam
      */
-     private void takeAction(Player player, int type) {
+    private void takeAction(Player player, int type) {
         String command;
 
         switch (type) {
@@ -325,5 +352,17 @@ public class Adfinder {
         return sdf.format(cal.getTime());
 
 
+    }
+
+    private boolean isNumbers(String input) {
+        boolean rtnbool = false;
+        try {
+            Integer.parseInt(input);
+            rtnbool = true;
+        } catch (NumberFormatException ex) {
+            //We catch this but does nothing to it because we dont need to :)
+        }
+
+        return rtnbool;
     }
 }
