@@ -22,6 +22,6 @@ AD-Detection: true
 #Number of characters without a space that become spam
 Spam-Number-Letters: 20
 #Number of Capital Letters that become spam per word Eg More than 3 Letters Per Word Become Spam
-Spam-Number-Letters-Word: 3
+Spam-Procent-Capital-Words: 80
 #Number of words that contain the number of capital letters to become spam - Eg More than 3 Words Trigger
 Spam-Number-Words: 3
