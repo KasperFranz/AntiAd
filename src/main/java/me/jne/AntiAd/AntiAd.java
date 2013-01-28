@@ -31,7 +31,6 @@ public class AntiAd extends JavaPlugin {
 
         final FileConfiguration config = getConfig();
         config.addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
-        config.addDefault("Stealth-Mode", "true");
         config.options().copyDefaults(true);
         saveConfig();
         File whitelistFile = new File(getDataFolder(), "Whitelist.txt");

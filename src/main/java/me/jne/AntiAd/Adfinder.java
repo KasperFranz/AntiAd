@@ -46,7 +46,7 @@ public class Adfinder {
      * @param type The type of where it is written (1 chat, 2 msg, 3 sign!
      * @return true if it is spam/advertising and else false.
      */
-    public boolean check(Player player, String message, int type) {
+    public boolean check(Player player, String message, int type, boolean checkForSpam) {
         boolean rtnbool = false;
 
         if (checkForAdvertising(player, message)) {
@@ -54,7 +54,7 @@ public class Adfinder {
             rtnbool = true;
         } else {
             //check for spam
-            if (spamDetection) {
+            if (spamDetection && checkForSpam) {
                 if (checkForSpam(player, message)) {
                     sendWarning(player, message, 2, type);
                     rtnbool = true;
@@ -139,7 +139,6 @@ public class Adfinder {
             while (regexMatcherurl.find()) {
                 if (regexMatcherurl.group().length() != 0) {
                     for (int i = 0; i < lines.size(); i++) {
-                        System.out.println(lines.get(i) + " this is what we found " + regexMatcherurl.group().trim() + "EX: " + regexMatcherurl.group());
 
                     }
                     if (!lines.contains(regexMatcherurl.group().trim())) {
