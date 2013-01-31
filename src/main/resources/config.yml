@@ -23,3 +23,10 @@ AD-Detection: true
 Spam-Number-Letters: 20
 #Number of Capital Letters that become spam per word Eg More than 3 Letters Per Word Become Spam
 Spam-Procent-Capital-Words: 80
+#What commands the plugin listens to (private, me and so on.)
+Detected-Commands:
+- /msg
+- /me
+- /t
+- /message
+- /tell
