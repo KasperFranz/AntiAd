@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 public class Adfinder {
 
     private AntiAd plugin;
-    private Pattern ipPattern, webpattern, spamPattern;
+    private Pattern ipPattern, webpattern;
     private HashMap<Player, Integer> warn;
     private boolean urlDetection, spamDetection;
     private ArrayList<String> lines;
@@ -33,8 +33,9 @@ public class Adfinder {
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
         warn = new HashMap<Player, Integer>();
 
-        spamPattern = Pattern.compile("((\\S{20,})|([A-Z]{3,}\\s){3,})");
-        ipPattern = Pattern.compile("([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])");
+        
+        // ip pattern http://regexr.com?33l17
+        ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))");
     }
 
