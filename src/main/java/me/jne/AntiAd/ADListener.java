@@ -22,10 +22,12 @@ public class ADListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-
-        chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1,true));
+        if(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1,true)){
+        chat.setCancelled(true);    
+        }
+        
     }
 
     @EventHandler(priority = EventPriority.LOW)
