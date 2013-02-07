@@ -85,11 +85,9 @@ public class Adfinder {
             if (words[i].length() >= number) {
                 spam = true;
                 i = words.length;
-                player.sendMessage("1" + spam);
             } else if ( words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i])) {
                 spam = true;
                 i = words.length;
-                player.sendMessage("2" + spam);
             } else if(words[i].length() >= 4) {
                 int upper = 0;
                 char[] charArray = words[i].toCharArray();
@@ -97,7 +95,6 @@ public class Adfinder {
                     String letter = charArray[j]+"";
                     if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
                         upper++;
-                        player.sendMessage(letter);
                     }
 
 
@@ -107,7 +104,6 @@ public class Adfinder {
                 if (upper * 100 / charArray.length * 100 >= procentCapital*100) {
                     spam = true;
                     i = words.length;
-                    player.sendMessage("3" + spam + upper * 100 / charArray.length * 100 + " >=" + procentCapital);
                 }
             }
 
