@@ -33,7 +33,7 @@ public class Adfinder {
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
         warn = new HashMap<Player, Integer>();
 
-        
+
         // ip pattern http://regexr.com?33l17
         ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))");
@@ -77,38 +77,38 @@ public class Adfinder {
      */
     private boolean checkForSpam(Player player, String message) {
         boolean spam = false;
-
-        int number = plugin.getConfig().getInt("Spam-Number-Letters");
-        int procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
-        String[] words = message.split("\\s+");
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].length() >= number) {
-                spam = true;
-                i = words.length;
-            } else if ( words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i])) {
-                spam = true;
-                i = words.length;
-            } else if(words[i].length() >= 4) {
-                int upper = 0;
-                char[] charArray = words[i].toCharArray();
-                for (int j = 0; j < charArray.length; j++) {
-                    String letter = charArray[j]+"";
-                    if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
-                        upper++;
-                    }
-
-
-
-                }
-
-                if (upper * 100 / charArray.length * 100 >= procentCapital*100) {
+        if (!player.hasPermission("antiad.bypass.spam")) {
+            int number = plugin.getConfig().getInt("Spam-Number-Letters");
+            int procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
+            String[] words = message.split("\\s+");
+            for (int i = 0; i < words.length; i++) {
+                if (words[i].length() >= number) {
                     spam = true;
                     i = words.length;
+                } else if (words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i])) {
+                    spam = true;
+                    i = words.length;
+                } else if (words[i].length() >= 4) {
+                    int upper = 0;
+                    char[] charArray = words[i].toCharArray();
+                    for (int j = 0; j < charArray.length; j++) {
+                        String letter = charArray[j] + "";
+                        if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
+                            upper++;
+                        }
+
+
+
+                    }
+
+                    if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
+                        spam = true;
+                        i = words.length;
+                    }
                 }
+
             }
-
         }
-
 
         return spam;
     }
@@ -116,40 +116,39 @@ public class Adfinder {
     private boolean checkForAdvertising(Player player, String message) {
         boolean advertising = false;
 
+        if (!player.hasPermission("antiad.bypass.ad")) {
+            // CHECK FOR IP PATTERN
+            Matcher regexMatcher = ipPattern.matcher(message);
+            while (regexMatcher.find()) {
+                if (regexMatcher.group().length() != 0) {
 
-        // CHECK FOR IP PATTERN
-        Matcher regexMatcher = ipPattern.matcher(message);
-        while (regexMatcher.find()) {
-            if (regexMatcher.group().length() != 0) {
-
-                if (!lines.contains(regexMatcher.group().trim())) {
-                    if (ipPattern.matcher(message).find() && !player.hasPermission("antiad.bypass.ad")) {
-                        advertising = true;
-                    }
-                }
-            }
-        }
-
-        if (!advertising) {
-            Matcher regexMatcherurl = webpattern.matcher(message);
-
-            while (regexMatcherurl.find()) {
-                if (regexMatcherurl.group().length() != 0) {
-                    for (int i = 0; i < lines.size(); i++) {
-
-                    }
-                    if (!lines.contains(regexMatcherurl.group().trim())) {
-                        if (webpattern.matcher(message).find()) {
-                            if (urlDetection && !player.hasPermission("antiad.bypass.ad")) {
-                                advertising = true;
-                            }
+                    if (!lines.contains(regexMatcher.group().trim())) {
+                        if (ipPattern.matcher(message).find()) {
+                            advertising = true;
                         }
+                    }
+                }
+            }
 
+            if (!advertising) {
+                Matcher regexMatcherurl = webpattern.matcher(message);
+
+                while (regexMatcherurl.find()) {
+                    if (regexMatcherurl.group().length() != 0) {
+                        for (int i = 0; i < lines.size(); i++) {
+                        }
+                        if (!lines.contains(regexMatcherurl.group().trim())) {
+                            if (webpattern.matcher(message).find()) {
+                                if (urlDetection) {
+                                    advertising = true;
+                                }
+                            }
+
+                        }
                     }
                 }
             }
         }
-
         return advertising;
     }
 
@@ -207,7 +206,8 @@ public class Adfinder {
                 command = plugin.getConfig().getString("Command-Ad").replaceAll(">reasonad>", typeToX(1, 3)).replaceAll("<time>", plugin.getConfig().getString("Time"));
                 break;
             case 2:
-                command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));;
+                command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));
+                ;
                 break;
             default:
                 command = "";
