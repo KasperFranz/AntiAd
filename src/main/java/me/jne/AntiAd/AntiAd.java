@@ -14,12 +14,7 @@ public class AntiAd extends JavaPlugin {
 
     private Adfinder adfinder;
 
-    @Override
-    public void onDisable() {
-        getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Disabled");
-    }
-
-    @Override
+   @Override
     public void onEnable() {
         adfinder = new Adfinder(this);
 
@@ -68,6 +63,11 @@ public class AntiAd extends JavaPlugin {
 
         getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Enabled");
 
+    }
+   
+    @Override
+    public void onDisable() {
+        getLogger().info(getDescription().getName() + " " + "Version" + " " + getDescription().getVersion() + " is now Disabled");
     }
 
     public Adfinder getAdfinder() {
