@@ -1,8 +1,8 @@
 name: AntiAd
-main: me.jne.AntiAd.AntiAd
+main: com.github.XxCoolGamesxX.AntiAd
 version: ${project.version}
-dev-url: http://dev.bukkit.org/server-mods/antiad-jne/
-website: http://dev.bukkit.org/server-mods/antiad-jne/
+dev-url: http://dev.bukkit.org/server-mods/antiad/
+website: http://dev.bukkit.org/server-mods/antiad/
 description: Prevents Advertising of ip's and web-url's and reduces spamming.
 commands:
    antiad:
