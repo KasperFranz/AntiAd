@@ -1,4 +1,5 @@
-
+#Standard Languge you wat to use (see http://dev.bukkit.org/server-mods/antiad/ for valid values here)
+Language: en
 #Command sent to console when someone advertises
 Command-Ad: tempban <player> <reasonad> <time>
 #Command sent to console when someone spams

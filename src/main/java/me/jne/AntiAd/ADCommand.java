@@ -33,7 +33,7 @@ public class ADCommand implements CommandExecutor {
             rtnbool = false;
         } else if (args[0].equalsIgnoreCase("reload") && (sender.isOp() || sender.hasPermission("antiad.reload"))) {
             plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN + "AntiAd" + ChatColor.YELLOW + " configuration file reloaded!");
+            sender.sendMessage(plugin.colorfull(plugin.getLanguage().getProperty("onCommandReloadMessage")));
             rtnbool = true;
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
             if (args.length < 2) {
