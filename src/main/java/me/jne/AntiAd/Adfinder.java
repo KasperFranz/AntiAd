@@ -83,12 +83,17 @@ public class Adfinder {
             String[] words = message.split("\\s+");
             for (int i = 0; i < words.length; i++) {
                 if (words[i].length() >= number) {
+                    System.out.println("if");
                     spam = true;
                     i = words.length;
+                    // if the word is 4 or under && it 
                 } else if (words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i])) {
+                    System.out.println("else if 1");
                     spam = true;
                     i = words.length;
+                    //if the words is longer than or 4 long
                 } else if (words[i].length() >= 4) {
+                    
                     int upper = 0;
                     char[] charArray = words[i].toCharArray();
                     for (int j = 0; j < charArray.length; j++) {
@@ -102,6 +107,7 @@ public class Adfinder {
                     }
 
                     if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
+                        System.out.println("else if 2");
                         spam = true;
                         i = words.length;
                     }
@@ -353,12 +359,14 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-            Integer.parseInt(input);
+            double d;
+            d = Double.parseDouble(input.replaceAll("\\,","\\."));
+            
             rtnbool = true;
         } catch (NumberFormatException ex) {
             //We catch this but does nothing to it because we dont need to :)
         }
-
+        
         return rtnbool;
     }
 }
