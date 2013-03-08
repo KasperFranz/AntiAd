@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-
+    private boolean DEBUG = false;
     private Adfinder adfinder;
     private Properties language;
 
@@ -182,5 +182,15 @@ public class AntiAd extends JavaPlugin {
      */
     public String colorfull(String text){
         return text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
+    }
+    
+    /**
+     * SOUT debug if this is debug!
+     * @param text the debug text
+     */
+    public void debug(String text){
+        if(DEBUG){
+        System.out.println(text);
+        }
     }
 }
