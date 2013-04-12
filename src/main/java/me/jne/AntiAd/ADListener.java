@@ -22,12 +22,21 @@ public class ADListener implements Listener {
         this.plugin = plugin;
     }
 
+    /**
+     * If the chat msg is spam we gonna cannel it. Edit: fixed a bug where if
+     * the chat was canneled we worked with it anyway (this is now fixed so we
+     * dont use ressources on it)
+     *
+     * @param chat
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        if(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1,true)){
-        chat.setCancelled(true);    
+        if (!chat.isCancelled()) {
+            if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
+                chat.setCancelled(true);
+            }
         }
-        
+
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -57,7 +66,9 @@ public class ADListener implements Listener {
         String CL = chat.getMessage().split("\\s+")[0];
         List<String> Commands = plugin.getConfig().getStringList("Detected-Commands");
         if (Commands.contains(CL)) {
-            chat.setCancelled(plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 2,true));
+            if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 2, true)) {
+                chat.setCancelled(true);
+            }
         }
     }
 }
