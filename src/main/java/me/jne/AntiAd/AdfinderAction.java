@@ -1,16 +1,14 @@
 package me.jne.AntiAd;
 
-import org.bukkit.ChatColor;
-
 /**
  *
  * @author Franz
  */
 public class AdfinderAction implements Runnable {
 
-    private String command;
-    private AntiAd plugin;
-    private String broadcastmsg;
+    private final String command;
+    private final AntiAd plugin;
+    private final String broadcastmsg;
 
     public AdfinderAction(String command, AntiAd plugin, String broadcastmsg) {
         this.command = command;

@@ -18,7 +18,7 @@ import org.bukkit.command.CommandSender;
  */
 public class ADCommand implements CommandExecutor {
 
-    private AntiAd plugin;
+    private final AntiAd plugin;
 
     public ADCommand(AntiAd plugin) {
         this.plugin = plugin;
