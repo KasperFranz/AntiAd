@@ -7,7 +7,6 @@ package me.jne.AntiAd;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import me.jne.AntiAd.AntiAd;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,21 +26,24 @@ public class ADCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        boolean rtnbool;
-
         if (args.length == 0) {
-            rtnbool = false;
+            return false;
+
         } else if (args[0].equalsIgnoreCase("reload") && (sender.isOp() || sender.hasPermission("antiad.reload"))) {
             plugin.reloadConfig();
             sender.sendMessage(plugin.colorfull(plugin.getLanguage().getProperty("onCommandReloadMessage")));
-            rtnbool = true;
+            return true;
+
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
+
             if (args.length < 2) {
                 sender.sendMessage(ChatColor.RED + "You must specify an IP/URL!");
-                rtnbool = true;
                 plugin.getAdfinder().loadWhitelist();
+                return true;
+
             } else {
-                String ip = args[1];
+                final String ip = args[1];
+
                 try {
                     BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Whitelist.txt", true));
                     write.append(ip);
@@ -49,19 +51,16 @@ public class ADCommand implements CommandExecutor {
                     write.flush();
                     write.close();
                     sender.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] The URL/IP added to Whitelist!");
-                    rtnbool = true;
+                    return true;
+
                 } catch (IOException e) {
-                    plugin.getLogger().info("AntiAid Whitelist file not found IOException!" + e.getMessage());
-                    rtnbool = false;
+                    plugin.getLogger().info(String.format("AntiAid Whitelist file not found IOException!%s", e.getMessage()));
+                    return false;
                 }
             }
 
         } else {
-            rtnbool = false;
+            return false;
         }
-
-
-        return rtnbool;
-
     }
 }
