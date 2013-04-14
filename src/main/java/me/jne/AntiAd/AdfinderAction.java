@@ -18,9 +18,6 @@ public class AdfinderAction implements Runnable {
 
     @Override
     public void run() {
-
-
-
         if (!plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command)) {
             plugin.getServer().broadcastMessage("error while trying to execute cmd!");
         } else {
