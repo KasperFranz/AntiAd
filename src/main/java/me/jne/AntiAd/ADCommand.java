@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.jne.AntiAd;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import me.jne.AntiAd.AntiAd;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +14,7 @@ import org.bukkit.command.CommandSender;
  */
 public class ADCommand implements CommandExecutor {
 
-    private AntiAd plugin;
+    private final AntiAd plugin;
 
     public ADCommand(AntiAd plugin) {
         this.plugin = plugin;

@@ -18,15 +18,20 @@ import org.bukkit.entity.Player;
 
 public class Adfinder {
 
-    private AntiAd plugin;
-    private Pattern ipPattern, webpattern;
-    private HashMap<Player, Integer> warn;
-    private boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
+    private final AntiAd plugin;
+    private static final Pattern ipPattern, webpattern;
+    private final HashMap<Player, Integer> warn;
+    private final boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
     private int numbers, procentCapital;
     private ArrayList<String> whitelistLine;
 
+    static {
+        // ip pattern http://regexr.com?33l17
+        ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+        webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.ru)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+    }
+
     public Adfinder(AntiAd instance) {
-        whitelistLine = new ArrayList<String>();
         plugin = instance;
         loadWhitelist();
         spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
@@ -36,11 +41,6 @@ public class Adfinder {
         procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
         checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
         warn = new HashMap<Player, Integer>();
-
-
-        // ip pattern http://regexr.com?33l17
-        ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
-        webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.ru)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
     }
 
     /**
@@ -52,27 +52,25 @@ public class Adfinder {
      * @return true if it is spam/advertising and else false.
      */
     public boolean check(Player player, String message, int type, boolean checkForSpam) {
-        boolean rtnbool = false;
         int ad = 0;
         // if the player hasn't permission the bypass advertising then we check if for advertising.
         if (!player.hasPermission("antiad.bypass.ad")) {
             ad = checkForAdvertising(message);
-
         }
 
         if (ad == 1) {
             sendWarning(player, message, 1, type);
-            rtnbool = true;
+            return true;
         } else if (ad == 0) {
             //if it's not advertising then check for spam
             if (spamDetection && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
                 if (checkForSpam(message)) {
                     sendWarning(player, message, 2, type);
-                    rtnbool = true;
+                    return true;
                 }
             }
         }
-        return rtnbool;
+        return false;
     }
 
     /**
@@ -82,22 +80,21 @@ public class Adfinder {
      * @return true or false depending on if it is spam or not!
      */
     private boolean checkForSpam(String message) {
-        boolean spam = false;
 
         String[] words = message.split("\\s+");
         for (int i = 0; i < words.length; i++) {
             if (checkWordLenght && words[i].length() >= numbers) {
                 //Checks if the message is longer than the max allowed, it only does this if the config allows it.
                 plugin.debug("this is marked as spam because " + words[i].length() + ">=" + numbers);
-                spam = true;
                 i = words.length; // we sets the i to max so it doesn't run more.
+                return true;
                 // if the word is 4 or under && it
             } else if (words[i].length() >= 4
                     && words[i].equals(words[i].toUpperCase())
                     && !isNumbers(words[i])) {
                 plugin.debug("else if 1");
-                spam = true;
                 i = words.length;
+                return true;
                 //if the words is longer than or 4 long
             } else if (words[i].length() >= 4) {
 
@@ -108,22 +105,16 @@ public class Adfinder {
                     if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
                         upper++;
                     }
-
-
-
                 }
 
                 if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
                     plugin.debug("else if 2");
-                    spam = true;
                     i = words.length;
+                    return true;
                 }
             }
-
         }
-
-
-        return spam;
+            return false;
     }
 
     /**
@@ -139,22 +130,20 @@ public class Adfinder {
      * whitelist.
      */
     private int checkForAdvertising(String message) {
-        int advertising = 0;
         // CHECK FOR IP PATTERN if it's turned on.
         if (IPDetection) {
-            advertising = checkForIPPattern(message);
+            return checkForIPPattern(message);
         }
 //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
-        if (advertising == 0 && urlDetection) {
-            advertising = checkForWebPattern(message);
+        if (urlDetection) {
+            return checkForWebPattern(message);
         }
-
-        return advertising;
+        return 0;
     }
 
     public void log(String message) {
         try {
-            BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
+            final BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
             write.append(message);
             write.newLine();
             write.flush();
@@ -207,11 +196,9 @@ public class Adfinder {
                 break;
             case 2:
                 command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));
-                ;
                 break;
             default:
                 command = "";
-
                 break;
         }
 
@@ -219,9 +206,6 @@ public class Adfinder {
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
         plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage));
-
-
-
     }
 
     /**
@@ -232,17 +216,14 @@ public class Adfinder {
      * @return the nice edition of the type.
      */
     private String getActionType(String command) {
-        String actionType;
-        String[] strings = command.split("\\s+");
-        if (strings[0].endsWith("n")) {
-            actionType = strings[0] + "ned";
-        } else if (strings[0].endsWith("e")) {
-            actionType = strings[0] + "d";
-
+        final String strings = command.split("\\s+")[0];
+        if (strings.endsWith("n")) {
+            return strings + "ned";
+        } else if (strings.endsWith("e")) {
+            return strings + "d";
         } else {
-            actionType = strings[0] + "ed";
+            return strings + "ed";
         }
-        return actionType;
     }
 
     /**
@@ -252,48 +233,34 @@ public class Adfinder {
      * @return the text :)
      */
     private String typeToX(int type, int to) {
-        String rtnString;
 
         if (type == 1) {
-
             switch (to) {
                 case 1:
-                    rtnString = "advertised";
-                    break;
+                    return "advertised";
                 case 2:
-                    rtnString = "advertising";
-                    break;
+                    return "advertising";
                 case 3:
-                    rtnString = plugin.getConfig().getString("Ad_Message");
-                    break;
+                    return plugin.getConfig().getString("Ad_Message");
                 case 4:
-                    rtnString = "advertised";
-                    break;
+                    return "advertised";
                 default:
-                    rtnString = " ";
-                    break;
+                    return " ";
             }
         } else {
             switch (to) {
                 case 1:
-                    rtnString = "spammed";
-                    break;
+                    return "spammed";
                 case 2:
-                    rtnString = "spamming";
-                    break;
+                    return "spamming";
                 case 3:
-                    rtnString = plugin.getConfig().getString("Spam_Message");
-                    break;
+                    return plugin.getConfig().getString("Spam_Message");
                 case 4:
-                    rtnString = "spammed";
-                    break;
+                    return "spammed";
                 default:
-                    rtnString = " ";
-                    break;
+                    return " ";
             }
-
         }
-        return rtnString;
     }
 
     /**
@@ -302,7 +269,7 @@ public class Adfinder {
     public void loadWhitelist() {
 
         try {
-            BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
+            final BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
 
             whitelistLine = new ArrayList<String>();
 
@@ -328,20 +295,16 @@ public class Adfinder {
      * atm.)
      */
     private String whereToTXT(int where) {
-        String returnString = "Unknown";
         switch (where) {
             case 1:
-                returnString = "chat";
-                break;
+                return "chat";
             case 2:
-                returnString = "command";
-                break;
+                return "command";
             case 3:
-                returnString = "sign";
-                break;
+                return "sign";
+            default:
+                return "Unknown";
         }
-        return returnString;
-
     }
 
     /**
@@ -351,11 +314,7 @@ public class Adfinder {
      * @return the String of the calendar in the dateFormat you wanted.
      */
     public static String now(String dateFormat) {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        return sdf.format(cal.getTime());
-
-
+        return new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime());
     }
 
     /**
@@ -365,18 +324,14 @@ public class Adfinder {
      * @return true/false depending on if it's numbers or not.
      */
     private boolean isNumbers(String input) {
-        boolean rtnbool = false;
         try {
-            double d;
-            d = Double.parseDouble(input.replaceAll("\\,", "\\."));
-
-            rtnbool = true;
+            Double.parseDouble(input.replaceAll("\\,", "\\."));
+            return true;
         } catch (NumberFormatException ex) {
             //We catch this but does nothing to it because we dont need to :)
             //Because if the Double.ParseDouble throws the exception then if can't parse it.
         }
-
-        return rtnbool;
+        return false;
     }
 
     /**
