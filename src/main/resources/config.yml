@@ -19,7 +19,11 @@ Spam-Detection: true
 #Says whether it will detect url's or not
 URL-Detection: true
 #check if there are any URLS ex. google.com
-AD-Detection: true
+IP-Detection: true
+#Check if all is Caps
+Caps-Detection: true
+#Checho for long spam 
+Spam-Number-Letters-check: true
 #Number of characters without a space that become spam
 Spam-Number-Letters: 20
 #Number of Capital Letters that become spam per word Eg More than 3 Letters Per Word Become Spam
