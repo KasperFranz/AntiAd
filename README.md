@@ -9,14 +9,14 @@ Builds
 ======
 We make auto builds every time a commit is made using Jenkins.
 
-Development builds can be found at  https://buildhive.cloudbees.com/job/XxCoolGamesxX/job/AntiAd/
+Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/job/AntiAd/
 
 Official builds can be found at AntiAds page on Dev.Bukkit.org
 
 License
 ======
 
-Copyright (c) 2012, The AntiAd Team. All rights reserved.
+Copyright (c) 2012 - 2013, The AntiAd Team. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
