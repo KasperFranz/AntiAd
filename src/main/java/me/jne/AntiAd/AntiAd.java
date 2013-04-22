@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +22,7 @@ public class AntiAd extends JavaPlugin {
     private Adfinder adfinder;
     private Properties language;
 
-    
+
     /**
      *The enable method for the plugin.
      */
@@ -31,7 +32,7 @@ public class AntiAd extends JavaPlugin {
         adfinder = new Adfinder(this);
 
 
-        //Setting op the plugin listener to listen on this :) 
+        //Setting op the plugin listener to listen on this :)
         getServer().getPluginManager().registerEvents(new ADListener(this), this);
 
         //Setting up the command Executer (antiAD)
@@ -45,7 +46,7 @@ public class AntiAd extends JavaPlugin {
             saveConfig();
         }
 
-        File whitelistFile = new File(getDataFolder(), "Whitelist.txt");
+        final File whitelistFile = new File(getDataFolder(), "Whitelist.txt");
         if (!whitelistFile.exists()) {
             try {
                 whitelistFile.createNewFile();
@@ -54,7 +55,7 @@ public class AntiAd extends JavaPlugin {
             }
         }
 
-        File logFile = new File(getDataFolder(), "Log.txt");
+        final File logFile = new File(getDataFolder(), "Log.txt");
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
@@ -67,7 +68,7 @@ public class AntiAd extends JavaPlugin {
 
 
         try {
-            MetricsLite metrics = new MetricsLite(this);
+            final MetricsLite metrics = new MetricsLite(this);
             metrics.start();
         } catch (IOException ex) {
             getLogger().info(language.getProperty("ERRORMetrics"));
@@ -103,11 +104,10 @@ public class AntiAd extends JavaPlugin {
      * Private method to check if the config is there if not we make it from the default.
      */
     private void checkConfig() {
-        String name = "config.yml";
-        File actual = new File(getDataFolder(), name);
+        final File actual = new File(getDataFolder(), "config.yml");
         if (!actual.exists()) {
             getDataFolder().mkdir();
-            InputStream input = this.getClass().getResourceAsStream(
+            final InputStream input = this.getClass().getResourceAsStream(
                     "/config.yml");
             if (input != null) {
                 FileOutputStream output = null;
@@ -127,11 +127,11 @@ public class AntiAd extends JavaPlugin {
         }
     }
 /**
- * Method to load the language (properties file) from the config 
+ * Method to load the language (properties file) from the config
  */
     private void loadLanguage() {
 
-        ArrayList<String> validLanguage = validLanguage();
+        final ArrayList<String> validLanguage = validLanguage();
         if (getConfig().contains("Language")) {
             String tempLang = getConfig().getString("Language");
             if (validLanguage.contains(tempLang)) {
@@ -140,9 +140,7 @@ public class AntiAd extends JavaPlugin {
                 setLanguage("en");
                 getLogger().warning(language.getProperty("WrongLangugage"));
             }
-
         } else {
-
             setLanguage("en");
         }
     }
@@ -157,12 +155,13 @@ public class AntiAd extends JavaPlugin {
     private void setLanguage(String lang) {
         language = new Properties();
         try {
-
             language.load(this.getClass().getClassLoader().getResourceAsStream(
                     "language/" + lang + ".properties"));
-        } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
-        }
+         } catch (FileNotFoundException ex) {
+             getLogger().info("This File doesn't exists");
+         } catch (IOException ex) {
+             getLogger().log(Level.INFO, "Exception while setting the language", ex);
+         }
     }
 
     /**
@@ -171,26 +170,26 @@ public class AntiAd extends JavaPlugin {
      * @return the list of valid language!
      */
     private ArrayList<String> validLanguage() {
-        ArrayList<String> validLanguage = new ArrayList<String>();
+        ArrayList<String> validLanguage = new ArrayList<String>(1);
         validLanguage.add("en");
         return validLanguage;
     }
     /**
-     * Method for making the text colorfull by the 
+     * Method for making the text colorfull by the
      * @param text the text there should be made colorfull
      * @return the text with chatColor.
      */
-    public String colorfull(String text){
+    public String colorfull(String text) {
         return text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
     }
-    
+
     /**
      * SOUT debug if this is debug!
      * @param text the debug text
      */
-    public void debug(String text){
-        if(DEBUG){
-        System.out.println(text);
+    public void debug(String text) {
+        if (DEBUG) {
+            System.out.println(text);
         }
     }
 }
