@@ -19,13 +19,14 @@ import org.bukkit.entity.Player;
 public class Adfinder {
 
     private AntiAd plugin;
-       // ip pattern http://regexr.com?33l17
+    // ip pattern http://regexr.com?33l17
     private final Pattern ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
     private final Pattern webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.ru)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
     private HashMap<Player, Integer> warn;
     private boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
     private int numbers, procentCapital;
     private ArrayList<String> whitelistLine;
+    
     public Adfinder(AntiAd instance) {
         plugin = instance;
         loadWhitelist();
@@ -198,7 +199,7 @@ public class Adfinder {
 
         switch (type) {
             case 1:
-                command = plugin.getConfig().getString("Command-Ad").replaceAll(">reasonad>", typeToX(1, 3)).replaceAll("<time>", plugin.getConfig().getString("Time"));
+                command = plugin.getConfig().getString("Command-Ad").replaceAll("<reasonad>", typeToX(1, 3)).replaceAll("<time>", plugin.getConfig().getString("Time"));
                 break;
             case 2:
                 command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));
