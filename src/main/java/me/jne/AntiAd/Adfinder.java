@@ -20,8 +20,7 @@ public class Adfinder {
 
     private AntiAd plugin;
     // ip pattern http://regexr.com?33l17
-    private final Pattern ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
-    private final Pattern webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.ru)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+    private  Pattern ipPattern, webpattern;
     private HashMap<Player, Integer> warn;
     private boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
     private int numbers, procentCapital;
@@ -30,6 +29,7 @@ public class Adfinder {
     public Adfinder(AntiAd instance) {
         plugin = instance;
         loadWhitelist();
+        loadPattern();
         spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
         IPDetection = plugin.getConfig().getBoolean("IP-Detection");
@@ -37,6 +37,11 @@ public class Adfinder {
         procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
         checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
         warn = new HashMap<Player, Integer>();
+    }
+    
+    private void loadPattern(){
+        ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+         webpattern = Pattern.compile("(http://)|(https://)?(www)?\\S{2,}((\\.com)|(\\.ru)|(\\.net)|(\\.org)|(\\.co\\.uk)|(\\.tk)|(\\.info)|(\\.es)|(\\.de)|(\\.arpa)|(\\.edu)|(\\.firm)|(\\.int)|(\\.mil)|(\\.mobi)|(\\.nato)|(\\.to)|(\\.fr)|(\\.ms)|(\\.vu)|(\\.eu)|(\\.nl)|(\\.us)|(\\.dk))[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
     }
 
     /**
