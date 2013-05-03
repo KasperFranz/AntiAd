@@ -3,6 +3,7 @@ main: me.jne.AntiAd.AntiAd
 version: ${project.version}
 dev-url: http://dev.bukkit.org/server-mods/antiad/
 website: http://dev.bukkit.org/server-mods/antiad/
+authors: [XxCoolGamesxX, franzmedia]
 description: Prevents Advertising of ip's and web-url's and reduces spamming.
 commands:
    antiad:
@@ -11,8 +12,7 @@ commands:
              /<command> reload - reload the configuration from disk. 
              /<command> add <URL/IP> - Adds a URL/IP to the whitelist.
         
-permissions:
-       
+permissions:      
         antiad.*:
                  description: Gives all AntiAd permissions
                  children:
@@ -21,7 +21,6 @@ permissions:
                      antiad.see: true
                      antiad.reload: true
                      antiad.whitelist: true
-                     
         antiad.bypass.spam:
                  description: Allows a player to bypass Spam restriction.
                  default: op
@@ -37,4 +36,3 @@ permissions:
         antiad.whitelist:
                  description: Allows a player to use the /antiad add command.
                  default: op
-                      
