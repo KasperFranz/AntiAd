@@ -168,7 +168,7 @@ public class Adfinder {
      */
     private void sendWarning(Player player, String message, int type, int where) {
 
-        log(now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has +" + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+        log(now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
         Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in " + whereToTXT(where) + ".");
         if (!warn.containsKey(player)) {
             warn.put(player, 0);
