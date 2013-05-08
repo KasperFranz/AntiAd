@@ -32,7 +32,7 @@ public class ADCommand implements CommandExecutor {
             rtnbool = true;
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.RED + "You must specify an IP/URL!");
+                sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandNoIP"));
                 rtnbool = true;
                 plugin.getAdfinder().loadWhitelist();
             } else {
@@ -43,10 +43,10 @@ public class ADCommand implements CommandExecutor {
                     write.newLine();
                     write.flush();
                     write.close();
-                    sender.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] The URL/IP added to Whitelist!");
+                    sender.sendMessage(ChatColor.DARK_GREEN + plugin.getLanguage().getProperty("PluginTag") + plugin.getLanguage().getProperty("AddCommandAdded"));
                     rtnbool = true;
-                } catch (IOException e) {
-                    plugin.getLogger().info("AntiAid Whitelist file not found IOException!" + e.getMessage());
+                } catch (IOException ex) {
+                    plugin.getLogger().info( plugin.getLanguage().getProperty("PluginTag") + plugin.getLanguage().getProperty("whitelistNotFound")+ ex.getMessage());
                     rtnbool = false;
                 }
             }

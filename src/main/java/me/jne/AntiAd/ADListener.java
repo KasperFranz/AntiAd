@@ -42,7 +42,7 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent join) {
         if (plugin.getConfig().getBoolean("JoinMsg-On")) {
-            join.getPlayer().sendMessage(ChatColor.YELLOW + "Running" + ChatColor.GREEN + " AntiAd" + ChatColor.YELLOW + ", Developed by XxCoolGamesxX and KasperFranz.");
+            join.getPlayer().sendMessage(plugin.colorfull(plugin.getLanguage().getProperty("JoinMsg")));
         }
     }
 
