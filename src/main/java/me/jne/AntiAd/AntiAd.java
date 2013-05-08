@@ -158,9 +158,9 @@ public class AntiAd extends JavaPlugin {
             language.load(this.getClass().getClassLoader().getResourceAsStream(
                     "language/" + lang + ".properties"));
          } catch (FileNotFoundException ex) {
-             getLogger().info("This File doesn't exists");
+             getLogger().info("langugage File not found (check if you made it right) ");
          } catch (IOException ex) {
-             getLogger().log(Level.INFO, "Exception while setting the language", ex);
+             getLogger().log(Level.INFO,"Error while setting the language", ex);
          }
     }
 
@@ -192,4 +192,20 @@ public class AntiAd extends JavaPlugin {
             System.out.println(text);
         }
     }
-}
+/***
+ * Colorize the text from the language
+ * @param propeuy the property you want from the language.
+ * @return the colorfull text :)
+ */
+    String getColorfullLanguage(String property) {
+       return colorfull(getLanguage().getProperty(property));
+    }
+    /**
+     * Returns the colorfull message included with a pluginTag at the begining 
+     * @param property
+     * @return 
+     */
+    String getColorfullLanguageAndTag(String property) {
+       return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
+    }
+ }
