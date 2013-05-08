@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.5.2-R0.1-SNAPSHOT</version>
+			<version>RELEASE</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
