@@ -1,7 +1,6 @@
 package me.jne.AntiAd;
 
 import java.util.List;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
