@@ -10,10 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class Adfinder {
@@ -167,7 +169,26 @@ public class Adfinder {
      * @param type 1 for AD 2 for spam. (gets logged)
      */
     private void sendWarning(Player player, String message, int type, int where) {
-
+        //First we gonna warn the admins (ops) about the player and what he chatted. 
+        if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) {
+            Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
+            OfflinePlayer[] ops = (OfflinePlayer[]) tempOps.toArray();
+            for (int i = 0; i < ops.length; i++) {
+                if (ops[i].isOnline()) {
+                    ops[i].getPlayer().sendMessage(player.getDisplayName() + " has been logged for " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+                }
+            }
+        }else if (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins")) {
+            Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
+            OfflinePlayer[] ops = (OfflinePlayer[]) tempOps.toArray();
+            for (int i = 0; i < ops.length; i++) {
+                if (ops[i].isOnline()) {
+                    ops[i].getPlayer().sendMessage(player.getDisplayName() + " has been logged for " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+                }
+            }
+        }
+        
+        // Start logging and sending the warning
         log(now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
         Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in " + whereToTXT(where) + ".");
         if (!warn.containsKey(player)) {

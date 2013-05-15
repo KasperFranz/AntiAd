@@ -35,3 +35,7 @@ Detected-Commands:
 - /t
 - /message
 - /tell
+#Warns admins when a player is spamming
+SpamWarnAdmins: false
+#Warns a admin when a player i advertising
+AdWarnAdmins: true
