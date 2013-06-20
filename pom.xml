@@ -56,11 +56,9 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>plugin.yml</include>
-                                        <include>config.yml</include>
-				
-		
+                                        <include>config.yml</include>		
 					<include>language/en.properties</include>
-                                        
+                                        <include>language/es.properties</include>
 				</includes>
 			</resource>
 		</resources>
