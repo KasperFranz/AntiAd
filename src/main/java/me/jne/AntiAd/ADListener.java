@@ -19,6 +19,7 @@ public class ADListener implements Listener {
 
     public ADListener(AntiAd plugin) {
         this.plugin = plugin;
+        System.out.println("this is started");
     }
 
     /**
@@ -28,20 +29,19 @@ public class ADListener implements Listener {
      *
      * @param chat
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        if (!chat.isCancelled()) {
+        System.out.println(chat.isCancelled());
+
             if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
                 chat.setCancelled(true);
             }
-        }
-
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent join) {
         if (plugin.getConfig().getBoolean("JoinMsg-On")) {
-            join.getPlayer().sendMessage(plugin.colorfull(plugin.getLanguage().getProperty("JoinMsg")));
+            join.getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("JoinMsg"));
         }
     }
 
