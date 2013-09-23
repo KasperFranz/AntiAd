@@ -8,9 +8,6 @@ description: Prevents Advertising of ip's and web-url's and reduces spamming.
 commands:
    antiad:
          description: Base command for  AntiAd.
-         usage: 
-             /<command> reload - reload the configuration from disk. 
-             /<command> add <URL/IP> - Adds a URL/IP to the whitelist.
         
 permissions:      
         antiad.*:
