@@ -136,11 +136,11 @@ public class Adfinder {
         // CHECK FOR IP PATTERN if it's turned on.
         if (IPDetection) {
             advertising = checkForIPPattern(message);
-            System.out.println("Checking for IP");
+            plugin.debug("Checking for IP");
         }
         //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
         if (advertising == 0 && urlDetection) {
-            System.out.println("Checking for web");
+            plugin.debug("Checking for web");
             advertising = checkForWebPattern(message);
         }
 
@@ -153,7 +153,7 @@ public class Adfinder {
      * @param message
      */
     public void log(String message) {
-        System.out.println("Begin to log:"+message);
+        plugin.debug("Begin to log:"+message);
         try {
             BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
             write.append(message);
@@ -161,7 +161,7 @@ public class Adfinder {
             write.flush();
             write.close();
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+            plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
         }
     }
 
@@ -172,7 +172,7 @@ public class Adfinder {
      * @param type 1 for AD 2 for spam. (gets logged)
      */
     private void sendWarning(Player player, String message, int type, int where) {
-        System.out.println("SENDING WARNING!!!!");
+        plugin.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
         if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
@@ -193,13 +193,13 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        log(now("MMM dd,yyyy HH:mm ") + plugin.getColorfullLanguage("privatLogWarning")
+        log(now("MMM dd,yyyy HH:mm ") + plugin.getFromLanguage("privatLogWarning")
                 .replace("%PLAYER%", player.getDisplayName())
                 .replace("%TYPE%", typeToX(type, 1))
                 .replace("%MESSAGE%", message)
                 .replace("%WHERE%", whereToTXT(where)));
             
-        Bukkit.getServer().getLogger().info(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
+        Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
         int warnings = 1;
         // if we know the player we gonna remove him and count the warnings up.
@@ -451,7 +451,7 @@ public class Adfinder {
 
         while (regexMatcherurl.find()) {
             String text = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
-            System.out.println(text+"g" + "reg:" +regexMatcherurl.group().length() + " group lenght"+regexMatcherurl.group().length());
+            plugin.debug(text+"g" + "reg:" +regexMatcherurl.group().length() + " group lenght"+regexMatcherurl.group().length());
             if (regexMatcherurl.group().length() != 0 && text.length() != 0) {
                 plugin.debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {

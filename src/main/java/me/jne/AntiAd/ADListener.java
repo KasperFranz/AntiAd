@@ -19,7 +19,7 @@ public class ADListener implements Listener {
 
     public ADListener(AntiAd plugin) {
         this.plugin = plugin;
-        System.out.println("this is started");
+        
     }
 
     /**
@@ -31,7 +31,7 @@ public class ADListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        System.out.println(chat.isCancelled());
+        plugin.debug("chat gone?"+chat.isCancelled());
 
             if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
                 chat.setCancelled(true);

@@ -172,7 +172,6 @@ public class AntiAd extends JavaPlugin {
         text =  text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
         debug(text+ "colorfull :)");
         }catch(Exception ex){
-            System.out.println(ex.getCause());
         }
         return text;
     }
@@ -181,7 +180,7 @@ public class AntiAd extends JavaPlugin {
         try{
            text = text.replaceAll("&([a-f0-9])", "");
         }catch(Exception ex){
-           System.out.println(ex.getCause()); 
+           
         }
         return text;
     }
