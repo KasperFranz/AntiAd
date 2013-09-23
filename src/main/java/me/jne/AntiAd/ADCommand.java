@@ -25,16 +25,20 @@ public class ADCommand implements CommandExecutor {
         boolean rtnbool;
 
         if (args.length == 0) {
-            rtnbool = false;
+            sender.sendMessage(plugin.getColorfullLanguage("helpMessageHeader"));
+            sender.sendMessage(plugin.getColorfullLanguage("helpMessageReload"));
+            sender.sendMessage(plugin.getColorfullLanguage("helpMessageAdd"));
+            rtnbool = true;
+            
         } else if (args[0].equalsIgnoreCase("reload") && (sender.isOp() || sender.hasPermission("antiad.reload"))) {
             plugin.reloadConfig();
-            sender.sendMessage(plugin.colorfull(plugin.getLanguage().getProperty("onCommandReloadMessage")));
+            sender.sendMessage(plugin.getColorfullLanguageAndTag("onCommandReloadMessage"));
             rtnbool = true;
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
+            rtnbool = true;
             if (args.length < 2) {
-                sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandNoIP"));
-                rtnbool = true;
                 plugin.getAdfinder().loadWhitelist();
+                sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandNoIP"));    
             } else {
                 String ip = args[1];
                 try {
@@ -44,9 +48,8 @@ public class ADCommand implements CommandExecutor {
                     write.flush();
                     write.close();
                     sender.sendMessage(ChatColor.DARK_GREEN + plugin.getLanguage().getProperty("PluginTag") + plugin.getLanguage().getProperty("AddCommandAdded"));
-                    rtnbool = true;
                 } catch (IOException ex) {
-                    plugin.getLogger().info( plugin.getLanguage().getProperty("PluginTag") + plugin.getLanguage().getProperty("whitelistNotFound")+ ex.getMessage());
+                    plugin.getLogger().info(plugin.getFromLanguage("whitelistNotFound") + ex.getMessage());
                     rtnbool = false;
                 }
             }

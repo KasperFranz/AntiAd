@@ -192,13 +192,12 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        String now = now("MMM dd,yyyy HH:mm ");
-        log(
-                now +
-                plugin.getColorfullLanguage("privateLogWarning")
+        log(now("MMM dd,yyyy HH:mm ") + plugin.getColorfullLanguage("privatLogWarning")
                 .replace("%PLAYER%", player.getDisplayName())
                 .replace("%TYPE%", typeToX(type, 1))
-                .replace("%WHERE%", whereToTXT(where)));    
+                .replace("%MESSAGE%", message)
+                .replace("%WHERE%", whereToTXT(where)));
+            
         Bukkit.getServer().getLogger().info(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
         //adding a warning to the player.
         int warnings = 1;
@@ -209,13 +208,15 @@ public class Adfinder {
         }
         warn.put(player,warnings);
         
+        int maxWarnings = plugin.getConfig().getInt("warnings");
+        
         // begin sending the warning to the player
-        if(warn.get(player) >= plugin.getConfig().getInt("warnings")){
+        if(warn.get(player) >= maxWarnings){
      // if he is at max Warnings we gonna take action
             takeAction(player, type);
         } else {
-            player.sendMessage(plugin.getColorfullLanguageAndTag("chancesLeft").replace("%WARNINGS%", warn.get(player) + ""));
-            player.sendMessage(plugin.getColorfullLanguageAndTag("PlayerWarningFor").replace("%REASON%", typeToX(type, 3)).replace("%CHANCES%", plugin.getConfig().getInt("warnings")+""));
+            player.sendMessage(plugin.getColorfullLanguageAndTag("chancesLeft").replace("%WARNINGS%", warn.get(player) + "").replace("%CHANCES%", maxWarnings+""));
+            player.sendMessage(plugin.getColorfullLanguageAndTag("PlayerWarningFor").replace("%REASON%", typeToX(type, 3)));
         }
 
         // if the player got permission to see what happend we gonna msg them the things.
@@ -328,6 +329,8 @@ public class Adfinder {
         } else {
             rtnString = "unknow";
         }
+        
+        
         return rtnString;
     }
 
@@ -443,7 +446,7 @@ public class Adfinder {
     private int checkForWebPattern(String message) {
         int advertising = 0;
         Matcher regexMatcherurl = webpattern.matcher(message);
-        System.out.println("Message: "+message);
+        plugin.debug("Message: "+message);
 
         while (regexMatcherurl.find()) {
             String text = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
