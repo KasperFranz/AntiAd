@@ -2,7 +2,6 @@ package me.jne.AntiAd;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -32,13 +30,7 @@ public class Adfinder {
     public Adfinder(AntiAd instance) {
         plugin = instance;
         loadWhitelist();
-        spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
-        urlDetection = plugin.getConfig().getBoolean("URL-Detection");
-        IPDetection = plugin.getConfig().getBoolean("IP-Detection");
-        numbers = plugin.getConfig().getInt("Spam-Number-Letters");
-        procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
-        checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
-        warn = new HashMap<Player, Integer>();
+        startUp();
     }
 
     /**
@@ -52,8 +44,10 @@ public class Adfinder {
     public boolean check(Player player, String message, int type, boolean checkForSpam) {
         boolean rtnbool = false;
         int ad = 0;
+        plugin.debug("We are testing player"+player.getName() + "Msg: "+message + "type:"+ type + "checkSpam"+ checkForSpam);
         // if the player hasn't permission the bypass advertising then we check if for advertising.
         if (!player.hasPermission("antiad.bypass.ad")) {
+            plugin.debug("Checking for advertising.");
             ad = checkForAdvertising(message);
 
         }
@@ -141,16 +135,24 @@ public class Adfinder {
         // CHECK FOR IP PATTERN if it's turned on.
         if (IPDetection) {
             advertising = checkForIPPattern(message);
+            System.out.println("Checking for IP");
         }
-//if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
+        //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
         if (advertising == 0 && urlDetection) {
+            System.out.println("Checking for web");
             advertising = checkForWebPattern(message);
         }
 
         return advertising;
     }
 
+    /**
+     * Saves to the log!
+     *
+     * @param message
+     */
     public void log(String message) {
+        System.out.println("Begin to log:"+message);
         try {
             BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
             write.append(message);
@@ -158,7 +160,7 @@ public class Adfinder {
             write.flush();
             write.close();
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.WARNING, "AntiAD error while saving message on the log file msg:" + ex.getMessage());
+            plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
         }
     }
 
@@ -169,42 +171,57 @@ public class Adfinder {
      * @param type 1 for AD 2 for spam. (gets logged)
      */
     private void sendWarning(Player player, String message, int type, int where) {
+        System.out.println("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
         if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
-            OfflinePlayer[] ops = (OfflinePlayer[]) tempOps.toArray();
+            OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
             for (int i = 0; i < ops.length; i++) {
                 if (ops[i].isOnline()) {
-                    ops[i].getPlayer().sendMessage(player.getDisplayName() + " has been logged for " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+                     ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
                 }
             }
-        }else if (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins")) {
+        } else if (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins")) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = (OfflinePlayer[]) tempOps.toArray();
             for (int i = 0; i < ops.length; i++) {
                 if (ops[i].isOnline()) {
-                    ops[i].getPlayer().sendMessage(player.getDisplayName() + " has been logged for " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
+                    ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
                 }
             }
         }
-        
+
         // Start logging and sending the warning
-        log(now("MMM dd,yyyy HH:mm ") + player.getDisplayName() + " has " + typeToX(type, 1) + ": " + message + ", in " + whereToTXT(where) + ".");
-        Bukkit.getServer().getLogger().info("[AntiAd] " + player.getDisplayName() + " was logged for " + typeToX(type, 2) + " in " + whereToTXT(where) + ".");
-        if (!warn.containsKey(player)) {
-            warn.put(player, 0);
+        String now = now("MMM dd,yyyy HH:mm ");
+        log(
+                now +
+                plugin.getColorfullLanguage("privateLogWarning")
+                .replace("%PLAYER%", player.getDisplayName())
+                .replace("%TYPE%", typeToX(type, 1))
+                .replace("%WHERE%", whereToTXT(where)));    
+        Bukkit.getServer().getLogger().info(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
+        //adding a warning to the player.
+        int warnings = 1;
+        // if we know the player we gonna remove him and count the warnings up.
+        if(warn.containsKey(player)){
+            warnings = warn.get(player) + 1;
+            warn.remove(player);
         }
-        if (warn.get(player) < 2) {
-            warn.put(player, warn.get(player) + 1);
-            player.sendMessage(ChatColor.RED + "You have " + warn.get(player) + "/3 chances left!");
-            player.sendMessage(ChatColor.DARK_GREEN + "[AntiAd]" + " " + ChatColor.RED + typeToX(type, 3));
-        } else {
+        warn.put(player,warnings);
+        
+        // begin sending the warning to the player
+        if(warn.get(player) >= plugin.getConfig().getInt("warnings")){
+     // if he is at max Warnings we gonna take action
             takeAction(player, type);
+        } else {
+            player.sendMessage(plugin.getColorfullLanguageAndTag("chancesLeft").replace("%WARNINGS%", warn.get(player) + ""));
+            player.sendMessage(plugin.getColorfullLanguageAndTag("PlayerWarningFor").replace("%REASON%", typeToX(type, 3)).replace("%CHANCES%", plugin.getConfig().getInt("warnings")+""));
         }
 
+        // if the player got permission to see what happend we gonna msg them the things.
         for (Player players : Bukkit.getServer().getOnlinePlayers()) {
             if (players.hasPermission("antiad.see")) {
-                players.sendMessage(ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has " + typeToX(type, 4) + message);
+                players.sendMessage(plugin.getColorfullLanguageAndTag("publicMessage").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 4)).replace("%MESSAGE", message));
             }
         }
     }
@@ -231,8 +248,7 @@ public class Adfinder {
 
                 break;
         }
-
-        String broadcastMessage = ChatColor.DARK_GREEN + "[AntiAd] " + ChatColor.RED + player.getDisplayName() + ChatColor.DARK_GREEN + " has been " + getActionType(command) + " for " + typeToX(type, 2);
+        String broadcastMessage = plugin.getColorfullLanguageAndTag("PlayerActionTaken").replace("%PLAYER%", player.getDisplayName()).replace("%ACTION%", getActionType(command)).replace("%FOR%", typeToX(type, 2));
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
         plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage));
@@ -290,7 +306,7 @@ public class Adfinder {
                     rtnString = " ";
                     break;
             }
-        } else {
+        } else if (type == 2) {
             switch (to) {
                 case 1:
                     rtnString = "spammed";
@@ -309,31 +325,28 @@ public class Adfinder {
                     break;
             }
 
+        } else {
+            rtnString = "unknow";
         }
         return rtnString;
     }
 
     /**
-     * Method to load the whitelist in again! (if changed)
+     * Method to load the whitelist This is at start of if we add it with the
+     * command (or reload)
      */
     public void loadWhitelist() {
 
         try {
             BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
-
             whitelistLine = new ArrayList<String>();
-
-            try {
-                String line;
-                while ((line = read.readLine()) != null) {
-                    whitelistLine.add(line);
-
-                }
-            } catch (IOException ex) {
-                plugin.getLogger().log(Level.WARNING, "error while loading whittelist " + ex.getMessage());
+            String line;
+            while ((line = read.readLine()) != null) {
+                whitelistLine.add(line);
             }
-        } catch (FileNotFoundException ex) {
-            plugin.getLogger().log(Level.WARNING, "error while loading file " + ex.getMessage());
+
+        } catch (Exception ex) {
+            plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("whitelistNotFound"));
         }
     }
 
@@ -384,8 +397,8 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-            double d;
-            d = Double.parseDouble(input.replaceAll("\\,", "\\."));
+
+            Double.parseDouble(input.replaceAll("\\,", "\\."));
 
             rtnbool = true;
         } catch (NumberFormatException ex) {
@@ -430,9 +443,11 @@ public class Adfinder {
     private int checkForWebPattern(String message) {
         int advertising = 0;
         Matcher regexMatcherurl = webpattern.matcher(message);
+        System.out.println("Message: "+message);
 
         while (regexMatcherurl.find()) {
             String text = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
+            System.out.println(text+"g" + "reg:" +regexMatcherurl.group().length() + " group lenght"+regexMatcherurl.group().length());
             if (regexMatcherurl.group().length() != 0 && text.length() != 0) {
                 plugin.debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {
@@ -446,5 +461,18 @@ public class Adfinder {
             }
         }
         return advertising;
+    }
+
+    /**
+     * method to Reload/load the config Options in the adfinder.
+     */
+    public void startUp() {
+        spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
+        urlDetection = plugin.getConfig().getBoolean("URL-Detection");
+        IPDetection = plugin.getConfig().getBoolean("IP-Detection");
+        numbers = plugin.getConfig().getInt("Spam-Number-Letters");
+        procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
+        checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
+        warn = new HashMap<Player, Integer>();
     }
 }

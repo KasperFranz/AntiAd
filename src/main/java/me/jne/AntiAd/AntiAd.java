@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -18,13 +17,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     private Adfinder adfinder;
     private Properties language;
 
-
     /**
-     *The enable method for the plugin.
+     * The enable method for the plugin.
      */
     @Override
     public void onEnable() {
@@ -39,33 +37,15 @@ public class AntiAd extends JavaPlugin {
         getCommand("antiad").setExecutor(new ADCommand(this));
 
         checkConfig();
-        final FileConfiguration config = getConfig();
-        if (!config.contains("Detected-Commands")) {
-            config.addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
+
+        if (!getConfig().contains("Detected-Commands")) {
+            getConfig().addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
 
             saveConfig();
         }
 
-        final File whitelistFile = new File(getDataFolder(), "Whitelist.txt");
-        if (!whitelistFile.exists()) {
-            try {
-                whitelistFile.createNewFile();
-            } catch (IOException ex) {
-                getLogger().warning(language.getProperty("ERRORWhitelist"));
-            }
-        }
-
-        final File logFile = new File(getDataFolder(), "Log.txt");
-        if (!logFile.exists()) {
-            try {
-                logFile.createNewFile();
-            } catch (IOException ex) {
-                getLogger().warning(language.getProperty("ERRORLog"));
-            }
-        }
-
-
-
+        checkFile("Whitelist.txt", "ERRORWhitelistCreate");
+        checkFile("Log.txt", "ERRORLogCreate");
 
         try {
             final MetricsLite metrics = new MetricsLite(this);
@@ -79,7 +59,7 @@ public class AntiAd extends JavaPlugin {
     }
 
     /**
-     *the disable method for the plugin
+     * the disable method for the plugin
      */
     @Override
     public void onDisable() {
@@ -88,20 +68,25 @@ public class AntiAd extends JavaPlugin {
 
     /**
      *
-     * @return the adfinder of the plugin (to check for spam, advertising and so on)
+     * @return the adfinder of the plugin (to check for spam, advertising and so
+     * on)
      */
     public Adfinder getAdfinder() {
         return adfinder;
     }
+
     /**
      *
-     * @return the properties file we are currently using (default is en.properties)
+     * @return the properties file we are currently using (default is
+     * en.properties)
      */
     public Properties getLanguage() {
         return language;
     }
+
     /**
-     * Private method to check if the config is there if not we make it from the default.
+     * Private method to check if the config is there if not we make it from the
+     * default.
      */
     private void checkConfig() {
         final File actual = new File(getDataFolder(), "config.yml");
@@ -126,9 +111,10 @@ public class AntiAd extends JavaPlugin {
             }
         }
     }
-/**
- * Method to load the language (properties file) from the config
- */
+
+    /**
+     * Method to load the language (properties file) from the config
+     */
     private void loadLanguage() {
 
         final ArrayList<String> validLanguage = validLanguage();
@@ -157,11 +143,11 @@ public class AntiAd extends JavaPlugin {
         try {
             language.load(this.getClass().getClassLoader().getResourceAsStream(
                     "language/" + lang + ".properties"));
-         } catch (FileNotFoundException ex) {
-             getLogger().info("langugage File not found (check if you made it right) ");
-         } catch (IOException ex) {
-             getLogger().log(Level.INFO,"Error while setting the language", ex);
-         }
+        } catch (FileNotFoundException ex) {
+            getLogger().info("langugage File not found (check if you made it right) ");
+        } catch (IOException ex) {
+            getLogger().log(Level.INFO, "Error while setting the language", ex);
+        }
     }
 
     /**
@@ -174,17 +160,20 @@ public class AntiAd extends JavaPlugin {
         validLanguage.add("en");
         return validLanguage;
     }
+
     /**
      * Method for making the text colorfull by the
+     *
      * @param text the text there should be made colorfull
      * @return the text with chatColor.
      */
     public String colorfull(String text) {
-        return text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
+        return text; //.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
     }
 
     /**
      * SOUT debug if this is debug!
+     *
      * @param text the debug text
      */
     public void debug(String text) {
@@ -192,20 +181,44 @@ public class AntiAd extends JavaPlugin {
             System.out.println(text);
         }
     }
-/***
- * Colorize the text from the language
- * @param propeuy the property you want from the language.
- * @return the colorfull text :)
- */
-    String getColorfullLanguage(String property) {
-       return colorfull(getLanguage().getProperty(property));
-    }
+
     /**
-     * Returns the colorfull message included with a pluginTag at the begining 
+     * *
+     * Colorize the text from the language
+     *
+     * @param propeuy the property you want from the language.
+     * @return the colorfull text :)
+     */
+    String getColorfullLanguage(String property) {
+        String text = getLanguage().getProperty(property);
+        return colorfull(text);
+    }
+
+    /**
+     * Returns the colorfull message included with a pluginTag at the begining
+     *
      * @param property
-     * @return 
+     * @return
      */
     String getColorfullLanguageAndTag(String property) {
-       return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
+        return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
     }
- }
+
+
+    /**
+     *
+     * @param fileName the filename you wanna check
+     * @param errorMessage the error message you wanna send if there was a
+     * error. (the name from the language file)
+     */
+    private void checkFile(String fileName, String errorMessage) {
+        final File fileToCheck = new File(getDataFolder(), fileName);
+        if (!fileToCheck.exists()) {
+            try {
+                fileToCheck.createNewFile();
+            } catch (IOException ex) {
+                getLogger().warning(language.getProperty(errorMessage));
+            }
+        }
+    }
+}
