@@ -168,7 +168,22 @@ public class AntiAd extends JavaPlugin {
      * @return the text with chatColor.
      */
     public String colorfull(String text) {
-        return text; //.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
+        try{
+        text =  text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
+        debug(text+ "colorfull :)");
+        }catch(Exception ex){
+            System.out.println(ex.getCause());
+        }
+        return text;
+    }
+    
+    public String uncolorfull(String text){
+        try{
+           text = text.replaceAll("&([a-f0-9])", "");
+        }catch(Exception ex){
+           System.out.println(ex.getCause()); 
+        }
+        return text;
     }
 
     /**
@@ -189,9 +204,31 @@ public class AntiAd extends JavaPlugin {
      * @param propeuy the property you want from the language.
      * @return the colorfull text :)
      */
-    String getColorfullLanguage(String property) {
+    public String getColorfullLanguage(String property) {
         String text = getLanguage().getProperty(property);
-        return colorfull(text);
+        String returnstr = "";
+        if(text != null){
+            returnstr = colorfull(text);
+        }
+        return returnstr;
+    }
+    
+    /**
+     * Get the language without any colorfull etc.
+     * @param property
+     * @return 
+     */
+    public String getFromLanguage(String property){
+        String text = getLanguage().getProperty(property);
+        String returnstr = "";
+         if(text != null){
+            returnstr = uncolorfull(text);
+        }
+        return returnstr;
+    }
+    
+    public String getFromLanguageAndTag(String property){
+        return uncolorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
     }
 
     /**
@@ -201,6 +238,7 @@ public class AntiAd extends JavaPlugin {
      * @return
      */
     String getColorfullLanguageAndTag(String property) {
+        
         return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
     }
 
