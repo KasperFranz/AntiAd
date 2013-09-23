@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     private Adfinder adfinder;
     private Properties language;
 
