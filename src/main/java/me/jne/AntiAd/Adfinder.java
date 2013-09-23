@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +44,7 @@ public class Adfinder {
      * @return true if it is spam/advertising and else false.
      */
     public boolean check(Player player, String message, int type, boolean checkForSpam) {
+        message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");;
         boolean rtnbool = false;
         int ad = 0;
         plugin.debug("We are testing player"+player.getName() + "Msg: "+message + "type:"+ type + "checkSpam"+ checkForSpam);
