@@ -353,6 +353,10 @@ public class Adfinder {
             plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("whitelistNotFound"));
         }
     }
+    
+    public void whitelistAdd(String url){
+         whitelistLine.add(url);
+    }
 
     /**
      * A method to change the where int to a String.
