@@ -48,7 +48,7 @@ public class ADCommand implements CommandExecutor {
                     write.flush();
                     write.close();
                     plugin.getAdfinder().whitelistAdd(ip);
-                    sender.sendMessage(plugin.getFromLanguageAndTag("AddCommandAdded"));
+                    sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandAdded"));
                 } catch (IOException ex) {
                     plugin.getLogger().info(plugin.getFromLanguage("whitelistNotFound") + ex.getMessage());
                     rtnbool = false;
