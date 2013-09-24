@@ -176,20 +176,12 @@ public class Adfinder {
     private void sendWarning(Player player, String message, int type, int where) {
         plugin.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
-        if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) {
+        if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins") || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
             for (int i = 0; i < ops.length; i++) {
                 if (ops[i].isOnline()) {
-                     ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
-                }
-            }
-        } else if (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins")) {
-            Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
-            OfflinePlayer[] ops = (OfflinePlayer[]) tempOps.toArray();
-            for (int i = 0; i < ops.length; i++) {
-                if (ops[i].isOnline()) {
-                    ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)));
+                     ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
                 }
             }
         }
@@ -225,7 +217,7 @@ public class Adfinder {
         // if the player got permission to see what happend we gonna msg them the things.
         for (Player players : Bukkit.getServer().getOnlinePlayers()) {
             if (players.hasPermission("antiad.see")) {
-                players.sendMessage(plugin.getColorfullLanguageAndTag("publicMessage").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 4)).replace("%MESSAGE", message));
+                players.sendMessage(plugin.getColorfullLanguageAndTag("publicMessage").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 4)).replace("%MESSAGE%", message));
             }
         }
     }
