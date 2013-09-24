@@ -59,6 +59,8 @@
                                         <include>config.yml</include>		
 					<include>language/en.properties</include>
                                         <include>language/es.properties</include>
+                                        <include>language/de.properties</include>
+                                        <include>language/pl.properties</include>
 				</includes>
 			</resource>
 		</resources>

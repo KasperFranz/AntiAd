@@ -37,8 +37,7 @@ Detected-Commands:
 - /tell
 #Warns admins when a player is spamming
 SpamWarnAdmins: false
-#Warns a admin when a player i advertising
+#Warns a admin when a player is advertising
 AdWarnAdmins: true
-
-# number of times a player can spam/advertise before a action is taken we recommend it's set on 3.)
+#Number of times a player can spam/advertise before a action is taken we recommend it's set on 3.)
 warnings: 3
