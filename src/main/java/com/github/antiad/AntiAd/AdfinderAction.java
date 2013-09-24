@@ -22,7 +22,8 @@ public class AdfinderAction implements Runnable {
     @Override
     public void run() {
         //First we try to run the command and if we gets a error while doing it we broadcast our Error message
-        if (!plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command)){
+        if (!plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), command)) {
+            plugin.getServer().broadcastMessage(plugin.getLanguage().getProperty("ErrorExecutingCommand"));
             
             // if we can execute it we gonna go into broadcasting a message about 
             // the player being kicked for advertising/spamming.
@@ -31,7 +32,6 @@ public class AdfinderAction implements Runnable {
             
             if (plugin.getConfig().getBoolean("Notification-Message")) {
                 plugin.getServer().broadcastMessage(broadcastmsg);
-                plugin.getServer().broadcastMessage(command);
             }
         }
     }
