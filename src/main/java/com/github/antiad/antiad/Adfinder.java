@@ -1,4 +1,4 @@
-package me.jne.AntiAd;
+package com.github.antiad.AntiAd;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

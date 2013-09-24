@@ -1,5 +1,5 @@
 name: AntiAd
-main: me.jne.AntiAd.AntiAd
+main: com.github.antiad.AntiAd.AntiAd
 version: ${project.version}
 dev-url: http://dev.bukkit.org/server-mods/antiad/
 website: http://dev.bukkit.org/server-mods/antiad/

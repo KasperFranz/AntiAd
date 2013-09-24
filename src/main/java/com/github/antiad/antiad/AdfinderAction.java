@@ -1,4 +1,4 @@
-package me.jne.AntiAd;
+package com.github.antiad.AntiAd;
 /**
  * This class is for execute commands (kick, ban tempban etc.) for when a player has reaced the limit (current 3).
  * but that is handled in the adfinder, this is only executing the command as console!

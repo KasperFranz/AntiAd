@@ -26,7 +26,7 @@
  * either expressed or implied, of anybody else.
  */
 
-package me.jne.AntiAd;
+package com.github.antiad.AntiAd;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
