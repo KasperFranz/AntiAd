@@ -29,7 +29,7 @@ public class ADListener implements Listener {
      *
      * @param chat
      */
-    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = false)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
         plugin.debug("chat gone?"+chat.isCancelled());
 
