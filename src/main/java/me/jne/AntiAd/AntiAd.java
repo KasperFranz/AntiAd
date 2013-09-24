@@ -158,6 +158,9 @@ public class AntiAd extends JavaPlugin {
     private ArrayList<String> validLanguage() {
         ArrayList<String> validLanguage = new ArrayList<String>(1);
         validLanguage.add("en");
+        validLanguage.add("pl");
+        validLanguage.add("de");
+        validLanguage.add("es");
         return validLanguage;
     }
 
