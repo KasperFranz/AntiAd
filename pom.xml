@@ -61,6 +61,7 @@
                                         <include>language/es.properties</include>
                                         <include>language/de.properties</include>
                                         <include>language/pl.properties</include>
+                                        <include>language/fr.properties</include>
 				</includes>
 			</resource>
 		</resources>
