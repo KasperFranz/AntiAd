@@ -1,4 +1,4 @@
-package com.github.antiad.AntiAd;;
+fpackage com.github.antiad.AntiAd;;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -162,6 +162,7 @@ public class AntiAd extends JavaPlugin {
         validLanguage.add("de");
         validLanguage.add("es");
         validLanguage.add("fr");
+        validLanguage.add("da");
         return validLanguage;
     }
 
