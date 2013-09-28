@@ -1,4 +1,4 @@
-fpackage com.github.antiad.AntiAd;;
+package com.github.antiad.AntiAd;;
 
 import java.io.File;
 import java.io.FileNotFoundException;
