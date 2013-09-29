@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>RELEASE</version>
+			<version>LATEST</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -22,6 +22,12 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+                    <dependency>
+                        <groupId>org.mcstats.bukkit</groupId>
+                        <artifactId>metrics</artifactId>
+                        <version>R8-SNAPSHOT</version>
+                        <scope>compile</scope>
+                </dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.name}</finalName>
@@ -72,5 +78,9 @@
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
+                <repository>
+                        <id>Plugin Metrics</id>
+                        <url>http://repo.mcstats.org/content/repositories/public</url>
+                </repository>
 	</repositories>
 </project>

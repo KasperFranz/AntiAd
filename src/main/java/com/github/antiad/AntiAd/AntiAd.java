@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.MetricsLite;
 
 /**
  * The main class for this bukkit plugin :)
@@ -48,9 +49,9 @@ public class AntiAd extends JavaPlugin {
         checkFile("Log.txt", "ERRORLogCreate");
 
         try {
-            final MetricsLite metrics = new MetricsLite(this);
+            MetricsLite metrics = new MetricsLite(this);
             metrics.start();
-        } catch (IOException ex) {
+        } catch (IOException e) {
             getLogger().info(language.getProperty("ERRORMetrics"));
         }
 
