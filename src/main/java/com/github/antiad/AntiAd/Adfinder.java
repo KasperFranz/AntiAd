@@ -397,7 +397,8 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-           input = input.replaceAll("\\,", "\\.")
+           input = input.replaceAll("\\,","")
+                   .replaceAll("\\.","")
                    .replaceAll("\\?", "")
                    .replaceAll("\\:","")
                    .replaceAll("\\;", "")
