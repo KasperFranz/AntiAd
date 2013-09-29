@@ -44,7 +44,7 @@ public class Adfinder {
      * @return true if it is spam/advertising and else false.
      */
     public boolean check(Player player, String message, int type, boolean checkForSpam) {
-        message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");;
+        message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         boolean rtnbool = false;
         int ad = 0;
         plugin.debug("We are testing player"+player.getName() + "Msg: "+message + "type:"+ type + "checkSpam"+ checkForSpam);
