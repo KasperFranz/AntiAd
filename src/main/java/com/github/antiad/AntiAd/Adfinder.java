@@ -405,6 +405,8 @@ public class Adfinder {
                    .replaceAll("\\/","")
                    .replaceAll("\\-", "")
                    .replaceAll("\\!", "")
+                   .replaceAll("\\(", "")
+                   .replaceAll("\\)", "")
                    
                    ;
           
