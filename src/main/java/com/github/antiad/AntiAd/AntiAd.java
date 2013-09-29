@@ -18,7 +18,7 @@ import org.mcstats.MetricsLite;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     private Adfinder adfinder;
     private Properties language;
 
@@ -198,7 +198,7 @@ public class AntiAd extends JavaPlugin {
      */
     public void debug(String text) {
         if (DEBUG) {
-            System.out.println(text);
+            System.out.println("DEBUG"+text);
         }
     }
 

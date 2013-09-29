@@ -397,15 +397,25 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-
-            Double.parseDouble(input.replaceAll("\\,", "\\."));
-
+           input = input.replaceAll("\\,", "\\.")
+                   .replaceAll("\\?", "")
+                   .replaceAll("\\:","")
+                   .replaceAll("\\;", "")
+                   .replaceAll("\\/","")
+                   .replaceAll("\\-", "")
+                   .replaceAll("\\!", "")
+                   
+                   ;
+          
+          
+            Double.parseDouble(input);
+            
             rtnbool = true;
         } catch (NumberFormatException ex) {
             //We catch this but does nothing to it because we dont need to :)
             //Because if the Double.ParseDouble throws the exception then if can't parse it.
         }
-
+        plugin.debug("isNumbers:"+rtnbool);
         return rtnbool;
     }
 
