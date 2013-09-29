@@ -87,14 +87,12 @@ public class Adfinder {
                 spam = true;
                 i = words.length; // we sets the i to max so it doesn't run more.
                 // if the word is 4 or under && it
-            } else if (words[i].length() >= 4
-                    && words[i].equals(words[i].toUpperCase())
-                    && !isNumbers(words[i])) {
+            } else if (words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i]) && procentCapital != 0) {
                 plugin.debug("else if 1");
                 spam = true;
                 i = words.length;
                 //if the words is longer than or 4 long
-            } else if (words[i].length() >= 4) {
+            } else if (words[i].length() >= 4 &&  procentCapital != 0) {
 
                 int upper = 0;
                 char[] charArray = words[i].toCharArray();

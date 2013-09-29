@@ -18,7 +18,7 @@ import org.mcstats.MetricsLite;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     private Adfinder adfinder;
     private Properties language;
 
