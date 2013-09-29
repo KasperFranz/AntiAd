@@ -28,7 +28,7 @@ public class AntiAd extends JavaPlugin {
     @Override
     public void onEnable() {
         loadLanguage();
-        adfinder = new Adfinder(this);
+       
 
 
         //Setting op the plugin listener to listen on this :)
@@ -47,15 +47,15 @@ public class AntiAd extends JavaPlugin {
 
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");
-
+        adfinder = new Adfinder(this);
         try {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
         } catch (IOException e) {
-            getLogger().info(language.getProperty("ERRORMetrics"));
+            getLogger().info(getFromLanguage("ERRORMetrics"));
         }
 
-        getLogger().info(language.getProperty("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
+        getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
 
     }
 
@@ -260,7 +260,7 @@ public class AntiAd extends JavaPlugin {
             try {
                 fileToCheck.createNewFile();
             } catch (IOException ex) {
-                getLogger().warning(language.getProperty(errorMessage));
+                getLogger().warning(getFromLanguage(errorMessage)+ " "+ex);
             }
         }
     }
