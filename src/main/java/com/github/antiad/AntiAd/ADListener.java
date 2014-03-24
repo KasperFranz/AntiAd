@@ -23,8 +23,9 @@ public class ADListener implements Listener {
     }
 
     /**
-     * If the chat msg is spam we gonna cannel it. Edit: fixed a bug where if
-     * the chat was canneled we worked with it anyway (this is now fixed so we
+     * If the chat msg is spam we gonna cannel it. 
+     * Edit: fixed a bug where if the chat was canneled
+     * we worked with it anyway (this is now fixed so we
      * dont use ressources on it)
      *
      * @param chat

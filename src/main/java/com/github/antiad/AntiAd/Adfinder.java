@@ -41,6 +41,7 @@ public class Adfinder {
      * @param player the player there issued this.
      * @param message the message the user sent!
      * @param type The type of where it is written (1 chat, 2 msg, 3 sign!
+     * @param checkForSpam if it should check for spam or not!
      * @return true if it is spam/advertising and else false.
      */
     public boolean check(Player player, String message, int type, boolean checkForSpam) {
@@ -177,9 +178,9 @@ public class Adfinder {
         if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins") || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
-            for (int i = 0; i < ops.length; i++) {
-                if (ops[i].isOnline()) {
-                     ops[i].getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
+            for (OfflinePlayer op : ops) {
+                if (op.isOnline()) {
+                    op.getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 1)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
                 }
             }
         }
@@ -341,7 +342,7 @@ public class Adfinder {
                 whitelistLine.add(line);
             }
 
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("whitelistNotFound"));
         }
     }
