@@ -398,29 +398,14 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-           input = input.replaceAll("\\,","")
-                   .replaceAll("\\.","")
-                   .replaceAll("\\?", "")
-                   .replaceAll("\\:","")
-                   .replaceAll("\\;", "")
-                   .replaceAll("\\/","")
-                   .replaceAll("\\-", "")
-                   .replaceAll("\\!", "")
-                   .replaceAll("\\(", "")
-                   .replaceAll("\\)", "")
-                   .replaceAll("\\\"", "")
-                   
-                   ;
-          
-          
-            Double.parseDouble(input);
-            
-            rtnbool = true;
+          input = input.replaceAll("[^A-Za-z0-9]", "");
+          Double.parseDouble(input);
+          rtnbool = true;
         } catch (NumberFormatException ex) {
             //We catch this but does nothing to it because we dont need to :)
-            //Because if the Double.ParseDouble throws the exception then if can't parse it.
+            //Because if the Double.ParseDouble throws the exception then it can't parse it.
         }
-        plugin.debug("isNumbers:"+rtnbool);
+        plugin.debug("isNumbers: "+rtnbool);
         return rtnbool;
     }
 
