@@ -20,8 +20,8 @@ import org.bukkit.entity.Player;
 public class Adfinder {
 
     private AntiAd plugin;
-    // ip pattern http://regexr.com?33l17
-    private final Pattern ipPattern = Pattern.compile("((?<![0-9])(?:(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[.,-:; ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})[ ]?[., ][ ]?(?:25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))(?![0-9]))");
+    // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
+    private final Pattern ipPattern = Pattern.compile("(?:\d{1,3}[ ]?[.,\-:;\ \\][ ]?){3}\d{1,3}");
     // web pattern http://regexr.com?36elv
     private final Pattern webpattern = Pattern.compile("[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?");
     private HashMap<Player, Integer> warn;
