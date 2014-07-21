@@ -21,7 +21,7 @@ public class Adfinder {
 
     private AntiAd plugin;
     // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
-    private final Pattern ipPattern = Pattern.compile("(?:\d{1,3}[ ]?[.,\-:;\ \\][ ]?){3}\d{1,3}");
+    private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     // web pattern http://regexr.com?36elv
     private final Pattern webpattern = Pattern.compile("[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?");
     private HashMap<Player, Integer> warn;
@@ -48,7 +48,7 @@ public class Adfinder {
         message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         boolean rtnbool = false;
         int ad = 0;
-        plugin.debug("We are testing player"+player.getName() + "Msg: "+message + "type:"+ type + "checkSpam"+ checkForSpam);
+        plugin.debug("We are testing player "+player.getName() + " Msg: "+message + "  type: "+ type + "    checkSpam"+ checkForSpam);
         // if the player hasn't permission the bypass advertising then we check if for advertising.
         if (!player.hasPermission("antiad.bypass.ad")) {
             plugin.debug("Checking for advertising.");
