@@ -13,6 +13,13 @@ Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/j
 
 Official builds can be found at AntiAds page on Dev.Bukkit.org
 
+Usage 
+=====
+
+We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
+![alt tag](http://i.mcstats.org/AntiAd/Global+Statistics.png)
+
+
 License
 ======
 
