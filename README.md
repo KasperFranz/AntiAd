@@ -9,9 +9,11 @@ Builds
 ======
 We make auto builds every time a commit is made using Jenkins.
 
+Travis CI: [![Build Status](https://travis-ci.org/antiAD/AntiAd.svg?branch=master)](https://travis-ci.org/antiAD/AntiAd)
+
 Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/job/AntiAd/
 
-Official builds can be found at AntiAds page on Dev.Bukkit.org
+Official builds can be found at AntiAds page on dev.bukkit.org
 
 Usage 
 =====
