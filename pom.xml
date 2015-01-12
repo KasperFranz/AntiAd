@@ -77,7 +77,7 @@
 	<repositories>
 		<repository>
 			<id>spigot-repo</id>
-			<url>hub.spigotmc.org/nexus/content/groups/public/</url>
+			<url>http://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
                 <repository>
                         <id>Plugin Metrics</id>
