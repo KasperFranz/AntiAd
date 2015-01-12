@@ -10,6 +10,7 @@ Builds
 We make auto builds every time a commit is made using Jenkins.
 
 Travis CI: [![Build Status](https://travis-ci.org/antiAD/AntiAd.svg?branch=master)](https://travis-ci.org/antiAD/AntiAd)
+
 CloudBees: [![Build Status](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/badge/icon)](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/)
 
 Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/job/AntiAd/
