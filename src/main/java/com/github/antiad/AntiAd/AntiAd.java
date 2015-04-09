@@ -23,7 +23,7 @@ public class AntiAd extends JavaPlugin {
     private Properties language;
 
     /**
-     * The enable method for the plugin.
+     * This enables this plugin :) 
      */
     @Override
     public void onEnable() {
