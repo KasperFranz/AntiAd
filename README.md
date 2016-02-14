@@ -15,7 +15,7 @@ Travis CI: [![Build Status](https://travis-ci.org/antiAD/AntiAd.svg?branch=maste
 
 Development builds can be found at: Coming Soon
 
-Official builds can be found at AntiAds page on dev.bukkit.org
+Official builds can be found at AntiAds page on dev.bukkit.org or spigotmc.org.
 
 Usage 
 =====
