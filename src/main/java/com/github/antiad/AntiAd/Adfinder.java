@@ -244,7 +244,7 @@ public class Adfinder {
         String broadcastMessage = plugin.getColorfullLanguageAndTag("PlayerActionTaken").replace("%PLAYER%", player.getDisplayName()).replace("%ACTION%", getActionType(command)).replace("%FOR%", typeToX(type, 2));
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
-        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage));
+        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage,typeToX(type, 2),player.getDisplayName()));
 
     }
 
