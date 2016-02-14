@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.*;
@@ -27,7 +28,7 @@ public class Adfinder {
     private HashMap<Player, Integer> warn;
     private boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
     private int numbers, procentCapital;
-    private ArrayList<String> whitelistLine;
+    private ArrayList<String> whitelistLine, whitelistWildCardList;
 
     public Adfinder(AntiAd instance) {
         plugin = instance;
@@ -48,7 +49,7 @@ public class Adfinder {
         message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         boolean rtnbool = false;
         int ad = 0;
-        plugin.debug("We are testing player "+player.getName() + " Msg: "+message + "  type: "+ type + "    checkSpam"+ checkForSpam);
+        plugin.debug("We are testing player " + player.getName() + " Msg: " + message + "  type: " + type + "    checkSpam" + checkForSpam);
         // if the player hasn't permission the bypass advertising then we check if for advertising.
         if (!player.hasPermission("antiad.bypass.ad")) {
             plugin.debug("Checking for advertising.");
@@ -93,7 +94,7 @@ public class Adfinder {
                 spam = true;
                 i = words.length;
                 //if the words is longer than or 4 long
-            } else if (words[i].length() >= 4 &&  procentCapital != 0) {
+            } else if (words[i].length() >= 4 && procentCapital != 0) {
 
                 int upper = 0;
                 char[] charArray = words[i].toCharArray();
@@ -102,8 +103,6 @@ public class Adfinder {
                     if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
                         upper++;
                     }
-
-
 
                 }
 
@@ -115,7 +114,6 @@ public class Adfinder {
             }
 
         }
-
 
         return spam;
     }
@@ -154,7 +152,7 @@ public class Adfinder {
      * @param message
      */
     public void log(String message) {
-        plugin.debug("Begin to log:"+message);
+        plugin.debug("Begin to log:" + message);
         try {
             BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
             write.append(message);
@@ -191,25 +189,25 @@ public class Adfinder {
                 .replace("%TYPE%", typeToX(type, 1))
                 .replace("%MESSAGE%", message)
                 .replace("%WHERE%", whereToTXT(where)));
-            
+
         Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
         int warnings = 1;
         // if we know the player we gonna remove him and count the warnings up.
-        if(warn.containsKey(player)){
+        if (warn.containsKey(player)) {
             warnings = warn.get(player) + 1;
             warn.remove(player);
         }
-        warn.put(player,warnings);
-        
+        warn.put(player, warnings);
+
         int maxWarnings = plugin.getConfig().getInt("warnings");
-        
+
         // begin sending the warning to the player
-        if(warn.get(player) >= maxWarnings){
-     // if he is at max Warnings we gonna take action
+        if (warn.get(player) >= maxWarnings) {
+            // if he is at max Warnings we gonna take action
             takeAction(player, type);
         } else {
-            player.sendMessage(plugin.getColorfullLanguageAndTag("chancesLeft").replace("%WARNINGS%", warn.get(player) + "").replace("%CHANCES%", maxWarnings+""));
+            player.sendMessage(plugin.getColorfullLanguageAndTag("chancesLeft").replace("%WARNINGS%", warn.get(player) + "").replace("%CHANCES%", maxWarnings + ""));
             player.sendMessage(plugin.getColorfullLanguageAndTag("PlayerWarningFor").replace("%REASON%", typeToX(type, 3)));
         }
 
@@ -247,8 +245,6 @@ public class Adfinder {
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
         plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage));
-
-
 
     }
 
@@ -323,8 +319,7 @@ public class Adfinder {
         } else {
             rtnString = "unknow";
         }
-        
-        
+
         return rtnString;
     }
 
@@ -337,18 +332,23 @@ public class Adfinder {
         try {
             BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
             whitelistLine = new ArrayList<String>();
+            whitelistWildCardList = new ArrayList<String>();
             String line;
             while ((line = read.readLine()) != null) {
-                whitelistLine.add(line);
+                whitelistAdd(line);
             }
 
         } catch (IOException ex) {
             plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("whitelistNotFound"));
         }
     }
-    
-    public void whitelistAdd(String url){
-         whitelistLine.add(url);
+
+    public void whitelistAdd(String line) {
+        if (line.startsWith("*") || line.endsWith("*")) {
+            whitelistWildCardList.add(line);
+        } else {
+            whitelistLine.add(line);
+        }
     }
 
     /**
@@ -386,7 +386,6 @@ public class Adfinder {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         return sdf.format(cal.getTime());
 
-
     }
 
     /**
@@ -398,14 +397,14 @@ public class Adfinder {
     private boolean isNumbers(String input) {
         boolean rtnbool = false;
         try {
-          input = input.replaceAll("[^A-Za-z0-9]", "");
-          Double.parseDouble(input);
-          rtnbool = true;
+            input = input.replaceAll("[^A-Za-z0-9]", "");
+            Double.parseDouble(input);
+            rtnbool = true;
         } catch (NumberFormatException ex) {
             //We catch this but does nothing to it because we dont need to :)
             //Because if the Double.ParseDouble throws the exception then it can't parse it.
         }
-        plugin.debug("isNumbers: "+rtnbool);
+        plugin.debug("isNumbers: " + rtnbool);
         return rtnbool;
     }
 
@@ -443,17 +442,19 @@ public class Adfinder {
     private int checkForWebPattern(String message) {
         int advertising = 0;
         Matcher regexMatcherurl = webpattern.matcher(message);
-        plugin.debug("Message: "+message);
+        plugin.debug("Message: " + message);
 
         while (regexMatcherurl.find()) {
             String text = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
-            plugin.debug(text+"g" + "reg:" +regexMatcherurl.group().length() + " group lenght"+regexMatcherurl.group().length());
+
+            plugin.debug(text + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
             if (regexMatcherurl.group().length() != 0 && text.length() != 0) {
                 plugin.debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {
-                    if (!whitelistLine.contains(text)) {
+                    if (checkInWhitelist(text)) {
                         plugin.debug("for this" + text);
                         advertising = 1;
+                        break;
                     } else {
                         advertising = 2;
                     }
@@ -461,6 +462,32 @@ public class Adfinder {
             }
         }
         return advertising;
+    }
+
+    public boolean checkInWhitelist(String text) {
+        boolean advertised = true;
+        if (whitelistLine.contains(text)) {
+            advertised = false;
+        } else {
+            if (whitelistWildCardList.size() > 0) {
+                for (String whitelistItem : whitelistWildCardList) {
+                    plugin.debug("looking at "+whitelistItem + (advertised ? " true" :" false"));
+                    if (whitelistItem.startsWith("*") && whitelistItem.endsWith("*")) {
+                        advertised = !text.contains(whitelistItem.replace("*", ""));
+                    } else if (whitelistItem.startsWith("*")) {
+                        advertised = !text.endsWith(whitelistItem.replace("*", ""));
+                    } else if (whitelistItem.endsWith("*")) {
+                        advertised = !text.startsWith(whitelistItem.replace("*", ""));
+                        plugin.debug(advertised ? "true" : "false");
+                    }
+                    if (!advertised) {
+                        plugin.debug("Found it!");
+                        break;
+                    }
+                }
+            }
+        }
+        return advertised;
     }
 
     /**
