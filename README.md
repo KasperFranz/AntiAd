@@ -9,14 +9,25 @@ Builds
 ======
 We make auto builds every time a commit is made using Jenkins.
 
+Travis CI: [![Build Status](https://travis-ci.org/antiAD/AntiAd.svg?branch=master)](https://travis-ci.org/antiAD/AntiAd)
+
+CloudBees: [![Build Status](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/badge/icon)](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/)
+
 Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/job/AntiAd/
 
-Official builds can be found at AntiAds page on Dev.Bukkit.org
+Official builds can be found at AntiAds page on dev.bukkit.org
+
+Usage 
+=====
+
+We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
+![alt tag](http://i.mcstats.org/AntiAd/Global+Statistics.png)
+
 
 License
 ======
 
-Copyright (c) 2012 - 2014, The AntiAd Team. All rights reserved.
+Copyright (c) 2012 - 2015, The AntiAd Team. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 

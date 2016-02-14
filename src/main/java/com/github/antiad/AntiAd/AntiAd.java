@@ -23,7 +23,7 @@ public class AntiAd extends JavaPlugin {
     private Properties language;
 
     /**
-     * The enable method for the plugin.
+     * This enables this plugin :) 
      */
     @Override
     public void onEnable() {
@@ -121,6 +121,7 @@ public class AntiAd extends JavaPlugin {
         final ArrayList<String> validLanguage = validLanguage();
         if (getConfig().contains("Language")) {
             String tempLang = getConfig().getString("Language");
+            this.debug("tempLang: "+tempLang);
             if (validLanguage.contains(tempLang)) {
                 setLanguage(tempLang);
             } else {
@@ -178,19 +179,17 @@ public class AntiAd extends JavaPlugin {
      */
     public String colorfull(String text) {
         try{
-        text =  text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
-        debug(text+ "colorfull :)");
-        }catch(Exception ex){
-        }
+            text =  text.replaceAll("&([a-f0-9])", ChatColor.COLOR_CHAR + "$1");
+        }catch(Exception ex){}
+        
         return text;
     }
     
     public String uncolorfull(String text){
         try{
            text = text.replaceAll("&([a-f0-9])", "");
-        }catch(Exception ex){
-           
-        }
+        }catch(Exception ex){}
+        
         return text;
     }
 
@@ -209,7 +208,7 @@ public class AntiAd extends JavaPlugin {
      * *
      * Colorize the text from the language
      *
-     * @param propeuy the property you want from the language.
+     * @param property the property you want from the language.
      * @return the colorfull text :)
      */
     public String getColorfullLanguage(String property) {

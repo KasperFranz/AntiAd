@@ -1,11 +1,11 @@
 #Standard Languge you wat to use (see http://dev.bukkit.org/server-mods/antiad/ for valid values here)
 Language: en
 #Command sent to console when someone advertises
-Command-Ad: tempban <player> <reasonad> <time>
+Command-Ad: tempban <player> <time> <reasonad>
 #Command sent to console when someone spams
 Command-Spam: kick <player> <reasonspam>
 #The Amount of time they are banned for
-Time: 5
+Time: 5m
 #The message players are given if not banned.
 Spam_Message: DO NOT SPAM!
 #The message players are given if not banned.
@@ -41,3 +41,5 @@ SpamWarnAdmins: false
 AdWarnAdmins: true
 #Number of times a player can spam/advertise before a action is taken we recommend it's set on 3.)
 warnings: 3
+#Should we replace text instead of removing it?
+replaceText: false
