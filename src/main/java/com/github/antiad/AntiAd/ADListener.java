@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
@@ -19,24 +20,23 @@ public class ADListener implements Listener {
 
     public ADListener(AntiAd plugin) {
         this.plugin = plugin;
-        
+
     }
 
     /**
-     * If the chat msg is spam we gonna cannel it. 
-     * Edit: fixed a bug where if the chat was canneled
-     * we worked with it anyway (this is now fixed so we
+     * If the chat msg is spam we gonna cancel it. Edit: fixed a bug where if
+     * the chat was canneled we worked with it anyway (this is now fixed so we
      * dont use ressources on it)
      *
      * @param chat
      */
-    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        plugin.debug("chat gone?"+chat.isCancelled());
+        plugin.debug("chat gone?" + chat.isCancelled());
 
-            if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
-                chat.setCancelled(true);
-            }
+        if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
+            chat.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -62,12 +62,21 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCommandSent(PlayerCommandPreprocessEvent chat) {
 
-
         String CL = chat.getMessage().split("\\s+")[0];
         List<String> Commands = plugin.getConfig().getStringList("Detected-Commands");
         if (Commands.contains(CL)) {
             if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 2, true)) {
                 chat.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEditBook(PlayerEditBookEvent bookEdit) {
+        for(String page : bookEdit.getNewBookMeta().getPages()){
+            if (plugin.getAdfinder().check(bookEdit.getPlayer(), page, 4, false)) {
+                bookEdit.setCancelled(true);
+                break;
             }
         }
     }

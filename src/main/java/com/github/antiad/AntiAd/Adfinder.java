@@ -41,7 +41,7 @@ public class Adfinder {
      *
      * @param player the player there issued this.
      * @param message the message the user sent!
-     * @param type The type of where it is written (1 chat, 2 msg, 3 sign!
+     * @param type The type of where it is written (1 chat, 2 msg, 3 sign, 4 book!
      * @param checkForSpam if it should check for spam or not!
      * @return true if it is spam/advertising and else false.
      */
@@ -354,7 +354,7 @@ public class Adfinder {
     /**
      * A method to change the where int to a String.
      *
-     * @param where The type of where it is written (1 chat, 2 msg, 3 sign!
+     * @param where The type of where it is written (1 chat, 2 msg, 3 sign, 4 book!
      * @return returns where it was executed, if found (1-3 is allowed values
      * atm.)
      */
@@ -369,6 +369,9 @@ public class Adfinder {
                 break;
             case 3:
                 returnString = "sign";
+                break;
+            case 4: 
+                returnString = "book";
                 break;
         }
         return returnString;

@@ -41,3 +41,5 @@ SpamWarnAdmins: false
 AdWarnAdmins: true
 #Number of times a player can spam/advertise before a action is taken we recommend it's set on 3.)
 warnings: 3
+#Should we replace text instead of removing it?
+replaceText: false

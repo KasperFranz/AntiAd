@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Added
  - Start aliases is now possible, see #49 for more information
  - Checking if the command exists before trying to execute it.
+ - We now check if the books contains spam, links etc.
  
 ### Changed
 
