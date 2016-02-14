@@ -12,3 +12,4 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ### Fixed
  - Whitelist accepted "this is my advertisement for xx.yy on this server server.com" if you had server.com on the whitelist.
+ - If the word length is set to 0 it isn't possible to use the chat system.

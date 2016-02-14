@@ -83,16 +83,16 @@ public class Adfinder {
 
         String[] words = message.split("\\s+");
         for (int i = 0; i < words.length; i++) {
-            if (checkWordLenght && words[i].length() >= numbers) {
+            if (checkWordLenght && words[i].length() >= numbers && numbers != 0) {
                 //Checks if the message is longer than the max allowed, it only does this if the config allows it.
                 plugin.debug("this is marked as spam because " + words[i].length() + ">=" + numbers);
                 spam = true;
-                i = words.length; // we sets the i to max so it doesn't run more.
+                break;
                 // if the word is 4 or under && it
             } else if (words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i]) && procentCapital != 0) {
                 plugin.debug("else if 1");
                 spam = true;
-                i = words.length;
+                break;
                 //if the words is longer than or 4 long
             } else if (words[i].length() >= 4 && procentCapital != 0) {
 
@@ -109,7 +109,7 @@ public class Adfinder {
                 if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
                     plugin.debug("else if 2");
                     spam = true;
-                    i = words.length;
+                    break;
                 }
             }
 
