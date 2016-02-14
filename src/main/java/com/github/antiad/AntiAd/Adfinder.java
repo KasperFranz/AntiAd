@@ -454,6 +454,7 @@ public class Adfinder {
                     if (!whitelistLine.contains(text)) {
                         plugin.debug("for this" + text);
                         advertising = 1;
+                        break;
                     } else {
                         advertising = 2;
                     }
