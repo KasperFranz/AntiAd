@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.*;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -26,8 +27,8 @@ public class Adfinder {
     // web pattern http://regexr.com?36elv
     private final Pattern webpattern = Pattern.compile("[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?");
     private HashMap<Player, Integer> warn;
-    private boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
-    private int numbers, procentCapital;
+    public boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
+    public int numbers, procentCapital;
     private ArrayList<String> whitelistLine, whitelistWildCardList;
 
     public Adfinder(AntiAd instance) {
@@ -37,67 +38,42 @@ public class Adfinder {
     }
 
     /**
-     * Command for checking if it is spam or advertising.
-     *
-     * @param player the player there issued this.
-     * @param message the message the user sent!
-     * @param type The type of where it is written (1 chat, 2 msg, 3 sign, 4 book!
-     * @param checkForSpam if it should check for spam or not!
-     * @return true if it is spam/advertising and else false.
-     */
-    public boolean check(Player player, String message, int type, boolean checkForSpam) {
-        message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-        boolean rtnbool = false;
-        int ad = 0;
-        plugin.debug("We are testing player " + player.getName() + " Msg: " + message + "  type: " + type + "    checkSpam" + checkForSpam);
-        // if the player hasn't permission the bypass advertising then we check if for advertising.
-        if (!player.hasPermission("antiad.bypass.ad")) {
-            plugin.debug("Checking for advertising.");
-            ad = checkForAdvertising(message);
-
-        }
-
-        if (ad == 1) {
-            sendWarning(player, message, 1, type);
-            rtnbool = true;
-        } else if (ad == 0) {
-            //if it's not advertising then check for spam
-            if (spamDetection && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
-                if (checkForSpam(message)) {
-                    sendWarning(player, message, 2, type);
-                    rtnbool = true;
-                }
-            }
-        }
-        return rtnbool;
-    }
-
-    /**
      * Check if the mesage is a spam or not!
      *
-     * @param message the message to check for ads!
      * @return true or false depending on if it is spam or not!
      */
-    private boolean checkForSpam(String message) {
+    public boolean checkForSpam(Check check) {
         boolean spam = false;
 
-        String[] words = message.split("\\s+");
-        for (int i = 0; i < words.length; i++) {
-            if (checkWordLenght && words[i].length() >= numbers && numbers != 0) {
+        for (String word : check.getMessage().split("\\s+")) {
+            if (checkWordLenght && word.length() >= numbers && numbers != 0) {
                 //Checks if the message is longer than the max allowed, it only does this if the config allows it.
-                plugin.debug("this is marked as spam because " + words[i].length() + ">=" + numbers);
+                plugin.debug("this is marked as spam because " + word.length() + ">=" + numbers);
                 spam = true;
                 break;
                 // if the word is 4 or under && it
-            } else if (words[i].length() >= 4 && words[i].equals(words[i].toUpperCase()) && !isNumbers(words[i]) && procentCapital != 0) {
+            }
+        }
+
+        return spam;
+    }
+
+    public boolean checkForCaps(Check check) {
+        boolean caps = false;
+        String[] words = check.getMessage().split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (word.length() >= 4 && word.equals(word.toUpperCase()) && !isNumbers(word) && procentCapital != 0) {
                 plugin.debug("else if 1");
-                spam = true;
+                word = word.toLowerCase();
+                words[i] = word;
+                caps = true;
                 break;
                 //if the words is longer than or 4 long
-            } else if (words[i].length() >= 4 && procentCapital != 0) {
+            } else if (word.length() >= 4 && procentCapital != 0) {
 
                 int upper = 0;
-                char[] charArray = words[i].toCharArray();
+                char[] charArray = word.toCharArray();
                 for (int j = 0; j < charArray.length; j++) {
                     String letter = charArray[j] + "";
                     if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
@@ -108,14 +84,15 @@ public class Adfinder {
 
                 if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
                     plugin.debug("else if 2");
-                    spam = true;
+                    word = word.toLowerCase();
+                    words[i] = word;
+                    caps = true;
                     break;
                 }
             }
-
         }
-
-        return spam;
+        check.setMessage(StringUtils.join(words," "));
+        return caps;
     }
 
     /**
@@ -126,21 +103,21 @@ public class Adfinder {
      * This uses int because if it's adverting there are on the whitelist then
      * it shouldn't check for spam.
      *
-     * @param message the message you want to check for
+     * @param check Check where we can get the message
      * @return 1 if advertising, and 2 if it's advertingsing there are on the
      * whitelist.
      */
-    private int checkForAdvertising(String message) {
+    public int checkForAdvertising(Check check) {
         int advertising = 0;
         // CHECK FOR IP PATTERN if it's turned on.
         if (IPDetection) {
-            advertising = checkForIPPattern(message);
+            advertising = checkForIPPattern(check);
             plugin.debug("Checking for IP");
         }
         //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
         if (advertising == 0 && urlDetection) {
             plugin.debug("Checking for web");
-            advertising = checkForWebPattern(message);
+            advertising = checkForWebPattern(check);
         }
 
         return advertising;
@@ -169,8 +146,9 @@ public class Adfinder {
      * @param message the message the player has send!
      * @param player the player there sent the message!
      * @param type 1 for AD 2 for spam. (gets logged)
+     * @param where
      */
-    private void sendWarning(Player player, String message, int type, int where) {
+    public void sendWarning(Player player, String message, int type, int where) {
         plugin.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
         if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins") || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
@@ -244,7 +222,7 @@ public class Adfinder {
         String broadcastMessage = plugin.getColorfullLanguageAndTag("PlayerActionTaken").replace("%PLAYER%", player.getDisplayName()).replace("%ACTION%", getActionType(command)).replace("%FOR%", typeToX(type, 2));
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
-        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage,typeToX(type, 2),player.getDisplayName()));
+        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage, typeToX(type, 2), player.getDisplayName()));
 
     }
 
@@ -354,7 +332,8 @@ public class Adfinder {
     /**
      * A method to change the where int to a String.
      *
-     * @param where The type of where it is written (1 chat, 2 msg, 3 sign, 4 book!
+     * @param where The type of where it is written (1 chat, 2 msg, 3 sign, 4
+     * book!
      * @return returns where it was executed, if found (1-3 is allowed values
      * atm.)
      */
@@ -370,7 +349,7 @@ public class Adfinder {
             case 3:
                 returnString = "sign";
                 break;
-            case 4: 
+            case 4:
                 returnString = "book";
                 break;
         }
@@ -418,15 +397,19 @@ public class Adfinder {
      * @return true if the message is in the IP pattern and not on the
      * whitelist.
      */
-    private int checkForIPPattern(String message) {
+    private int checkForIPPattern(Check check) {
         int advertising = 0;
+        String message = check.getMessage();
         Matcher regexMatcher = ipPattern.matcher(message);
 
         while (regexMatcher.find()) {
             if (regexMatcher.group().length() != 0) {
                 if (ipPattern.matcher(message).find()) {
-                    if (!whitelistLine.contains(regexMatcher.group().trim())) {
+                    String advertisement = regexMatcher.group().trim();
+                    if (!whitelistLine.contains(advertisement)) {
                         advertising = 1;
+                        message = message.replace(advertisement, "Advertisement");
+                        check.setMessage(message);
                     } else {
                         advertising = 2;
                     }
@@ -442,20 +425,23 @@ public class Adfinder {
      * @param message the message you want to get checked.
      * @return true if it's in the webpattern and false if it isn't
      */
-    private int checkForWebPattern(String message) {
+    private int checkForWebPattern(Check check) {
         int advertising = 0;
+        String message = check.getMessage();
         Matcher regexMatcherurl = webpattern.matcher(message);
         plugin.debug("Message: " + message);
 
         while (regexMatcherurl.find()) {
-            String text = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
+            String advertisement = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
 
-            plugin.debug(text + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
-            if (regexMatcherurl.group().length() != 0 && text.length() != 0) {
+            plugin.debug(advertisement + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
+            if (regexMatcherurl.group().length() != 0 && advertisement.length() != 0) {
                 plugin.debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {
-                    if (checkInWhitelist(text)) {
-                        plugin.debug("for this" + text);
+                    if (checkInWhitelist(advertisement)) {
+                        plugin.debug("for this" + advertisement);
+                        message = message.replace(advertisement, "Advertisement");
+                        check.setMessage(message);
                         advertising = 1;
                         break;
                     } else {
@@ -474,7 +460,7 @@ public class Adfinder {
         } else {
             if (whitelistWildCardList.size() > 0) {
                 for (String whitelistItem : whitelistWildCardList) {
-                    plugin.debug("looking at "+whitelistItem + (advertised ? " true" :" false"));
+                    plugin.debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
                     if (whitelistItem.startsWith("*") && whitelistItem.endsWith("*")) {
                         advertised = !text.contains(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.startsWith("*")) {

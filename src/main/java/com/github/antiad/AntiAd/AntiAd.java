@@ -1,4 +1,4 @@
-package com.github.antiad.AntiAd;;
+package com.github.antiad.AntiAd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +29,7 @@ public class AntiAd extends JavaPlugin {
     public void onEnable() {
         loadLanguage();
        
-
+        
 
         //Setting op the plugin listener to listen on this :)
         getServer().getPluginManager().registerEvents(new ADListener(this), this);
@@ -41,7 +41,7 @@ public class AntiAd extends JavaPlugin {
 
         if (!getConfig().contains("Detected-Commands")) {
             getConfig().addDefault("Detected-Commands", Arrays.asList("/msg", "/message", "/tell"));
-
+        
             saveConfig();
         }
 
@@ -265,5 +265,5 @@ public class AntiAd extends JavaPlugin {
                 getLogger().warning(getFromLanguage(errorMessage)+ " "+ex);
             }
         }
-    }
+    }    
 }

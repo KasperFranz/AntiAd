@@ -33,9 +33,23 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
         plugin.debug("chat gone?" + chat.isCancelled());
+        Check check = new Check(plugin, chat.getPlayer());
 
-        if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 1, true)) {
-            chat.setCancelled(true);
+        if (check.check(chat.getMessage(), 1, true)) {
+
+            plugin.debug(" " + plugin.getConfig().getBoolean("replaceText.advertisement"));
+            plugin.debug(" " + check.isAdvertisement());
+            if (check.isSpam() && plugin.getConfig().getBoolean("replaceText.spam")) {
+
+            } else if (
+                    (check.isAdvertisement() && plugin.getConfig().getBoolean("replaceText.advertisement")) ||
+//                    (check.isSpam() && plugin.getConfig().getBoolean("replaceText.spam")) ||
+                    (check.isCaps()&& plugin.getConfig().getBoolean("replaceText.caps"))
+                    ) {
+                chat.setMessage(check.getMessage());
+            } else {
+                chat.setCancelled(true);
+            }
         }
     }
 
@@ -49,9 +63,10 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSignCreation(SignChangeEvent sign) {
 
+        Check check = new Check(plugin, sign.getPlayer());
         for (int i = 0; i < sign.getLines().length; i++) {
+            if (check.check(sign.getLine(i), 3, false)) {
 
-            if (plugin.getAdfinder().check(sign.getPlayer(), sign.getLine(i), 3, false)) {
                 i = sign.getLines().length;
                 sign.setCancelled(true);
                 sign.getBlock().breakNaturally();
@@ -65,7 +80,8 @@ public class ADListener implements Listener {
         String CL = chat.getMessage().split("\\s+")[0];
         List<String> Commands = plugin.getConfig().getStringList("Detected-Commands");
         if (Commands.contains(CL)) {
-            if (plugin.getAdfinder().check(chat.getPlayer(), chat.getMessage(), 2, true)) {
+            Check check = new Check(plugin, chat.getPlayer());
+            if (check.check(chat.getMessage(), 2, true)) {
                 chat.setCancelled(true);
             }
         }
@@ -73,8 +89,9 @@ public class ADListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEditBook(PlayerEditBookEvent bookEdit) {
-        for(String page : bookEdit.getNewBookMeta().getPages()){
-            if (plugin.getAdfinder().check(bookEdit.getPlayer(), page, 4, false)) {
+        Check check = new Check(plugin, bookEdit.getPlayer());
+        for (String page : bookEdit.getNewBookMeta().getPages()) {
+            if (check.check(page, 4, true)) {
                 bookEdit.setCancelled(true);
                 break;
             }
