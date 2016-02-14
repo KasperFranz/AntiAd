@@ -3,7 +3,8 @@ AntiAd
 
 This is a plugin is my first public plugin and it allows you to prevent those anyoing advertisers stealing your people from your server. What it does is it waits for an IP in the chat and when someone types an IP it intercepts the message and says to the person [AntiAd] DO NOT ADVERTISE! and gives them their first strike, the player has 3 chances and on the third chance will be punished using a command outputed from the console, this is editable in the config, It also sends a message to everyone with the permissions node: antiad.see: true and tells them who advertised and what the IP was so admins and moderators can take appropriate action. There is a Secondary feature that prevents spam, Long excessive words 'aaaaaaaaaaaaaaaa' for example and it also blocks people writing in caps.
 
-http://dev.bukkit.org/server-mods/antiad/
+Bukkit: https://dev.bukkit.org/server-mods/antiad/
+SpigotMC: https://www.spigotmc.org/resources/antiad.323/
 
 Builds
 ======
@@ -11,9 +12,7 @@ We make auto builds every time a commit is made using Jenkins.
 
 Travis CI: [![Build Status](https://travis-ci.org/antiAD/AntiAd.svg?branch=master)](https://travis-ci.org/antiAD/AntiAd)
 
-CloudBees: [![Build Status](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/badge/icon)](https://buildhive.cloudbees.com/job/antiAD/job/AntiAd/)
-
-Development builds can be found at  https://buildhive.cloudbees.com/job/AntiAd/job/AntiAd/
+Development builds can be found at: Coming Soon
 
 Official builds can be found at AntiAds page on dev.bukkit.org
 
@@ -21,13 +20,13 @@ Usage
 =====
 
 We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
-![alt tag](http://i.mcstats.org/AntiAd/Global+Statistics.png)
+![alt tag](https://i.mcstats.org/AntiAd/Global+Statistics.png)
 
 
 License
 ======
 
-Copyright (c) 2012 - 2015, The AntiAd Team. All rights reserved.
+Copyright (c) 2012 - 2016, The AntiAd Team. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
