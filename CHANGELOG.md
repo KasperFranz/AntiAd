@@ -4,12 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
- - Start aliases is now possible, see #49 for more information
- - Checking if the command exists before trying to execute it.
- - We now check if the books contains spam, links etc.
  
 ### Changed
 
+### Fixed
+
+
+## [2.3.0] - 2016-02-15
+### Added
+ - Start aliases is now possible, see #49 for more information
+ - Checking if the command exists before trying to execute it.
+ - We now check if the books contains spam, links etc.
 
 ### Fixed
  - Whitelist accepted "this is my advertisement for xx.yy on this server server.com" if you had server.com on the whitelist.
