@@ -44,6 +44,18 @@ public class AntiAd extends JavaPlugin {
         
             saveConfig();
         }
+		
+		
+        if (!getConfig().contains("replaceText.caps")) {
+            getConfig().addDefault("replaceText.caps", false);
+            saveConfig();
+        }
+		
+		
+        if (!getConfig().contains("replaceText.advertisement")) {
+            getConfig().addDefault("replaceText.advertisement", false);
+            saveConfig();
+        }
 
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");

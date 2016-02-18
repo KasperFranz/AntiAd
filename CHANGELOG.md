@@ -4,9 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
+ - Added default values to the new variables, should be added on startup.
  
 ### Changed
-
+ - Removed the join messages
+ 
 ### Fixed
 
 
