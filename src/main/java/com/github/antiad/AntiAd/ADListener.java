@@ -53,12 +53,6 @@ public class ADListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerJoin(PlayerJoinEvent join) {
-        if (plugin.getConfig().getBoolean("JoinMsg-On")) {
-            join.getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("JoinMsg"));
-        }
-    }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSignCreation(SignChangeEvent sign) {
