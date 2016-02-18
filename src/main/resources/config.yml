@@ -12,8 +12,6 @@ Spam_Message: DO NOT SPAM!
 Ad_Message: DO NOT ADVERTISE!
 #Broadcasts a notification that someone has been punished for advertising
 Notification-Message: true
-#Says Server is running AntiAd
-JoinMsg-On: true
 #Check if there are spam
 Spam-Detection: true
 #Says whether it will detect url's or not
