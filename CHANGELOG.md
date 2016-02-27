@@ -4,13 +4,21 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
+ 
+### Changed
+ 
+### Fixed
+
+
+## [2.3.1] - 2016-02-27
+### Added
  - Added default values to the new variables, should be added on startup.
  
 ### Changed
  - Removed the join messages
- 
-### Fixed
 
+### Fixed
+ - Removed debug message.
 
 ## [2.3.0] - 2016-02-15
 ### Added
