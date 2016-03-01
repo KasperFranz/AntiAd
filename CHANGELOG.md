@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Changed
  
 ### Fixed
-
+- Warn admin now works
 
 ## [2.3.1] - 2016-02-27
 ### Added

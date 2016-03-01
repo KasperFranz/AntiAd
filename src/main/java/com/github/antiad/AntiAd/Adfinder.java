@@ -151,7 +151,7 @@ public class Adfinder {
     public void sendWarning(Player player, String message, int type, int where) {
         plugin.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
-        if (type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins") || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
+        if ((type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
             for (OfflinePlayer op : ops) {
