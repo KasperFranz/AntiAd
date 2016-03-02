@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
+ - moved my debug into a config option
  
 ### Changed
  - Cleanup in the languages setup

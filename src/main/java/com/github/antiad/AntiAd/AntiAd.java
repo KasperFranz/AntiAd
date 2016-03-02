@@ -56,6 +56,11 @@ public class AntiAd extends JavaPlugin {
             getConfig().addDefault("replaceText.advertisement", false);
             saveConfig();
         }
+        
+         if (getConfig().contains("debug")) {
+            this.DEBUG = this.getConfig().getBoolean("debug");
+            saveConfig();
+        }
 
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");
