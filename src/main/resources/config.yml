@@ -43,3 +43,5 @@ warnings: 3
 replaceText:
     advertisement: false
     caps: false
+#Should we use the simple (alot can get through this pattern, we advice you to use the advanced one.
+useSimpleWebPattern: false

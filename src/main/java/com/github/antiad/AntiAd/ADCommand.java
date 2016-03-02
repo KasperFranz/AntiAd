@@ -30,7 +30,7 @@ public class ADCommand implements CommandExecutor {
             rtnbool = true;
             
         } else if (args[0].equalsIgnoreCase("reload") && (sender.isOp() || sender.hasPermission("antiad.reload"))) {
-            plugin.reloadConfig();
+            plugin.reload();
             sender.sendMessage(plugin.getColorfullLanguageAndTag("onCommandReloadMessage"));
             rtnbool = true;
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {

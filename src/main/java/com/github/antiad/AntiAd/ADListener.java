@@ -43,7 +43,6 @@ public class ADListener implements Listener {
 
             } else if (
                     (check.isAdvertisement() && plugin.getConfig().getBoolean("replaceText.advertisement")) ||
-//                    (check.isSpam() && plugin.getConfig().getBoolean("replaceText.spam")) ||
                     (check.isCaps()&& plugin.getConfig().getBoolean("replaceText.caps"))
                     ) {
                 chat.setMessage(check.getMessage());

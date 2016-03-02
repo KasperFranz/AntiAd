@@ -283,4 +283,9 @@ public class AntiAd extends JavaPlugin {
             }
         }
     }    
+
+    void reload() {
+        this.reloadConfig();
+        this.adfinder.startUp();
+    }
 }
