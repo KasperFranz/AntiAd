@@ -17,7 +17,7 @@ public class Check {
     private final Adfinder adfinder;
     private final AntiAd plugin;
     private final Player player;
-    private boolean spam,advertisement,caps;
+    private boolean spam, advertisement, caps;
     private String message;
 
     public Check(AntiAd plugin, Player player) {
@@ -25,12 +25,13 @@ public class Check {
         this.player = player;
         this.plugin = plugin;
     }
-    
-    public void reset(){
+
+    public void reset() {
         this.spam = false;
         this.caps = false;
         this.advertisement = false;
     }
+
     public boolean check(String message, int type, boolean checkForSpam) {
         message = Normalizer.normalize(message, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         this.message = message;
@@ -55,12 +56,12 @@ public class Check {
                     adfinder.sendWarning(player, message, 2, type);
                     rtnbool = true;
                 }
-                 caps = adfinder.checkForCaps(this);
+                caps = adfinder.checkForCaps(this);
                 if (caps && !rtnbool) {
                     adfinder.sendWarning(player, message, 2, type);
                     rtnbool = true;
                 }
-                
+
             }
         }
         return rtnbool;
