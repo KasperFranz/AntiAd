@@ -6,9 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Added
  
 ### Changed
+ - Cleanup in the languages setup
  
 ### Fixed
-- Warn admin now works
+ - Warn admin now works
 
 ## [2.3.1] - 2016-02-27
 ### Added
