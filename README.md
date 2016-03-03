@@ -11,4 +11,8 @@ There is a Secondary feature that prevents spam, Long excessive words 'aaaaaaaaa
 Usage 
 =====
 We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
-![alt tag](https://i.mcstats.org/AntiAd/Global+Statistics@2x.borderless.png)
+![Usage statistics][stats]
+
+
+
+[stats]: https://i.mcstats.org/AntiAd/Global+Statistics@2x.borderless.png
