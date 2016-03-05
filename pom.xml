@@ -2,25 +2,31 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>AntiAD</groupId>
     <artifactId>AntiAD</artifactId>
-    <version>2.3.1-dev</version>
+    <version>2.3.2-dev</version>
     
     <name>AntiAD</name>
    <properties>
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            
+            <!-- Change MC Version HERE! -->
+            <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>            
    </properties>
     <dependencies>
-        <dependency>
-	   <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-	    <version>RELEASE</version>
-	    <type>jar</type>
-        </dependency>
+
+	<!-- Spigot-Api, https://www.spigotmc.org/ Based on the Bukkit project, http://bukkit.org/ -->
+	<dependency>
+		<groupId>org.spigotmc</groupId>
+		<artifactId>spigot-api</artifactId>
+		<version>${bukkitVersion}</version>
+	</dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
             <artifactId>metrics</artifactId>
@@ -50,8 +56,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -76,9 +82,10 @@
         </resources>
 	</build>
 	<repositories>
+		<!-- SpigotMC Repo (Bukkit and SpigotAPI) -->
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public</url>
 		</repository>
                 <repository>
                         <id>Plugin Metrics</id>
