@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>AntiAD</groupId>
     <artifactId>AntiAD</artifactId>
-    <version>2.3.2-dev</version>
+    <version>2.3.1b</version>
     
     <name>AntiAD</name>
    <properties>
