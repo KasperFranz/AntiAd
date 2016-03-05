@@ -13,6 +13,13 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Fixed
  - Warn admin now works
 
+## [2.3.1b] - 2016-03-05
+### Changed
+- Update to 1.9.
+
+### Fixed
+ - Fix error of Metrics.
+
 ## [2.3.1] - 2016-02-27
 ### Added
  - Added default values to the new variables, should be added on startup.
