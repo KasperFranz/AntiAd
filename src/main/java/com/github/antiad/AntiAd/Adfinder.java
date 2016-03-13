@@ -5,12 +5,10 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.*;
@@ -21,7 +19,7 @@ import org.bukkit.entity.Player;
 
 public class Adfinder {
 
-    private AntiAd plugin;
+    private final AntiAd plugin;
     // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
     private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     // web pattern http://regexr.com?36elv
@@ -43,6 +41,7 @@ public class Adfinder {
     /**
      * Check if the mesage is a spam or not!
      *
+     * @param check
      * @return true or false depending on if it is spam or not!
      */
     public boolean checkForSpam(Check check) {

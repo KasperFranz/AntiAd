@@ -73,7 +73,8 @@ public class AntiAd extends JavaPlugin {
         }
 
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
-
+        Update update;
+        update = new Update(this,52014);
     }
 
     /**
