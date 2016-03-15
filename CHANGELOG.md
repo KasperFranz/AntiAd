@@ -4,17 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
-  Added a check for new version
+ - Added a check for new version
 
 ### Changed
 
  
 ### Fixed
-
+ - Now possible to run with java 7 after implementing the version class.
 
 ## [2.3.1b] - 2016-03-05
 ### Changed
-- Update to 1.9.
+ - Update to 1.9.
 
 ### Fixed
  - Fix error of Metrics.

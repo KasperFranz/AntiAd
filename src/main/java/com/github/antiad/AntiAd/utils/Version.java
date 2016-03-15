@@ -3,6 +3,7 @@ package com.github.antiad.AntiAd.utils;
 public class Version implements Comparable<Version> {
 
     private int[] parts;
+    private String version;
 
     public Version(String value) {
         if (value == null) {
@@ -14,6 +15,7 @@ public class Version implements Comparable<Version> {
         }
 
         String[] split = value.split("\\.");
+        version = value;
         parts = new int[split.length];
 
         for (int i = 0; i < split.length; i += 1) {
@@ -23,13 +25,7 @@ public class Version implements Comparable<Version> {
 
     @Override
     public String toString() {
-        String[] split = new String[parts.length];
-
-        for (int i = 0; i < parts.length; i += 1) {
-            split[i] = String.valueOf(parts[i]);
-        }
-
-        return String.join(".", split);
+        return version;
     }
 
     public static int compare(Version verA, Version verB) {
