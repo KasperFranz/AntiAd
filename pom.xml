@@ -68,7 +68,6 @@
                     <filtering>true</filtering>
                     <includes>
                             <include>*.yml</include>
-                            <include>config.yml</include>		
                             <include>language/*</include>
                     </includes>
             </resource>
