@@ -3,6 +3,7 @@
     <groupId>AntiAD</groupId>
     <artifactId>AntiAD</artifactId>
     <version>2.3.1b</version>
+    <url>http://dev.bukkit.org/server-mods/antiad/</url>
     
     <name>AntiAD</name>
    <properties>
@@ -64,6 +65,12 @@
         <resources>
             <resource>
                     <directory>src/main/resources</directory>
+                    <filtering>true</filtering>
+                    <includes>
+                            <include>*.yml</include>
+                            <include>config.yml</include>		
+                            <include>language/*</include>
+                    </includes>
             </resource>
         </resources>
 	</build>
