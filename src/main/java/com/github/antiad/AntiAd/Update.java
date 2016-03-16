@@ -153,8 +153,8 @@ public class Update {
         return versionName;
     }
 
-    public String getVersionLink() {
-        return versionLink;
+    public String getLinkToDev() {
+        return linkToDev;
     }
 
 }

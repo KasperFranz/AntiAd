@@ -31,7 +31,7 @@ public class UpdateListener implements Listener {
         if (!event.getPlayer().hasPermission("antiad.notify.update")) {
             return;
         }
-        event.getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("updateAvalible").replaceAll("%LINK%", update.getVersionLink()).replaceAll("%VERSION%", update.getVersionName()));
+        event.getPlayer().sendMessage(plugin.getColorfullLanguageAndTag("updateAvalible").replaceAll("%LINK%", update.getLinkToDev()).replaceAll("%VERSION%", update.getVersionName()));
 
     }
 }
