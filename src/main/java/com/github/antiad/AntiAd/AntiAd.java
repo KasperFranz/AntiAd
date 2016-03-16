@@ -262,7 +262,7 @@ public class AntiAd extends JavaPlugin {
      * @param property
      * @return
      */
-    String getColorfullLanguageAndTag(String property) {
+    public String getColorfullLanguageAndTag(String property) {
         
         return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
     }

@@ -1,5 +1,6 @@
 package com.github.antiad.AntiAd;
 
+import com.github.antiad.AntiAd.Listeners.UpdateListener;
 import com.github.antiad.AntiAd.utils.Version;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,10 +34,11 @@ public class Update {
     private static final String API_RELEASE_TYPE_VALUE = "releaseType";
     private static final String API_FILE_NAME_VALUE = "fileName";
     private static final String API_GAME_VERSION_VALUE = "gameVersion";
-
+    private final String linkToDev;
     // Static information for querying the API
     private static final String API_QUERY = "/servermods/files?projectIds=";
     private static final String API_HOST = "https://api.curseforge.com";
+    private String versionName, versionLink;
 
     /**
      * Check for updates anonymously (keyless)
@@ -62,6 +64,7 @@ public class Update {
         this.projectID = projectID;
         this.apiKey = apiKey;
         this.plugin = plugin;
+        this.linkToDev = plugin.getDescription().getWebsite();
         query();
     }
 
@@ -101,16 +104,17 @@ public class Update {
             if (latest instanceof JSONObject) {
                 // Get the newest file's details
                 // Get the version's title
-                String versionName = (String) latest.get(API_NAME_VALUE);
+                versionName = (String) latest.get(API_NAME_VALUE);
 
                 // Get the version's link
-                String versionLink = (String) latest.get(API_LINK_VALUE);
+                versionLink = (String) latest.get(API_LINK_VALUE);
 
                 Version currentVersion = new Version(plugin.getDescription().getVersion().replaceAll("[^\\d.]", ""));
                 Version foundVersion = new Version(versionName.replaceAll("[^\\d.]", ""));
 
                 if (currentVersion.compareTo(foundVersion) < 0) {
-                    plugin.getLogger().log(Level.INFO, plugin.uncolorfull(plugin.getFromLanguage("updateAvalible").replaceAll("%LINK%", versionLink).replaceAll("%VERSION%", foundVersion.toString())));
+                    plugin.getLogger().log(Level.INFO, plugin.uncolorfull(plugin.getFromLanguage("updateAvalible").replaceAll("%LINK%", linkToDev).replaceAll("%VERSION%", foundVersion.toString())));
+                    plugin.getServer().getPluginManager().registerEvents(new UpdateListener(this), plugin);
                 }
             }
         } catch (IOException e) {
@@ -119,9 +123,10 @@ public class Update {
 
     /**
      * A method to get the latest release from a jsonArray
+     *
      * @param array
      * @param round
-     * @return 
+     * @return
      */
     private JSONObject getLatestRelease(JSONArray array, int round) {
         if (array.size() - round > 0) {
@@ -139,4 +144,17 @@ public class Update {
 
         return null;
     }
+
+    public AntiAd getPlugin() {
+        return plugin;
+    }
+
+    public String getVersionName() {
+        return versionName;
+    }
+
+    public String getVersionLink() {
+        return versionLink;
+    }
+
 }

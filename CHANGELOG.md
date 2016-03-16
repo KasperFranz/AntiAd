@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ## [Unreleased][unreleased]
 ### Added
  - Added a check for new version
+ - New build message on join (permission node for this is added)
 
 ### Changed
  - No need to be specific in the pom.

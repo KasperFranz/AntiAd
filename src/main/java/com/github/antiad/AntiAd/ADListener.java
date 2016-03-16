@@ -8,7 +8,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  *

@@ -18,6 +18,7 @@ permissions:
                      antiad.see: true
                      antiad.reload: true
                      antiad.whitelist: true
+                     antiad.notify.update: true
         antiad.bypass.spam:
                  description: Allows a player to bypass Spam restriction.
                  default: op
@@ -32,4 +33,7 @@ permissions:
                  default: op
         antiad.whitelist:
                  description: Allows a player to use the /antiad add command.
+                 default: op
+        antiad.notify.update:
+                 description: Allows a player to recieve information when a new update is availible.
                  default: op
