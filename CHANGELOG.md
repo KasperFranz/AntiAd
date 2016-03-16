@@ -4,6 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+
+## [2.3.2] - 2016-03-17
+### Added
  - Added a check for new version
  - New build message on join (permission node for this is added)
 
