@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
  - Added a check for new version
 
 ### Changed
-
+ - No need to be specific in the pom.
  
 ### Fixed
  - Now possible to run with java 7 after implementing the version class.

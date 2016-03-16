@@ -64,20 +64,6 @@
         <resources>
             <resource>
                     <directory>src/main/resources</directory>
-                    <filtering>true</filtering>
-                    <includes>
-                            <include>plugin.yml</include>
-                            <include>config.yml</include>		
-                            <include>language/en.properties</include>
-                            <include>language/es.properties</include>
-                            <include>language/de.properties</include>
-                            <include>language/pl.properties</include>
-                            <include>language/fr.properties</include>
-                            <include>language/da.properties</include>
-                            <include>language/ru.properties</include>
-                            <include>language/tr.properties</include>
-                            <include>language/cn.properties</include>
-                    </includes>
             </resource>
         </resources>
 	</build>
