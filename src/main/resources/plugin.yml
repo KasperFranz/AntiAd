@@ -35,5 +35,5 @@ permissions:
                  description: Allows a player to use the /antiad add command.
                  default: op
         antiad.notify.update:
-                 description: Allows a player to recieve information when a new update is availible.
+                 description: Allows a player to recieve information when a new update is available.
                  default: op
