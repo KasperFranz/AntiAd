@@ -14,7 +14,7 @@ Let's say you have a forum on forum.website.com and you want everything on the f
 
 **We have 2 different webpatterns:**  
 * **Strict**: Blocks every TLD, it also sometimes blocks something there are shown not to be a domain
-* **Simple**: Blocks the 50 most common TLDs It can be activated by chainging `useSimpleWebPattern` to true in the config.
+* **Simple**: Blocks 50 of the most common TLDs It can be activated by chainging `useSimpleWebPattern` to true in the config.
 
 
 
