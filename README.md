@@ -17,7 +17,20 @@ Let's say you have a forum on forum.website.com and you want everything on the f
 * **Simple**: Blocks 50 of the most common TLDs It can be activated by chainging `useSimpleWebPattern` to true in the config.
 
 
+**Languages:**
+We currently support the following languages:
+ Languages          | shortCode    
+ ------------------ |:---------:  
+ Simplified Chinese | ´cn´      
+ Danish             | ´da´      
+ German             | ´de´      
+ Spanish            | ´es´      
+ French             | ´fr´      
+ Polish             | ´pl´      
+ Russian            | ´ru´      
+ Turkish            | ´tr´      
 
+Thanks to @Mayomi, @kasperfranz, @AlexMl, @XxCoolgamesxX, @MySt1k, @metLuna for the awesome translations
 
 Usage 
 =====
