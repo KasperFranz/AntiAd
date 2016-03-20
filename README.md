@@ -17,7 +17,8 @@ Let's say you have a forum on forum.website.com and you want everything on the f
 * **Simple**: Blocks 50 of the most common TLDs It can be activated by chainging `useSimpleWebPattern` to true in the config.
 
 
-**Languages:**  
+##Languages
+
 The languages are community driven so if you want a language added to AntiAd, please make a PullRequest with the properties file.  
 You can set the language in the `Language` part of the config.yml, the diffent languages are listed below.
 
@@ -35,8 +36,8 @@ Languages | ShortCode
 Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna for the awesome translations
 
 
-Usage 
-=====
+##Usage 
+
 We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
 ![Usage statistics][stats]
 
