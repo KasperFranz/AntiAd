@@ -87,7 +87,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
  - At some point when ppl type a long link it got outgoing as spam (if the link was a whitelisted link) ex.
  -  - http://dev.bukkit.org/server-mods/antiad/ This should work now :)
  -  - http://dev.bukkit.org and dev.bukkit.org should now be handled as thesame :)
- -  - http://dev.bukkit.org/server-mods/antiad/ and http://dev.bukkit.org/server-mods are both whitelisted if you whitelistdev.bukkit.org.
+ -  - http://dev.bukkit.org/server-mods/antiad/ and http://dev.bukkit.org/server-mods are both whitelisted if you whitelist dev.bukkit.org.
  - Better web pattern
 
 
