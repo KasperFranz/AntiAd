@@ -1,8 +1,8 @@
 AntiAd
 ======
-[![Build Status](https://travis-ci.org/antiAD/AntiAd.svg)](https://travis-ci.org/antiAD/AntiAd)
-[![Download](https://img.shields.io/badge/Download-Bukkit-blue.svg)](https://dev.bukkit.org/server-mods/antiad//)
-[![Download](https://img.shields.io/badge/Download-SpigotMC-orange.svg)](https://www.spigotmc.org/resources/antiad.323/)
+[![Build Status][buildSVG]][buildLink]
+[![Download][bukkitSVG]][bukkitLink]
+[![Download][spigotSVG]][spigotLink]
 
 The goal of AntiAd is to help you maintain a server where people don't advertise, spam or write in all caps.  
 When a player is sending advertisement or spam in the chat it shows a message to the people with the permission `antiad.see` the advertised/spammy message - The advertising/spammy player gets a warning and a message that spam/advertisement isn't allowed (the message can be changed in the config).  
@@ -44,3 +44,9 @@ We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/Anti
 
 
 [stats]: https://i.mcstats.org/AntiAd/Global+Statistics@2x.borderless.png
+[buildSVG]: https://travis-ci.org/antiAD/AntiAd.svg
+[buildLink]: https://travis-ci.org/antiAD/AntiAd
+[bukkitSVG]: https://img.shields.io/badge/Download-Bukkit-blue.svg
+[bukkitLink]: https://dev.bukkit.org/server-mods/antiad/
+[spigotSVG]: https://img.shields.io/badge/Download-SpigotMC-orange.svg
+[spigotLink]: https://www.spigotmc.org/resources/antiad.323/
