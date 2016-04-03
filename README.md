@@ -36,9 +36,9 @@ Languages | ShortCode
 Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna for the awesome translations
 
 
-##Usage 
+##Usage of AntiAd
 
-We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/AntiAd)
+We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of AntiAd and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.  
 ![Usage statistics][stats]
 
 
@@ -50,3 +50,4 @@ We monitor the usage of the plugin with [MCStats](http://mcstats.org/plugin/Anti
 [bukkitLink]: https://dev.bukkit.org/server-mods/antiad/
 [spigotSVG]: https://img.shields.io/badge/Download-SpigotMC-orange.svg
 [spigotLink]: https://www.spigotmc.org/resources/antiad.323/
+[MCStatsLink]: http://mcstats.org/plugin/AntiAd
