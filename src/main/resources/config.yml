@@ -4,7 +4,7 @@ Language: en
 Command-Ad: tempban <player> <time> <reasonad>
 #Command sent to console when someone spams
 Command-Spam: kick <player> <reasonspam>
-#The Amount of time they are banned for
+#The Amount of time they are banned for (if your plugin, eg. banmanager, needs a identifier for how long it is it should be there like m for minute, d for days etc.) 
 Time: 5m
 #The message players are given if not banned.
 Spam_Message: DO NOT SPAM!
