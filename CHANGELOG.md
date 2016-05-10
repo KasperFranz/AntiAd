@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Added
 
 ### Changed
+- The description of the time in the config was a bit to unclear what it was, this is just something we add to the ban command!
 
 ### Fixed
 
