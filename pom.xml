@@ -10,7 +10,7 @@
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
             
             <!-- Change MC Version HERE! -->
-            <bukkitVersion>1.9.2-R0.1-SNAPSHOT</bukkitVersion>            
+            <bukkitVersion>1.9.4-R0.1-SNAPSHOT</bukkitVersion>            
    </properties>
     <dependencies>
 
