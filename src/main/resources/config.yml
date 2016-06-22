@@ -45,3 +45,5 @@ replaceText:
     caps: false
 #Should we use the simple (alot can get through this pattern, we advice you to use the advanced one.
 useSimpleWebPattern: false
+#Should we Log what is being advertised / message there has been advertised
+log: true

@@ -125,21 +125,27 @@ public class Adfinder {
         return advertising;
     }
 
-    /**
-     * Saves to the log!
-     *
-     * @param message
-     */
-    public void log(String message) {
+/**
+ * 
+ * Save the message to the log if the server have that in the config, by default it does this.
+ * 
+ * @param player the playername of the player
+ * @param type the type of the messsage (advertisement, spam etc.)
+ * @param message The message the player is spamming/ advertisement)
+ * @param where Where was it spammed, so we can see that for future problems.
+ */
+    public void log(String player,String type,String message,String where) {
         plugin.debug("Begin to log:" + message);
-        try {
-            BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
-            write.append(message);
-            write.newLine();
-            write.flush();
-            write.close();
-        } catch (IOException ex) {
-            plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+        if(plugin.getConfig().getBoolean("log",true)){
+            try {
+                try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
+                    write.append(now("[yyyy-MM-dd HH:mm:ss]")+" - "+player+" - "+where + " - "+message);
+                    write.newLine();
+                    write.flush();
+                }
+            } catch (IOException ex) {
+                plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+            }
         }
     }
 
@@ -164,11 +170,7 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        log(now("MMM dd,yyyy HH:mm ") + plugin.getFromLanguage("privatLogWarning")
-                .replace("%PLAYER%", player.getDisplayName())
-                .replace("%TYPE%", typeToX(type, 1))
-                .replace("%MESSAGE%", message)
-                .replace("%WHERE%", whereToTXT(where)));
+        log(player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
 
         Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
