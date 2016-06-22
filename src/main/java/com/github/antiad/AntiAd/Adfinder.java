@@ -21,7 +21,7 @@ public class Adfinder {
 
     private final AntiAd plugin;
     // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
-    private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
+    private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     // web pattern http://regexr.com?36elv
     private Pattern webpattern;
     // web pattern http://regexr.com?36elv
@@ -408,8 +408,10 @@ public class Adfinder {
             if (regexMatcher.group().length() != 0) {
                 if (ipPattern.matcher(message).find()) {
                     String advertisement = regexMatcher.group().trim();
+                    plugin.debug(regexMatcher.group());
                     if (!whitelistLine.contains(advertisement)) {
                         advertising = 1;
+                        plugin.debug("found in ip pattern!");
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                     } else {

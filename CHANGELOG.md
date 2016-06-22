@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 - The description of the time in the config was a bit to unclear what it was, this is just something we add to the ban command!
 
 ### Fixed
+-  A problem where a large number (12 numbers) would be seen as a IP
 
 
 ## [2.3.2] - 2016-03-17
