@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>AntiAD</groupId>
     <artifactId>AntiAD</artifactId>
-    <version>2.4.0-dev</version>
+    <version>2.3.3</version>
     <url>http://dev.bukkit.org/server-mods/antiad/</url>
     
     <name>AntiAD</name>
