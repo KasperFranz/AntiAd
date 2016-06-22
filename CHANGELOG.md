@@ -4,6 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ## [Unreleased][unreleased]
 ### Added
+
+### Changed
+
+### Fixed## 
+
+
+## [2.3.3] - 2016-06-22
+### Added
  - added log config option, and  made our logging more easily readable. (default it is on!)
 
 ### Changed
