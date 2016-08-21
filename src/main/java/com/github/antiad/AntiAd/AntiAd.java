@@ -186,6 +186,7 @@ public class AntiAd extends JavaPlugin {
         validLanguage.add("ru");
         validLanguage.add("tr");
         validLanguage.add("cn");
+        validLanguage.add("hu");
         return validLanguage;
     }
 
