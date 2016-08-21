@@ -32,8 +32,9 @@ Languages | ShortCode
  Polish             | `pl`      |
  Russian            | `ru`      |
  Turkish            | `tr`      |
+ Hungarian          | `hu`      | 
 
-Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna for the awesome translations
+Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna, HunLux for the awesome translations
 
 
 ##Usage of AntiAd
