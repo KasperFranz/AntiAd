@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ## [Unreleased][unreleased]
 ### Added
  - Added hungarian - thank you @HunLux
+
 ### Changed
 
 ### Fixed
