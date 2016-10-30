@@ -50,7 +50,7 @@ public class Check {
             rtnbool = true;
         } else if (ad == 0) {
             //if it's not advertising then check for spam
-            if (adfinder.spamDetection && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
+            if (adfinder.isSpamDetection() && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
                 spam = adfinder.checkForSpam(this);
                 if (spam) {
                     adfinder.sendWarning(player, message, 2, type);
