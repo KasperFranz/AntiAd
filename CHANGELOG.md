@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 ### Fixed
  
  
- ## [2.3.4] - 2016-12-30
+## [2.3.4] - 2016-12-30
 ### Added
  - Added hungarian - thank you @HunLux
  - Added Brazilian Portuguese - thank you @nathampa0909
