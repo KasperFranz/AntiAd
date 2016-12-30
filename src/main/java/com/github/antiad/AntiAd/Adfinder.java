@@ -21,7 +21,7 @@ public class Adfinder {
 
     private final AntiAd plugin;
     // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
-    private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
+    private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     // web pattern http://regexr.com?36elv
     private Pattern webpattern;
     // web pattern http://regexr.com?36elv
@@ -29,7 +29,9 @@ public class Adfinder {
     // Simple pattern http://regexr.com/3cu3l
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
-    public boolean urlDetection, spamDetection, IPDetection, checkWordLenght;
+    public boolean urlDetection;
+    private boolean spamDetection;
+    public boolean  IPDetection, checkWordLenght;
     public int numbers, procentCapital;
     private ArrayList<String> whitelistLine, whitelistWildCardList;
 
@@ -126,20 +128,34 @@ public class Adfinder {
     }
 
     /**
-     * Saves to the log!
-     *
-     * @param message
+     * Does this adfinder protect against spam and caps?
+     * @return return true if it protects against spam and caps
      */
-    public void log(String message) {
+    public boolean isSpamDetection() {
+        return spamDetection;
+    }
+
+/**
+ * 
+ * Save the message to the log if the server have that in the config, by default it does this.
+ * 
+ * @param player the playername of the player
+ * @param type the type of the messsage (advertisement, spam etc.)
+ * @param message The message the player is spamming/ advertisement)
+ * @param where Where was it spammed, so we can see that for future problems.
+ */
+    public void log(String player,String type,String message,String where) {
         plugin.debug("Begin to log:" + message);
-        try {
-            BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true));
-            write.append(message);
-            write.newLine();
-            write.flush();
-            write.close();
-        } catch (IOException ex) {
-            plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+        if(plugin.getConfig().getBoolean("log",true)){
+            try {
+                try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
+                    write.append(now("[yyyy-MM-dd HH:mm:ss]")+" - "+player+" - "+where + " - "+message);
+                    write.newLine();
+                    write.flush();
+                }
+            } catch (IOException ex) {
+                plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+            }
         }
     }
 
@@ -164,11 +180,7 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        log(now("MMM dd,yyyy HH:mm ") + plugin.getFromLanguage("privatLogWarning")
-                .replace("%PLAYER%", player.getDisplayName())
-                .replace("%TYPE%", typeToX(type, 1))
-                .replace("%MESSAGE%", message)
-                .replace("%WHERE%", whereToTXT(where)));
+        log(player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
 
         Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
@@ -408,8 +420,10 @@ public class Adfinder {
             if (regexMatcher.group().length() != 0) {
                 if (ipPattern.matcher(message).find()) {
                     String advertisement = regexMatcher.group().trim();
+                    plugin.debug(regexMatcher.group());
                     if (!whitelistLine.contains(advertisement)) {
                         advertising = 1;
+                        plugin.debug("found in ip pattern!");
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                     } else {
@@ -429,7 +443,7 @@ public class Adfinder {
      */
     private int checkForWebPattern(Check check) {
         int advertising = 0;
-        String message = check.getMessage();
+        String message = check.getMessage().toLowerCase();
         Matcher regexMatcherurl = webpattern.matcher(message);
         plugin.debug("Message: " + message);
 

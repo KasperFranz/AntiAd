@@ -2,12 +2,34 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/), and following the format from [keep a CHANGELOG](http://keepachangelog.com/)
 
-## [Unreleased][unreleased]
+## [Unreleased] - unreleased
 ### Added
 
 ### Changed
 
 ### Fixed
+ 
+ 
+ ## [2.3.4] - 2016-12-30
+### Added
+ - Added hungarian - thank you @HunLux
+ - Added Brazilian Portuguese - thank you @nathampa0909
+ - Added some basic tests - thank you @ferrybig
+ 
+### Changed
+
+### Fixed
+ - an issue where you could bypass the webpattern with uppercae - thank you @ferrybig
+
+## [2.3.3] - 2016-06-22
+### Added
+ - added log config option, and  made our logging more easily readable. (default it is on!)
+
+### Changed
+ - The description of the time in the config was a bit to unclear what it was, this is just something we add to the ban command!
+
+### Fixed
+ -  A problem where a large number (12 numbers) would be seen as a IP
 
 
 ## [2.3.2] - 2016-03-17

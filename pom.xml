@@ -10,7 +10,7 @@
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
             
             <!-- Change MC Version HERE! -->
-            <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>            
+            <bukkitVersion>1.9.4-R0.1-SNAPSHOT</bukkitVersion>            
    </properties>
     <dependencies>
 
@@ -33,6 +33,12 @@
             <artifactId>metrics</artifactId>
             <version>R8-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

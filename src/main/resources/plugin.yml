@@ -1,7 +1,7 @@
 name: AntiAd
 main: com.github.antiad.AntiAd.AntiAd
 version: ${project.version}
-dev-url: http://dev.bukkit.org/server-mods/antiad/
+dev-url: https://github.com/antiAD/AntiAd
 website: http://dev.bukkit.org/server-mods/antiad/
 authors: [XxCoolGamesxX, franzmedia]
 description: Prevents Advertising of ip's and web-url's and reduces spamming.
