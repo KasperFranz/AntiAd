@@ -153,3 +153,6 @@ var
 sdist
 develop-egg
 /target/
+
+/.idea/
+*.iml
