@@ -2,14 +2,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/), and following the format from [keep a CHANGELOG](http://keepachangelog.com/)
 
-## [Unreleased][unreleased]
+## [Unreleased] - unreleased
 ### Added
- - Added hungarian - thank you @HunLux
 
 ### Changed
 
 ### Fixed
+ 
+ 
+ ## [2.3.4] - 2016-12-30
+### Added
+ - Added hungarian - thank you @HunLux
+ - Added Brazilian Portuguese - thank you @nathampa0909
+ - Added some basic tests - thank you @ferrybig
+ 
+### Changed
 
+### Fixed
+ - an issue where you could bypass the webpattern with uppercae - thank you @ferrybig
 
 ## [2.3.3] - 2016-06-22
 ### Added
