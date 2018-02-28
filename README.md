@@ -49,7 +49,7 @@ We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help
 [buildSVG]: https://travis-ci.org/antiAD/AntiAd.svg
 [buildLink]: https://travis-ci.org/antiAD/AntiAd
 [bukkitSVG]: https://img.shields.io/badge/Download-Bukkit-blue.svg
-[bukkitLink]: https://dev.bukkit.org/server-mods/antiad/
+[bukkitLink]: https://dev.bukkit.org/projects/antiad
 [spigotSVG]: https://img.shields.io/badge/Download-SpigotMC-orange.svg
 [spigotLink]: https://www.spigotmc.org/resources/antiad.323/
 [MCStatsLink]: http://mcstats.org/plugin/AntiAd
