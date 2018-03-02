@@ -29,9 +29,8 @@ public class Adfinder {
     // Simple pattern http://regexr.com/3cu3l
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
-    public boolean urlDetection;
     private boolean spamDetection;
-    public boolean  IPDetection, checkWordLenght;
+    public boolean  urlDetection, IPDetection, checkWordLenght;
     public int numbers, procentCapital;
     private ArrayList<String> whitelistLine, whitelistWildCardList;
 
