@@ -40,8 +40,10 @@ Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna, HunLux an
 
 ## Usage of AntiAd
 
-We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of AntiAd and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.  
-![Usage statistics][stats]
+~~We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of AntiAd and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.
+![Usage statistics][stats]~~
+we are using bStats now.
+
 
 
 

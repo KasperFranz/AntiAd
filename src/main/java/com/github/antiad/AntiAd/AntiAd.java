@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
+
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
 
 /**
  * The main class for this bukkit plugin :)
@@ -65,12 +66,7 @@ public class AntiAd extends JavaPlugin {
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");
         adfinder = new Adfinder(this);
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-            getLogger().info(getFromLanguage("ERRORMetrics"));
-        }
+        Metrics metrics = new Metrics(this);
 
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
         Update update;
