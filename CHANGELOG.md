@@ -9,7 +9,12 @@ This project adheres to [Semantic Versioning](http://semver.org/), and following
 
 ### Fixed
  
- 
+
+## [2.4.0] - Unreleased
+### Changed
+ - moved to use bsStats instead of mcstats.
+
+
 ## [2.3.4] - 2016-12-30
 ### Added
  - Added hungarian - thank you @HunLux
