@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 public class Adfinder {
 
     private final AntiAd plugin;
-    // ip pattern NEW PATTERN: http://regexr.com/396h5  OLD PATTERN: http://regexr.com?33l17
+    // ip pattern NEW PATTERN: https://regexr.com/3lpie OLD PATTERN: http://regexr.com?33l17
     private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     // web pattern http://regexr.com?36elv
     private Pattern webpattern;
