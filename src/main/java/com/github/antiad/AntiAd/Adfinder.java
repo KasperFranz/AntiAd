@@ -24,7 +24,7 @@ public class Adfinder {
     private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     
     private Pattern webpattern;
-    // advanced pattern https://regexr.com/3lr99
+    // advanced pattern https://regexr.com/3lpit
     private final String webpatternAdvanced = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?";
     // Simple pattern https://regexr.com/3lr99
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
