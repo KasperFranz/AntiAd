@@ -22,12 +22,12 @@ public class Adfinder {
     private final AntiAd plugin;
     // ip pattern NEW PATTERN: https://regexr.com/3lpie OLD PATTERN: http://regexr.com?33l17
     private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
-    // web pattern http://regexr.com?36elv
+    
     private Pattern webpattern;
-    // web pattern http://regexr.com?36elv
-    private final String webpatternAdvanced = "[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?";
-    // Simple pattern http://regexr.com/3cu3l
-    private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
+    // advanced pattern https://regexr.com/3lr99
+    private final String webpatternAdvanced = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.[a-z]{2,4}\\b(\\/[-a-zA-Z0-9@:%_\\+~#?&//=]*)?";
+    // Simple pattern https://regexr.com/3lr99
+    private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
     private boolean spamDetection;
     public boolean  urlDetection, IPDetection, checkWordLenght;
