@@ -148,7 +148,7 @@ public class Adfinder {
         if(plugin.getConfig().getBoolean("log",true)){
             try {
                 try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
-                    write.append(now("[yyyy-MM-dd HH:mm:ss]")+" - "+player+" - "+where + " - "+message);
+                    write.append(now("[yyyy-MM-dd HH:mm:ss]")+" - "+player+" - " +type+  " - "+where + " - "+message);
                     write.newLine();
                     write.flush();
                 }
