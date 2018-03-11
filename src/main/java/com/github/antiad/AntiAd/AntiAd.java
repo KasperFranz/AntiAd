@@ -28,7 +28,9 @@ public class AntiAd extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        loadLanguage();
+        adfinder = new Adfinder(this);
+
+        setLanguage(adfinder.getLanguage());
        
         
 
@@ -65,12 +67,21 @@ public class AntiAd extends JavaPlugin {
 
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");
-        adfinder = new Adfinder(this);
         Metrics metrics = new Metrics(this);
 
+
+        metrics.addCustomChart(new Metrics.SimplePie("spam_detection", () -> adfinder.isSpamDetection() ? "yes" : "No"));
+        metrics.addCustomChart(new Metrics.SimplePie("spam_detection", () -> adfinder.isSpamDetection() ? "yes" : "No"));
+        metrics.addCustomChart(new Metrics.SimplePie("notify_public", () -> adfinder.isNotifyMessage() ? "yes" : "No"));
+        metrics.addCustomChart(new Metrics.SimplePie("ip_detection", () -> adfinder.isIPDetection() ? "yes" : "No"));
+        metrics.addCustomChart(new Metrics.SimplePie("check_word_length", () -> adfinder.isCheckWordLenght() ? "yes" : "No"));
+        metrics.addCustomChart(new Metrics.SimplePie("numbers", () -> adfinder.getNumbers()+ ""));
+        metrics.addCustomChart(new Metrics.SimplePie("procentalCapital", () -> adfinder.getProcentCapital()+ ""));
+        metrics.addCustomChart(new Metrics.SimplePie("language", () -> adfinder.getLanguage()));
+
+
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
-        Update update;
-        update = new Update(this,52014);
+        Update update = new Update(this,52014);
     }
 
     /**
@@ -128,27 +139,7 @@ public class AntiAd extends JavaPlugin {
     }
 
     /**
-     * Method to load the language (properties file) from the config
-     */
-    private void loadLanguage() {
-
-        final ArrayList<String> validLanguage = validLanguage();
-        if (getConfig().contains("Language")) {
-            String tempLang = getConfig().getString("Language");
-            this.debug("tempLang: "+tempLang);
-            if (validLanguage.contains(tempLang)) {
-                setLanguage(tempLang);
-            } else {
-                setLanguage("en");
-                getLogger().warning(language.getProperty("WrongLangugage"));
-            }
-        } else {
-            setLanguage("en");
-        }
-    }
-
-    /**
-     * SHOULD ONLY BE CALLED FROM loadLANGUAGE()! Loads a langugage into the
+     * SHOULD ONLY BE CALLED FROM loadLANGUAGE()! Loads a language into the
      * language (properties)
      *
      * @param lang the languge (needs to be checked agains valid language before
@@ -164,27 +155,6 @@ public class AntiAd extends JavaPlugin {
         } catch (IOException ex) {
             getLogger().log(Level.INFO, "Error while setting the language", ex);
         }
-    }
-
-    /**
-     * Method to get all the valid languages!
-     *
-     * @return the list of valid language!
-     */
-    private ArrayList<String> validLanguage() {
-        ArrayList<String> validLanguage = new ArrayList<String>(1);
-        validLanguage.add("en");
-        validLanguage.add("pl");
-        validLanguage.add("de");
-        validLanguage.add("es");
-        validLanguage.add("fr");
-        validLanguage.add("da");
-        validLanguage.add("ru");
-        validLanguage.add("tr");
-        validLanguage.add("cn");
-        validLanguage.add("hu");
-	validLanguage.add("pt-br");
-        return validLanguage;
     }
 
     /**

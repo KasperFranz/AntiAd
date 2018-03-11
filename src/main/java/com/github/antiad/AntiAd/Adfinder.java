@@ -11,11 +11,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
 
 public class Adfinder {
 
@@ -29,10 +32,10 @@ public class Adfinder {
     // Simple pattern http://regexr.com/3cu3l
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+.~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
-    private boolean spamDetection;
-    public boolean  urlDetection, IPDetection, checkWordLenght;
-    public int numbers, procentCapital;
+    private boolean spamDetection, urlDetection, IPDetection, checkWordLenght, notifyMessage;
+    private int numbers, procentCapital;
     private ArrayList<String> whitelistLine, whitelistWildCardList;
+    private String language;
 
     public Adfinder(AntiAd instance) {
         plugin = instance;
@@ -42,7 +45,7 @@ public class Adfinder {
     /**
      * Check if the mesage is a spam or not!
      *
-     * @param check
+     * @param check The message you want to check if is spam.
      * @return true or false depending on if it is spam or not!
      */
     public boolean checkForSpam(Check check) {
@@ -77,8 +80,8 @@ public class Adfinder {
 
                 int upper = 0;
                 char[] charArray = word.toCharArray();
-                for (int j = 0; j < charArray.length; j++) {
-                    String letter = charArray[j] + "";
+                for (char aCharArray : charArray) {
+                    String letter = aCharArray + "";
                     if (letter.equals(letter.toUpperCase()) && !isNumbers(letter)) {
                         upper++;
                     }
@@ -134,7 +137,65 @@ public class Adfinder {
         return spamDetection;
     }
 
-/**
+    /**
+     * If we are checking for URL or not.
+     * @return return true if the url detection is active.
+     */
+    public boolean isURLDetection() {
+        return urlDetection;
+    }
+
+    /**
+     * If we are checking for ip addresses or not.
+     * @return return true if the ip address detection is active or not.
+     */
+    public boolean isIPDetection() {
+        return IPDetection;
+    }
+
+    /**
+     * Are we checking the word length.
+     * @return return true if the we are checking the word length.
+     */
+    public boolean isCheckWordLenght() {
+        return checkWordLenght;
+    }
+
+    /**
+     * get the numbers of .
+     * @return return true if the we are checking the word length.
+     */
+    public int getNumbers() {
+        return numbers;
+    }
+
+    /**
+     * Are we checking the word length.
+     * @return return true if the we are checking the word length.
+     */
+    public int getProcentCapital() {
+        return procentCapital;
+    }
+
+    /**
+     * Are we checking the word length.
+     * @return return true if the we are checking the word length.
+     */
+    public String getLanguage() {
+        return language;
+    }
+
+    /**
+     * Are we checking the word length.
+     * @return return true if the we are checking the word length.
+     */
+    public boolean isNotifyMessage() {
+        return notifyMessage;
+    }
+
+
+
+    /**
  * 
  * Save the message to the log if the server have that in the config, by default it does this.
  * 
@@ -148,7 +209,13 @@ public class Adfinder {
         if(plugin.getConfig().getBoolean("log",true)){
             try {
                 try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
-                    write.append(now("[yyyy-MM-dd HH:mm:ss]")+" - "+player+" - "+where + " - "+message);
+                    write.append(now("[yyyy-MM-dd HH:mm:ss]"))
+                            .append(" - ")
+                            .append(player)
+                            .append(" - ")
+                            .append(where)
+                            .append(" - ")
+                            .append(message);
                     write.newLine();
                     write.flush();
                 }
@@ -163,12 +230,13 @@ public class Adfinder {
      * @param message the message the player has send!
      * @param player the player there sent the message!
      * @param type 1 for AD 2 for spam. (gets logged)
-     * @param where
+     * @param where Where was this found
      */
     public void sendWarning(Player player, String message, int type, int where) {
+        //todo the where makes no sense tbh.
         plugin.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
-        if ((type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) || (type == 2 && plugin.getConfig().getBoolean("SpamWarnAdmins"))) {
+        if ((type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) || (type == 2 && plugin.getConfig().getBoolean("   SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
             for (OfflinePlayer op : ops) {
@@ -225,7 +293,6 @@ public class Adfinder {
                 break;
             case 2:
                 command = plugin.getConfig().getString("Command-Spam").replaceAll("<reasonspam>", typeToX(2, 3));
-                ;
                 break;
             default:
                 command = "";
@@ -406,7 +473,7 @@ public class Adfinder {
     /**
      * Checks if the message contains the IP Pattern
      *
-     * @param message the message you want to check on.
+     * @param check the message you want to check on.
      * @return true if the message is in the IP pattern and not on the
      * whitelist.
      */
@@ -437,7 +504,7 @@ public class Adfinder {
     /**
      * Method to check if it is in the webpattern!
      *
-     * @param message the message you want to get checked.
+     * @param check the message you want to get checked.
      * @return true if it's in the webpattern and false if it isn't
      */
     private int checkForWebPattern(Check check) {
@@ -475,7 +542,6 @@ public class Adfinder {
         } else {
             if (whitelistWildCardList.size() > 0) {
                 for (String whitelistItem : whitelistWildCardList) {
-                    plugin.debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
                     if (whitelistItem.startsWith("*") && whitelistItem.endsWith("*")) {
                         advertised = !text.contains(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.startsWith("*")) {
@@ -488,6 +554,7 @@ public class Adfinder {
                         plugin.debug("Found it!");
                         break;
                     }
+                    plugin.debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
                 }
             }
         }
@@ -498,13 +565,17 @@ public class Adfinder {
      * method to Reload/load the config Options in the adfinder.
      */
     public void startUp() {
+        setLanguage(plugin.getConfig().getString("language","en"));warn = new HashMap<>();
         spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
         urlDetection = plugin.getConfig().getBoolean("URL-Detection");
         IPDetection = plugin.getConfig().getBoolean("IP-Detection");
         numbers = plugin.getConfig().getInt("Spam-Number-Letters");
         procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
         checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
-        warn = new HashMap<Player, Integer>();
+        notifyMessage = plugin.getConfig().getBoolean("Notification-Message");
+        warn = new HashMap<>();
+
+
         if (plugin.getConfig().getBoolean("useSimpleWebPattern")) {
             webpattern = Pattern.compile(webpatternSimple);
             plugin.debug("Simple pattern loaded");
@@ -514,5 +585,39 @@ public class Adfinder {
         }
 
         loadWhitelist();
+    }
+
+
+    /**
+     * Set the language to a valid language, if it does not exists we are using englih.
+     * @param lang
+     */
+    private void setLanguage(String lang) {
+        final ArrayList<String> validLanguage = getValidLanguages();
+        if (getValidLanguages().contains(lang)) {
+            plugin.debug("tempLang: " + lang);
+            language = validLanguage.contains(lang) ? lang : "en";
+        }
+    }
+
+    /**
+     * Method to get all the valid languages!
+     *
+     * @return the list of valid language!
+     */
+    private ArrayList<String> getValidLanguages() {
+        ArrayList<String> validLanguage = new ArrayList<String>();
+        validLanguage.add("en");
+        validLanguage.add("pl");
+        validLanguage.add("de");
+        validLanguage.add("es");
+        validLanguage.add("fr");
+        validLanguage.add("da");
+        validLanguage.add("ru");
+        validLanguage.add("tr");
+        validLanguage.add("cn");
+        validLanguage.add("hu");
+        validLanguage.add("pt-br");
+        return validLanguage;
     }
 }

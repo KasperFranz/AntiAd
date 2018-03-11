@@ -55,7 +55,7 @@ public class AdfinderAction implements Runnable {
             // NB: This is only executed if the Notification-message is on!
         } else {
 
-            if (plugin.getConfig().getBoolean("Notification-Message")) {
+            if (plugin.getAdfinder().isNotifyMessage()) {
                 plugin.getServer().broadcastMessage(broadcastmsg);
             }
         }
