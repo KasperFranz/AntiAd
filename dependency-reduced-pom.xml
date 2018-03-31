@@ -78,7 +78,6 @@
     </dependency>
   </dependencies>
   <properties>
-    <bukkitVersion>1.9.4-R0.1-SNAPSHOT</bukkitVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

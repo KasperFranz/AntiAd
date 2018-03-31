@@ -8,7 +8,6 @@ description: Prevents Advertising of ip's and web-url's and reduces spamming.
 commands:
    antiad:
          description: Base command for  AntiAd.
-        
 permissions:      
         antiad.*:
                  description: Gives all AntiAd permissions

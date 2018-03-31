@@ -5,13 +5,12 @@
  */
 package com.github.antiad.AntiAd;
 
+import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.entity.Player;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Ignore;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
@@ -27,9 +26,10 @@ public class CheckTest {
         AntiAd pl = Mockito.mock(AntiAd.class);
         Player player = Mockito.mock(Player.class);
         Adfinder finder = Mockito.mock(Adfinder.class);
+        Core core = Mockito.mock(Core.class);
 
         Mockito.when(pl.getAdfinder()).thenReturn(finder);
-        Mockito.when(finder.isSpamDetection()).thenReturn(true);
+        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
 
         Check check = new Check(pl, player);
 
@@ -48,9 +48,10 @@ public class CheckTest {
         AntiAd pl = Mockito.mock(AntiAd.class);
         Player player = Mockito.mock(Player.class);
         Adfinder finder = Mockito.mock(Adfinder.class);
+        Core core = Mockito.mock(Core.class);
 
         Mockito.when(pl.getAdfinder()).thenReturn(finder);
-        Mockito.when(finder.isSpamDetection()).thenReturn(false);
+        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(false);
 
         Check check = new Check(pl, player);
 
@@ -68,10 +69,11 @@ public class CheckTest {
     public void testOtherChecksAreSkippedWhenAdvertisementsAreDetected() {
         AntiAd pl = Mockito.mock(AntiAd.class);
         Player player = Mockito.mock(Player.class);
+        Core core = Mockito.mock(Core.class);
         Adfinder finder = Mockito.mock(Adfinder.class);
 
         Mockito.when(pl.getAdfinder()).thenReturn(finder);
-        Mockito.when(finder.isSpamDetection()).thenReturn(true);
+        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
         Mockito.when(finder.checkForAdvertising(Mockito.any(Check.class))).thenReturn(1);
 
         Check check = new Check(pl, player);
@@ -89,15 +91,16 @@ public class CheckTest {
     @Ignore
     @Test
     public void testOtherChecksAreStillRunWhenWhitelistedAdvertisementsAreDetected() {
-        AntiAd pl = Mockito.mock(AntiAd.class);
+        AntiAd plugin = Mockito.mock(AntiAd.class);
         Player player = Mockito.mock(Player.class);
+        Core core = Mockito.mock(Core.class);
         Adfinder finder = Mockito.mock(Adfinder.class);
 
-        Mockito.when(pl.getAdfinder()).thenReturn(finder);
-        Mockito.when(finder.isSpamDetection()).thenReturn(true);
+        Mockito.when(plugin.getAdfinder()).thenReturn(finder);
+        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
         Mockito.when(finder.checkForAdvertising(Mockito.any(Check.class))).thenReturn(2);
 
-        Check check = new Check(pl, player);
+        Check check = new Check(plugin, player);
 
         check.check("Hello World", 1, true);
 

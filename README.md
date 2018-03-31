@@ -4,7 +4,7 @@ AntiAd
 [![Download][bukkitSVG]][bukkitLink]
 [![Download][spigotSVG]][spigotLink]
 
-The goal of AntiAd is to help you maintain a server where people don't advertise, spam or write in all caps.  
+The goal of Core is to help you maintain a server where people don't advertise, spam or write in all caps.
 When a player is sending advertisement or spam in the chat it shows a message to the people with the permission `antiad.see` the advertised/spammy message - The advertising/spammy player gets a warning and a message that spam/advertisement isn't allowed (the message can be changed in the config).  
 We are doing this by giving everyone n (default 3) chances (resets with a server restart), when they used their 3 chances there a executed a command (the command can be set in the config).  
 
@@ -19,7 +19,7 @@ Let's say you have a forum on forum.website.com and you want everything on the f
 
 ## Languages
 
-The languages are community driven so if you want a language added to AntiAd, please make a PullRequest with the properties file.  
+The languages are community driven so if you want a language added to Core, please make a PullRequest with the properties file.
 You can set the language in the `Language` part of the config.yml, the diffent languages are listed below.
 
 Languages | ShortCode
@@ -40,7 +40,7 @@ Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna, HunLux an
 
 ## Usage of AntiAd
 
-~~We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of AntiAd and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.
+~~We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of Core and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.
 ![Usage statistics][stats]~~
 we are using bStats now.
 

@@ -1,6 +1,8 @@
 package com.github.antiad.AntiAd;
 
 import java.util.List;
+
+import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,13 +33,13 @@ public class ADListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        plugin.debug("chat gone?" + chat.isCancelled());
+        Core.instance().debug("chat gone?" + chat.isCancelled());
         Check check = new Check(plugin, chat.getPlayer());
 
         if (check.check(chat.getMessage(), 1, true)) {
 
-            plugin.debug(" " + plugin.getConfig().getBoolean("replaceText.advertisement"));
-            plugin.debug(" " + check.isAdvertisement());
+            Core.instance().debug(" " + plugin.getConfig().getBoolean("replaceText.advertisement"));
+            Core.instance().debug(" " + check.isAdvertisement());
             if (check.isSpam() && plugin.getConfig().getBoolean("replaceText.spam")) {
 
             } else if (

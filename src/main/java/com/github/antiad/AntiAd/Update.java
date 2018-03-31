@@ -30,15 +30,12 @@ public class Update {
     private final AntiAd plugin;
     // Keys for extracting file information from JSON response
     private static final String API_NAME_VALUE = "name";
-    private static final String API_LINK_VALUE = "downloadUrl";
     private static final String API_RELEASE_TYPE_VALUE = "releaseType";
-    private static final String API_FILE_NAME_VALUE = "fileName";
-    private static final String API_GAME_VERSION_VALUE = "gameVersion";
     private final String linkToDev;
     // Static information for querying the API
     private static final String API_QUERY = "/servermods/files?projectIds=";
     private static final String API_HOST = "https://api.curseforge.com";
-    private String versionName, versionLink;
+    private String versionName;
 
     /**
      * Check for updates anonymously (keyless)
@@ -101,13 +98,11 @@ public class Update {
             // Parse the array of files from the query's response
             JSONArray array = (JSONArray) JSONValue.parse(response);
             JSONObject latest = getLatestRelease(array, 0);
-            if (latest instanceof JSONObject) {
+            if (latest != null) {
                 // Get the newest file's details
                 // Get the version's title
                 versionName = (String) latest.get(API_NAME_VALUE);
 
-                // Get the version's link
-                versionLink = (String) latest.get(API_LINK_VALUE);
 
                 Version currentVersion = new Version(plugin.getDescription().getVersion().replaceAll("[^\\d.]", ""));
                 Version foundVersion = new Version(versionName.replaceAll("[^\\d.]", ""));
@@ -117,8 +112,7 @@ public class Update {
                     plugin.getServer().getPluginManager().registerEvents(new UpdateListener(this), plugin);
                 }
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 
     /**

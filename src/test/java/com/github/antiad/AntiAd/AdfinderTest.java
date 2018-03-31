@@ -107,8 +107,8 @@ public class AdfinderTest {
         Field f3 = Adfinder.class.getDeclaredField("whitelistWildCardList");
         f3.setAccessible(true);
         f3.set(finder, new ArrayList<>());
-        
-        finder.whitelistAdd("github.com");
+
+        plugin.getCore().getConfig().whitelistAdd("github.com");
     }
 
     @Test

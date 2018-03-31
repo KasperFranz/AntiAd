@@ -1,19 +1,13 @@
 package com.github.antiad.AntiAd;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.antiad.AntiAd.model.Core;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -32,10 +26,6 @@ public class Adfinder {
     // Simple pattern https://regexr.com/3lr99
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
-    private boolean spamDetection, urlDetection, IPDetection, checkWordLenght, notifyMessage;
-    private int numbers, procentCapital;
-    private ArrayList<String> whitelistLine, whitelistWildCardList;
-    private String language;
 
     public Adfinder(AntiAd instance) {
         plugin = instance;
@@ -52,9 +42,9 @@ public class Adfinder {
         boolean spam = false;
 
         for (String word : check.getMessage().split("\\s+")) {
-            if (checkWordLenght && word.length() >= numbers && numbers != 0) {
+            if (Core.instance().getConfig().isCheckWordLenght() && word.length() >= Core.instance().getConfig().getNumbers() && Core.instance().getConfig().getNumbers() != 0) {
                 //Checks if the message is longer than the max allowed, it only does this if the config allows it.
-                plugin.debug("this is marked as spam because " + word.length() + ">=" + numbers);
+                Core.instance().debug("this is marked as spam because " + word.length() + ">=" + Core.instance().getConfig().getNumbers());
                 spam = true;
                 break;
                 // if the word is 4 or under && it
@@ -69,14 +59,14 @@ public class Adfinder {
         String[] words = check.getMessage().split("\\s+");
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
-            if (word.length() >= 4 && word.equals(word.toUpperCase()) && !isNumbers(word) && procentCapital != 0) {
-                plugin.debug("else if 1");
+            if (word.length() >= 4 && word.equals(word.toUpperCase()) && !isNumbers(word) &&  Core.instance().getConfig().getProcentCapital() != 0) {
+                Core.instance().debug("else if 1");
                 word = word.toLowerCase();
                 words[i] = word;
                 caps = true;
                 break;
                 //if the words is longer than or 4 long
-            } else if (word.length() >= 4 && procentCapital != 0) {
+            } else if (word.length() >= 4 && Core.instance().getConfig().getProcentCapital()!= 0) {
 
                 int upper = 0;
                 char[] charArray = word.toCharArray();
@@ -88,8 +78,8 @@ public class Adfinder {
 
                 }
 
-                if (upper * 100 / charArray.length * 100 >= procentCapital * 100) {
-                    plugin.debug("else if 2");
+                if (upper * 100 / charArray.length * 100 >=  Core.instance().getConfig().getProcentCapital() * 100) {
+                    Core.instance().debug("else if 2");
                     word = word.toLowerCase();
                     words[i] = word;
                     caps = true;
@@ -116,116 +106,20 @@ public class Adfinder {
     public int checkForAdvertising(Check check) {
         int advertising = 0;
         // CHECK FOR IP PATTERN if it's turned on.
-        if (IPDetection) {
+        if (Core.instance().getConfig().isIPDetection()) {
             advertising = checkForIPPattern(check);
-            plugin.debug("Checking for IP");
+            Core.instance().debug("Checking for IP");
         }
         //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
-        if (advertising == 0 && urlDetection) {
-            plugin.debug("Checking for web");
+        if (advertising == 0 && Core.instance().getConfig().isUrlDetection()) {
+            Core.instance().debug("Checking for web");
             advertising = checkForWebPattern(check);
         }
 
         return advertising;
     }
 
-    /**
-     * Does this adfinder protect against spam and caps?
-     * @return return true if it protects against spam and caps
-     */
-    public boolean isSpamDetection() {
-        return spamDetection;
-    }
 
-    /**
-     * If we are checking for URL or not.
-     * @return return true if the url detection is active.
-     */
-    public boolean isURLDetection() {
-        return urlDetection;
-    }
-
-    /**
-     * If we are checking for ip addresses or not.
-     * @return return true if the ip address detection is active or not.
-     */
-    public boolean isIPDetection() {
-        return IPDetection;
-    }
-
-    /**
-     * Are we checking the word length.
-     * @return return true if the we are checking the word length.
-     */
-    public boolean isCheckWordLenght() {
-        return checkWordLenght;
-    }
-
-    /**
-     * get the numbers of .
-     * @return return true if the we are checking the word length.
-     */
-    public int getNumbers() {
-        return numbers;
-    }
-
-    /**
-     * Are we checking the word length.
-     * @return return true if the we are checking the word length.
-     */
-    public int getProcentCapital() {
-        return procentCapital;
-    }
-
-    /**
-     * Are we checking the word length.
-     * @return return true if the we are checking the word length.
-     */
-    public String getLanguage() {
-        return language;
-    }
-
-    /**
-     * Are we checking the word length.
-     * @return return true if the we are checking the word length.
-     */
-    public boolean isNotifyMessage() {
-        return notifyMessage;
-    }
-
-
-
-    /**
- * 
- * Save the message to the log if the server have that in the config, by default it does this.
- * 
- * @param player the playername of the player
- * @param type the type of the messsage (advertisement, spam etc.)
- * @param message The message the player is spamming/ advertisement)
- * @param where Where was it spammed, so we can see that for future problems.
- */
-    public void log(String player,String type,String message,String where) {
-        plugin.debug("Begin to log:" + message);
-        if(plugin.getConfig().getBoolean("log",true)){
-            try {
-                try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
-                    write.append(now("[yyyy-MM-dd HH:mm:ss]"))
-                            .append(" - ")
-                            .append(player)
-                            .append(" - ")
-                            .append(type)
-                            .append(" - ")
-                            .append(where)
-                            .append(" - ")
-                            .append(message);
-                    write.newLine();
-                    write.flush();
-                }
-            } catch (IOException ex) {
-                plugin.getLogger().log(Level.WARNING, plugin.getFromLanguage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
-            }
-        }
-    }
 
     /**
      *
@@ -236,7 +130,7 @@ public class Adfinder {
      */
     public void sendWarning(Player player, String message, int type, int where) {
         //todo the where makes no sense tbh.
-        plugin.debug("SENDING WARNING!!!!");
+        Core.instance().debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
         if ((type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) || (type == 2 && plugin.getConfig().getBoolean("   SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
@@ -249,7 +143,7 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        log(player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
+        Core.instance().getLogger().log(player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
 
         Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
@@ -383,33 +277,7 @@ public class Adfinder {
         return rtnString;
     }
 
-    /**
-     * Method to load the whitelist This is at start of if we add it with the
-     * command (or reload)
-     */
-    public void loadWhitelist() {
 
-        try {
-            BufferedReader read = new BufferedReader(new FileReader("plugins/AntiAd/Whitelist.txt"));
-            whitelistLine = new ArrayList<String>();
-            whitelistWildCardList = new ArrayList<String>();
-            String line;
-            while ((line = read.readLine()) != null) {
-                whitelistAdd(line);
-            }
-
-        } catch (IOException ex) {
-            plugin.getLogger().log(Level.WARNING, plugin.getColorfullLanguage("whitelistNotFound"));
-        }
-    }
-
-    public void whitelistAdd(String line) {
-        if (line.startsWith("*") || line.endsWith("*")) {
-            whitelistWildCardList.add(line);
-        } else {
-            whitelistLine.add(line);
-        }
-    }
 
     /**
      * A method to change the where int to a String.
@@ -439,18 +307,6 @@ public class Adfinder {
 
     }
 
-    /**
-     * A Help method to get the current time-
-     *
-     * @param dateFormat the number format you want back ex. MMM dd,yyyy HH:mm
-     * @return the String of the calendar in the dateFormat you wanted.
-     */
-    public static String now(String dateFormat) {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        return sdf.format(cal.getTime());
-
-    }
 
     /**
      * A help Method to check if the input are numbers.
@@ -468,7 +324,7 @@ public class Adfinder {
             //We catch this but does nothing to it because we dont need to :)
             //Because if the Double.ParseDouble throws the exception then it can't parse it.
         }
-        plugin.debug("isNumbers: " + rtnbool);
+        Core.instance().debug("isNumbers: " + rtnbool);
         return rtnbool;
     }
 
@@ -488,10 +344,10 @@ public class Adfinder {
             if (regexMatcher.group().length() != 0) {
                 if (ipPattern.matcher(message).find()) {
                     String advertisement = regexMatcher.group().trim();
-                    plugin.debug(regexMatcher.group());
-                    if (!whitelistLine.contains(advertisement)) {
+                    Core.instance().debug(regexMatcher.group());
+                    if (!Core.instance().getConfig().getWhitelistLine().contains(advertisement)) {
                         advertising = 1;
-                        plugin.debug("found in ip pattern!");
+                        Core.instance().debug("found in ip pattern!");
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                     } else {
@@ -513,17 +369,17 @@ public class Adfinder {
         int advertising = 0;
         String message = check.getMessage().toLowerCase();
         Matcher regexMatcherurl = webpattern.matcher(message);
-        plugin.debug("Message: " + message);
+        Core.instance().debug("Message: " + message);
 
         while (regexMatcherurl.find()) {
             String advertisement = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
 
-            plugin.debug(advertisement + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
+            Core.instance().debug(advertisement + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
             if (regexMatcherurl.group().length() != 0 && advertisement.length() != 0) {
-                plugin.debug(regexMatcherurl.group().trim() + " + test");
+                Core.instance().debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {
                     if (checkInWhitelist(advertisement)) {
-                        plugin.debug("for this" + advertisement);
+                        Core.instance().debug("for this" + advertisement);
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                         advertising = 1;
@@ -539,24 +395,24 @@ public class Adfinder {
 
     public boolean checkInWhitelist(String text) {
         boolean advertised = true;
-        if (whitelistLine.contains(text)) {
+        if (Core.instance().getConfig().getWhitelistLine().contains(text)) {
             advertised = false;
         } else {
-            if (whitelistWildCardList.size() > 0) {
-                for (String whitelistItem : whitelistWildCardList) {
+            if (Core.instance().getConfig().getWhitelistLine().size() > 0) {
+                for (String whitelistItem : Core.instance().getConfig().getWhitelistLine()) {
                     if (whitelistItem.startsWith("*") && whitelistItem.endsWith("*")) {
                         advertised = !text.contains(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.startsWith("*")) {
                         advertised = !text.endsWith(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.endsWith("*")) {
                         advertised = !text.startsWith(whitelistItem.replace("*", ""));
-                        plugin.debug(advertised ? "true" : "false");
+                        Core.instance().debug(advertised ? "true" : "false");
                     }
                     if (!advertised) {
-                        plugin.debug("Found it!");
+                        Core.instance().debug("Found it!");
                         break;
                     }
-                    plugin.debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
+                    Core.instance().debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
                 }
             }
         }
@@ -566,41 +422,21 @@ public class Adfinder {
     /**
      * method to Reload/load the config Options in the adfinder.
      */
-    public void startUp() {
-        setLanguage(plugin.getConfig().getString("language","en"));warn = new HashMap<>();
-        spamDetection = plugin.getConfig().getBoolean("Spam-Detection");
-        urlDetection = plugin.getConfig().getBoolean("URL-Detection");
-        IPDetection = plugin.getConfig().getBoolean("IP-Detection");
-        numbers = plugin.getConfig().getInt("Spam-Number-Letters");
-        procentCapital = plugin.getConfig().getInt("Spam-Procent-Capital-Words");
-        checkWordLenght = plugin.getConfig().getBoolean("Spam-Number-Letters-check");
-        notifyMessage = plugin.getConfig().getBoolean("Notification-Message");
+    void startUp() {
         warn = new HashMap<>();
 
 
         if (plugin.getConfig().getBoolean("useSimpleWebPattern")) {
             webpattern = Pattern.compile(webpatternSimple);
-            plugin.debug("Simple pattern loaded");
+            Core.instance().debug("Simple pattern loaded");
         } else {
             webpattern = Pattern.compile(webpatternAdvanced);
-            plugin.debug("Advanced pattern loaded");
-        }
-
-        loadWhitelist();
-    }
-
-
-    /**
-     * Set the language to a valid language, if it does not exists we are using englih.
-     * @param lang
-     */
-    private void setLanguage(String lang) {
-        final ArrayList<String> validLanguage = getValidLanguages();
-        if (getValidLanguages().contains(lang)) {
-            plugin.debug("tempLang: " + lang);
-            language = validLanguage.contains(lang) ? lang : "en";
+            Core.instance().debug("Advanced pattern loaded");
         }
     }
+
+
+
 
     /**
      * Method to get all the valid languages!

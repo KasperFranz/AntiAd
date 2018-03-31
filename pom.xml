@@ -9,9 +9,6 @@
     <name>AntiAD</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- Change MC Version HERE! -->
-        <bukkitVersion>1.9.4-R0.1-SNAPSHOT</bukkitVersion>
     </properties>
     <dependencies>
 
@@ -19,7 +16,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>${bukkitVersion}</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

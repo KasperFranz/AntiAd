@@ -1,16 +1,12 @@
 package com.github.antiad.AntiAd;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.logging.Level;
-
-import org.bstats.bukkit.Metrics;
+import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,21 +15,21 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Franz
  */
 public class AntiAd extends JavaPlugin {
-    private boolean DEBUG = false;
     private Adfinder adfinder;
-    private Properties language;
+    private Core core;
 
     /**
      * This enables this plugin :) 
      */
     @Override
     public void onEnable() {
+        core = new Core(this);
+        createConfigAndAttact();
+
+
+
+
         adfinder = new Adfinder(this);
-
-        setLanguage(adfinder.getLanguage());
-       
-        
-
         //Setting op the plugin listener to listen on this :)
         getServer().getPluginManager().registerEvents(new ADListener(this), this);
 
@@ -61,23 +57,12 @@ public class AntiAd extends JavaPlugin {
         }
         
          if (getConfig().contains("debug")) {
-            this.DEBUG = this.getConfig().getBoolean("debug");
+            this.core.setDebug(this.getConfig().getBoolean("debug"));
             saveConfig();
         }
 
         checkFile("Whitelist.txt", "ERRORWhitelistCreate");
         checkFile("Log.txt", "ERRORLogCreate");
-        Metrics metrics = new Metrics(this);
-
-
-        metrics.addCustomChart(new Metrics.SimplePie("spam_detection", () -> adfinder.isSpamDetection() ? "yes" : "No"));
-        metrics.addCustomChart(new Metrics.SimplePie("spam_detection", () -> adfinder.isSpamDetection() ? "yes" : "No"));
-        metrics.addCustomChart(new Metrics.SimplePie("notify_public", () -> adfinder.isNotifyMessage() ? "yes" : "No"));
-        metrics.addCustomChart(new Metrics.SimplePie("ip_detection", () -> adfinder.isIPDetection() ? "yes" : "No"));
-        metrics.addCustomChart(new Metrics.SimplePie("check_word_length", () -> adfinder.isCheckWordLenght() ? "yes" : "No"));
-        metrics.addCustomChart(new Metrics.SimplePie("numbers", () -> adfinder.getNumbers()+ ""));
-        metrics.addCustomChart(new Metrics.SimplePie("procentalCapital", () -> adfinder.getProcentCapital()+ ""));
-        metrics.addCustomChart(new Metrics.SimplePie("language", () -> adfinder.getLanguage()));
 
 
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
@@ -89,7 +74,7 @@ public class AntiAd extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        getLogger().info(language.getProperty("disable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
+        getLogger().info(Core.instance().getLanguage().getProperty("disable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
     }
 
     /**
@@ -101,14 +86,6 @@ public class AntiAd extends JavaPlugin {
         return adfinder;
     }
 
-    /**
-     *
-     * @return the properties file we are currently using (default is
-     * en.properties)
-     */
-    public Properties getLanguage() {
-        return language;
-    }
 
     /**
      * Private method to check if the config is there if not we make it from the
@@ -130,30 +107,11 @@ public class AntiAd extends JavaPlugin {
                     while ((length = input.read(buf)) > 0) {
                         output.write(buf, 0, length);
                     }
-                    getLogger().info(language.getProperty("usingDefaultConfig"));
+                    getLogger().info(Core.instance().getLanguage().getProperty("usingDefaultConfig"));
                 } catch (IOException e) {
-                    getLogger().warning(language.getProperty("ERRORLoadingDeafultConfig"));
+                    getLogger().warning(Core.instance().getLanguage().getProperty("ERRORLoadingDeafultConfig"));
                 }
             }
-        }
-    }
-
-    /**
-     * SHOULD ONLY BE CALLED FROM loadLANGUAGE()! Loads a language into the
-     * language (properties)
-     *
-     * @param lang the languge (needs to be checked agains valid language before
-     * it is going in here!
-     */
-    private void setLanguage(String lang) {
-        language = new Properties();
-        try {
-            language.load(this.getClass().getClassLoader().getResourceAsStream(
-                    "language/" + lang + ".properties"));
-        } catch (FileNotFoundException ex) {
-            getLogger().info("langugage File not found (check if you made it right) ");
-        } catch (IOException ex) {
-            getLogger().log(Level.INFO, "Error while setting the language", ex);
         }
     }
 
@@ -179,16 +137,6 @@ public class AntiAd extends JavaPlugin {
         return text;
     }
 
-    /**
-     * SOUT debug if this is debug!
-     *
-     * @param text the debug text
-     */
-    public void debug(String text) {
-        if (DEBUG) {
-            System.out.println("DEBUG"+text);
-        }
-    }
 
     /**
      * *
@@ -198,7 +146,7 @@ public class AntiAd extends JavaPlugin {
      * @return the colorfull text :)
      */
     public String getColorfullLanguage(String property) {
-        String text = getLanguage().getProperty(property);
+        String text = Core.instance().getLanguage().getProperty(property);
         String returnstr = "";
         if(text != null){
             returnstr = colorfull(text);
@@ -212,7 +160,7 @@ public class AntiAd extends JavaPlugin {
      * @return 
      */
     public String getFromLanguage(String property){
-        String text = getLanguage().getProperty(property);
+        String text = Core.instance().getLanguage().getProperty(property);
         String returnstr = "";
          if(text != null){
             returnstr = uncolorfull(text);
@@ -221,7 +169,8 @@ public class AntiAd extends JavaPlugin {
     }
     
     public String getFromLanguageAndTag(String property){
-        return uncolorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
+        Properties language = Core.instance().getLanguage();
+        return uncolorfull(language.getProperty("PluginTag") + language.getProperty(property));
     }
 
     /**
@@ -231,8 +180,8 @@ public class AntiAd extends JavaPlugin {
      * @return
      */
     public String getColorfullLanguageAndTag(String property) {
-        
-        return colorfull(getLanguage().getProperty("PluginTag") + getLanguage().getProperty(property));
+        Properties language = Core.instance().getLanguage();
+        return colorfull(language.getProperty("PluginTag") + language.getProperty(property));
     }
 
 
@@ -251,7 +200,24 @@ public class AntiAd extends JavaPlugin {
                 getLogger().warning(getFromLanguage(errorMessage)+ " "+ex);
             }
         }
-    }    
+    }
+
+    public void createConfigAndAttact(){
+        String language = getConfig().getString("language","en");
+        boolean spamDetection = getConfig().getBoolean("Spam-Detection");
+        boolean urlDetection = getConfig().getBoolean("URL-Detection");
+        boolean IPDetection = getConfig().getBoolean("IP-Detection");
+        boolean checkWordLenght = getConfig().getBoolean("Spam-Number-Letters-check");
+        boolean log = getConfig().getBoolean("log");
+        boolean notifyMessage = getConfig().getBoolean("Notification-Message");
+        int numbers = getConfig().getInt("Spam-Number-Letters");
+        int procentCapital = getConfig().getInt("Spam-Procent-Capital-Words");
+        core.createConfig(spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, "plugins/Core/Whitelist.txt", language);
+    }
+
+    public Core getCore(){
+        return core;
+    }
 
     void reload() {
         this.reloadConfig();

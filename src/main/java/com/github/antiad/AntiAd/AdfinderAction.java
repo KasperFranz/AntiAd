@@ -1,6 +1,8 @@
 package com.github.antiad.AntiAd;
 
 import java.util.Set;
+
+import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -33,7 +35,7 @@ public class AdfinderAction implements Runnable {
         //First we try to run the command and if we gets a error while doing it we broadcast our Error message
         String commandString = executeCommand.split(" ", 2)[0].toLowerCase();
         Command command = Bukkit.getServer().getPluginCommand(commandString);
-        plugin.debug("ban".equals(commandString) ? "true" : "false");
+        Core.instance().debug("ban".equals(commandString) ? "true" : "false");
         if (command == null && !("ban".equals(commandString) || "kick".equals(commandString))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
             OfflinePlayer[] ops = tempOps.toArray(new OfflinePlayer[tempOps.size()]);
@@ -55,7 +57,7 @@ public class AdfinderAction implements Runnable {
             // NB: This is only executed if the Notification-message is on!
         } else {
 
-            if (plugin.getAdfinder().isNotifyMessage()) {
+            if (Core.instance().getConfig().isNotifyMessage()) {
                 plugin.getServer().broadcastMessage(broadcastmsg);
             }
         }
