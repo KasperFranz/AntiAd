@@ -23,7 +23,7 @@ public class Logger {
         Core.instance().debug("Begin to log:" + message);
         if(Core.instance().getConfig().getLog()){
             try {
-                try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/Core/Log.txt", true))) {
+                try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
                     write.append(now("[yyyy-MM-dd HH:mm:ss]"))
                             .append(" - ")
                             .append(player)

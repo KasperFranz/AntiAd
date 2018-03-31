@@ -38,12 +38,12 @@ public class ADCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
             rtnbool = true;
             if (args.length < 2) {
-                Core.instance().getConfig().loadWhitelist("plugins/Core/Whitelist.txt");
+                Core.instance().getConfig().loadWhitelist("plugins/AntiAd/Whitelist.txt");
                 sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandNoIP"));    
             } else {
                 String ip = args[1];
                 try {
-                    BufferedWriter write = new BufferedWriter(new FileWriter("plugins/Core/Whitelist.txt", true));
+                    BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Whitelist.txt", true));
                     write.append(ip);
                     write.newLine();
                     write.flush();

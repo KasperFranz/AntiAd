@@ -212,7 +212,7 @@ public class AntiAd extends JavaPlugin {
         boolean notifyMessage = getConfig().getBoolean("Notification-Message");
         int numbers = getConfig().getInt("Spam-Number-Letters");
         int procentCapital = getConfig().getInt("Spam-Procent-Capital-Words");
-        core.createConfig(spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, "plugins/Core/Whitelist.txt", language);
+        core.createConfig(spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, "plugins/AntiAd/Whitelist.txt", language);
     }
 
     public Core getCore(){
