@@ -5,19 +5,11 @@
  */
 package com.github.antiad.AntiAd;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.logging.Logger;
+import com.github.antiad.AntiAd.model.Config;
+import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -25,6 +17,10 @@ import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  *
@@ -66,12 +62,18 @@ public class AdfinderTest {
     
     @Mock 
     private AntiAd plugin;
-    
+
+    @Mock
+    private Core core;
+
     @Mock 
     private PluginLogger logger;
-    
-    @Mock 
-    private FileConfiguration config;
+
+    @Mock
+    private FileConfiguration fileConfig;
+
+    @Mock
+    private Config config;
     
     private Adfinder finder;
 
@@ -83,32 +85,25 @@ public class AdfinderTest {
     }
     
     @Before
-    public void before() throws Exception {
+    public void before() {
         MockitoAnnotations.initMocks(this);
-        
-        Mockito.when(plugin.getConfig()).thenReturn(config);
-        Field f1 = JavaPlugin.class.getDeclaredField("logger");
-        f1.setAccessible(true);
-        f1.set(plugin, logger);
-        Mockito.when(check.getMessage()).thenReturn(message);
-        Mockito.when(config.getBoolean("Spam-Detection")).thenReturn(true);
-        Mockito.when(config.getBoolean("URL-Detection")).thenReturn(true);
-        Mockito.when(config.getBoolean("IP-Detection")).thenReturn(true);
-        Mockito.when(config.getInt("Spam-Number-Letters")).thenReturn(20);
-        Mockito.when(config.getInt("Spam-Procent-Capital-Words")).thenReturn(80);
-        Mockito.when(config.getBoolean("Spam-Number-Letters-check")).thenReturn(true);
-        
-        finder = new Adfinder(plugin);
-        
-        // Required because plguin fails loding properly when in mocked context (whitelist file missing)
-        Field f2 = Adfinder.class.getDeclaredField("whitelistLine");
-        f2.setAccessible(true);
-        f2.set(finder, new ArrayList<>());
-        Field f3 = Adfinder.class.getDeclaredField("whitelistWildCardList");
-        f3.setAccessible(true);
-        f3.set(finder, new ArrayList<>());
+        Mockito.when(core.getPlugin()).thenReturn(plugin);
+        Mockito.when(core.getConfig()).thenReturn(config);
 
-        plugin.getCore().getConfig().whitelistAdd("github.com");
+        Mockito.when(plugin.getConfig()).thenReturn(fileConfig);
+        Mockito.when(check.getMessage()).thenReturn(message);
+        Mockito.when(config.isSpamDetection()).thenReturn(true);
+        Mockito.when(config.isUrlDetection()).thenReturn(true);
+        Mockito.when(config.isIPDetection()).thenReturn(true);
+        Mockito.when(config.getNumbers()).thenReturn(20);
+        Mockito.when(config.getProcentCapital()).thenReturn(80);
+        Mockito.when(config.isCheckWordLenght()).thenReturn(true);
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("github.com");
+        Mockito.when(config.getWhitelistLine()).thenReturn(list);
+        finder = new Adfinder(core);
+
     }
 
     @Test

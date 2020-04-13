@@ -5,12 +5,16 @@
  */
 package com.github.antiad.AntiAd;
 
+import com.github.antiad.AntiAd.model.Config;
 import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.entity.Player;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 /**
  *
@@ -21,23 +25,38 @@ public class CheckTest {
     public CheckTest() {
     }
 
+    @Mock
+    private AntiAd plugin;
+    @Mock
+    private Core core;
+    @Mock
+    private Config config;
+    @Mock
+    private Adfinder adfinder;
+    @Mock
+    private Player player;
+
+    @Before
+    public void before() {
+        MockitoAnnotations.initMocks(this);
+        Mockito.when(core.getConfig()).thenReturn(config);
+        Mockito.when(core.getPlugin()).thenReturn(plugin);
+        Mockito.when(plugin.getAdfinder()).thenReturn(adfinder);
+        Mockito.when(config.isSpamDetection()).thenReturn(true);
+
+
+    }
+
     @Test
     public void testAllAdfinderMethodsAreCalled() {
-        AntiAd pl = Mockito.mock(AntiAd.class);
-        Player player = Mockito.mock(Player.class);
-        Adfinder finder = Mockito.mock(Adfinder.class);
-        Core core = Mockito.mock(Core.class);
 
-        Mockito.when(pl.getAdfinder()).thenReturn(finder);
-        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
-
-        Check check = new Check(pl, player);
+        Check check = new Check(core, player);
 
         check.check("Hello World", 1, true);
 
-        Mockito.verify(finder).checkForAdvertising(check);
-        Mockito.verify(finder).checkForCaps(check);
-        Mockito.verify(finder).checkForSpam(check);
+        Mockito.verify(adfinder).checkForAdvertising(check);
+        Mockito.verify(adfinder).checkForCaps(check);
+        Mockito.verify(adfinder).checkForSpam(check);
         Assert.assertEquals(false, check.isAdvertisement());
         Assert.assertEquals(false, check.isCaps());
         Assert.assertEquals(false, check.isSpam());
@@ -45,21 +64,16 @@ public class CheckTest {
 
     @Test
     public void testOnlyAdvertisementAdfinderMethodsAreCalled() {
-        AntiAd pl = Mockito.mock(AntiAd.class);
-        Player player = Mockito.mock(Player.class);
-        Adfinder finder = Mockito.mock(Adfinder.class);
-        Core core = Mockito.mock(Core.class);
 
-        Mockito.when(pl.getAdfinder()).thenReturn(finder);
         Mockito.when(core.getConfig().isSpamDetection()).thenReturn(false);
 
-        Check check = new Check(pl, player);
+        Check check = new Check(core, player);
 
         check.check("Hello World", 1, true);
 
-        Mockito.verify(finder).checkForAdvertising(check);
-        Mockito.verify(finder, Mockito.never()).checkForCaps(check);
-        Mockito.verify(finder, Mockito.never()).checkForSpam(check);
+        Mockito.verify(adfinder).checkForAdvertising(check);
+        Mockito.verify(adfinder, Mockito.never()).checkForCaps(check);
+        Mockito.verify(adfinder, Mockito.never()).checkForSpam(check);
         Assert.assertEquals(false, check.isAdvertisement());
         Assert.assertEquals(false, check.isCaps());
         Assert.assertEquals(false, check.isSpam());
@@ -67,22 +81,16 @@ public class CheckTest {
 
     @Test
     public void testOtherChecksAreSkippedWhenAdvertisementsAreDetected() {
-        AntiAd pl = Mockito.mock(AntiAd.class);
-        Player player = Mockito.mock(Player.class);
-        Core core = Mockito.mock(Core.class);
-        Adfinder finder = Mockito.mock(Adfinder.class);
-
-        Mockito.when(pl.getAdfinder()).thenReturn(finder);
         Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
-        Mockito.when(finder.checkForAdvertising(Mockito.any(Check.class))).thenReturn(1);
+        Mockito.when(adfinder.checkForAdvertising(Mockito.any(Check.class))).thenReturn(1);
 
-        Check check = new Check(pl, player);
+        Check check = new Check(core, player);
 
         check.check("Hello World", 1, true);
 
-        Mockito.verify(finder).checkForAdvertising(check);
-        Mockito.verify(finder, Mockito.never()).checkForCaps(check);
-        Mockito.verify(finder, Mockito.never()).checkForSpam(check);
+        Mockito.verify(adfinder).checkForAdvertising(check);
+        Mockito.verify(adfinder, Mockito.never()).checkForCaps(check);
+        Mockito.verify(adfinder, Mockito.never()).checkForSpam(check);
         Assert.assertEquals(true, check.isAdvertisement());
         Assert.assertEquals(false, check.isCaps());
         Assert.assertEquals(false, check.isSpam());
@@ -91,22 +99,12 @@ public class CheckTest {
     @Ignore
     @Test
     public void testOtherChecksAreStillRunWhenWhitelistedAdvertisementsAreDetected() {
-        AntiAd plugin = Mockito.mock(AntiAd.class);
-        Player player = Mockito.mock(Player.class);
-        Core core = Mockito.mock(Core.class);
-        Adfinder finder = Mockito.mock(Adfinder.class);
-
-        Mockito.when(plugin.getAdfinder()).thenReturn(finder);
-        Mockito.when(core.getConfig().isSpamDetection()).thenReturn(true);
-        Mockito.when(finder.checkForAdvertising(Mockito.any(Check.class))).thenReturn(2);
-
-        Check check = new Check(plugin, player);
-
+        Check check = new Check(core, player);
         check.check("Hello World", 1, true);
 
-        Mockito.verify(finder).checkForAdvertising(check);
-        Mockito.verify(finder).checkForCaps(check);
-        Mockito.verify(finder).checkForSpam(check);
+        Mockito.verify(adfinder).checkForAdvertising(check);
+        Mockito.verify(adfinder).checkForCaps(check);
+        Mockito.verify(adfinder).checkForSpam(check);
         Assert.assertEquals(false, check.isAdvertisement());
         Assert.assertEquals(false, check.isCaps());
         Assert.assertEquals(false, check.isSpam());
