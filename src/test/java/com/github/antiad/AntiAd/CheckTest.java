@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.github.antiad.AntiAd;
 
 import com.github.antiad.AntiAd.model.Config;
@@ -16,10 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-/**
- *
- * @author Fernando
- */
+
 public class CheckTest {
 
     public CheckTest() {
@@ -57,9 +49,9 @@ public class CheckTest {
         Mockito.verify(adfinder).checkForAdvertising(check);
         Mockito.verify(adfinder).checkForCaps(check);
         Mockito.verify(adfinder).checkForSpam(check);
-        Assert.assertEquals(false, check.isAdvertisement());
-        Assert.assertEquals(false, check.isCaps());
-        Assert.assertEquals(false, check.isSpam());
+        Assert.assertFalse(check.isAdvertisement());
+        Assert.assertFalse(check.isCaps());
+        Assert.assertFalse(check.isSpam());
     }
 
     @Test
@@ -74,9 +66,9 @@ public class CheckTest {
         Mockito.verify(adfinder).checkForAdvertising(check);
         Mockito.verify(adfinder, Mockito.never()).checkForCaps(check);
         Mockito.verify(adfinder, Mockito.never()).checkForSpam(check);
-        Assert.assertEquals(false, check.isAdvertisement());
-        Assert.assertEquals(false, check.isCaps());
-        Assert.assertEquals(false, check.isSpam());
+        Assert.assertFalse(check.isAdvertisement());
+        Assert.assertFalse(check.isCaps());
+        Assert.assertFalse(check.isSpam());
     }
 
     @Test
@@ -91,9 +83,9 @@ public class CheckTest {
         Mockito.verify(adfinder).checkForAdvertising(check);
         Mockito.verify(adfinder, Mockito.never()).checkForCaps(check);
         Mockito.verify(adfinder, Mockito.never()).checkForSpam(check);
-        Assert.assertEquals(true, check.isAdvertisement());
-        Assert.assertEquals(false, check.isCaps());
-        Assert.assertEquals(false, check.isSpam());
+        Assert.assertTrue(check.isAdvertisement());
+        Assert.assertFalse(check.isCaps());
+        Assert.assertFalse(check.isSpam());
     }
 
     @Ignore
@@ -105,9 +97,9 @@ public class CheckTest {
         Mockito.verify(adfinder).checkForAdvertising(check);
         Mockito.verify(adfinder).checkForCaps(check);
         Mockito.verify(adfinder).checkForSpam(check);
-        Assert.assertEquals(false, check.isAdvertisement());
-        Assert.assertEquals(false, check.isCaps());
-        Assert.assertEquals(false, check.isSpam());
+        Assert.assertFalse(check.isAdvertisement());
+        Assert.assertFalse(check.isCaps());
+        Assert.assertFalse(check.isSpam());
     }
 
 }
