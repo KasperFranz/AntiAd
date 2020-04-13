@@ -4,3 +4,5 @@ build_script:
   - set JAVA_HOME=C:\Program Files\Java\jdk1.8.0
   - mvn --version
   - mvn install
+artifacts:
+  - path: target/*.jar
