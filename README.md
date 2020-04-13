@@ -5,7 +5,7 @@ AntiAd
 [![Download][spigotSVG]][spigotLink]
 
 The goal of AntiAd is to help you maintain a server where people don't advertise, spam or write in all caps.
-When a player is sending advertisement or spam in the chat it shows a message to the people with the permission `antiad.see` the advertised/spammy message - The advertising/spammy player gets a warning and a message that spam/advertisement isn't allowed (the message can be changed in the config).  
+When a player is sending advertisement or spam in the chat, it shows a message to the people with the permission `antiad.see` the advertised/spammy message - The advertising/spammy player gets a warning and a message that spam/advertisement isn't allowed (the message can be changed in the config).  
 We are doing this by giving everyone n (default 3) chances (resets with a server restart), when they used their 3 chances there a executed a command (the command can be set in the config).  
 
 **but Isn't my own website blocked then?**  
@@ -39,11 +39,7 @@ Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna, HunLux an
 
 
 ## Usage of AntiAd
-
-~~We monitor the usage of the plugin with [MCStats][MCStatsLink] - this is to help us see which version of AntiAd and what version of Minecraft you  - all this is so we can make sure the plugin is working with your version of Spigot/Bukkit and Minecraft.
-![Usage statistics][stats]~~
-we are using bStats now.
-
+As of version 2.4.0 we are using bStats to gather usage statistics.
 
 
 
