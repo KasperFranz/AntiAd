@@ -24,16 +24,16 @@ You can set the language in the `Language` part of the config.yml, the diffent l
 
 Languages | ShortCode
 --- | ---
- Simplified Chinese | `cn`      |
- Danish             | `da`      |
- German             | `de`      |
- Spanish            | `es`      |
- French             | `fr`      |
- Polish             | `pl`      |
- Russian            | `ru`      |
- Turkish            | `tr`      |
- Hungarian          | `hu`      | 
- Brazilian Portuguese          | `pt-br`      | 
+ Simplified Chinese     | `cn`      |
+ Danish                 | `da`      |
+ German                 | `de`      |
+ Spanish                | `es`      |
+ French                 | `fr`      |
+ Polish                 | `pl`      |
+ Russian                | `ru`      |
+ Turkish                | `tr`      |
+ Hungarian              | `hu`      | 
+ Brazilian Portuguese   | `pt-br`   | 
 
 Thanks to Mayomi, kasperfranz, AlexMl, XxCoolgamesxX, MySt1k, metLuna, HunLux and nathampa0909 for the awesome translations
 
@@ -43,11 +43,9 @@ As of version 2.4.0 we are using bStats to gather usage statistics.
 
 
 
-[stats]: https://i.mcstats.org/AntiAd/Global+Statistics@2x.borderless.png
-[buildSVG]: https://travis-ci.org/antiAD/AntiAd.svg
-[buildLink]: https://travis-ci.org/antiAD/AntiAd
+[buildSVG]: https://ci.appveyor.com/api/projects/status/nidhfci49my5bchl/branch/master?svg=true
+[buildLink]: https://ci.appveyor.com/project/KasperFranz/antiad/branch/master
 [bukkitSVG]: https://img.shields.io/badge/Download-Bukkit-blue.svg
 [bukkitLink]: https://dev.bukkit.org/projects/antiad
 [spigotSVG]: https://img.shields.io/badge/Download-SpigotMC-orange.svg
 [spigotLink]: https://www.spigotmc.org/resources/antiad.323/
-[MCStatsLink]: http://mcstats.org/plugin/AntiAd

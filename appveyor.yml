@@ -5,4 +5,4 @@ build_script:
   - mvn --version
   - mvn install
 artifacts:
-  - path: target/*.jar
+  - path: target/AntiAd-*.jar
