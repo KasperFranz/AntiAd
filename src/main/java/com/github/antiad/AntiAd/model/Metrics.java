@@ -2,8 +2,8 @@ package com.github.antiad.AntiAd.model;
 
 public class Metrics {
     public Metrics(){
-
-        org.bstats.bukkit.Metrics metrics = new org.bstats.bukkit.Metrics(Core.instance().getPlugin());
+        int pluginId = 7090;
+        org.bstats.bukkit.Metrics metrics = new org.bstats.bukkit.Metrics(Core.instance().getPlugin(),pluginId);
 
 
         metrics.addCustomChart(new org.bstats.bukkit.Metrics.SimplePie("spam_detection", () -> Core.instance().getConfig().isSpamDetection() ? "yes" : "No"));
