@@ -1,13 +1,13 @@
 package com.github.antiad.AntiAd;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
@@ -16,9 +16,11 @@ import org.bukkit.command.CommandSender;
 public class ADCommand implements CommandExecutor {
 
     private final AntiAd plugin;
+    private final Core core;
 
-    public ADCommand(AntiAd plugin) {
-        this.plugin = plugin;
+    public ADCommand(Core core) {
+        this.core = core;
+        this.plugin = core.getPlugin();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ADCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("add") && ((sender.isOp() || sender.hasPermission("antiad.whitelist")))) {
             rtnbool = true;
             if (args.length < 2) {
-                Core.instance().getConfig().loadWhitelist("plugins/AntiAd/Whitelist.txt");
+                core.getConfig().loadWhitelist("plugins/AntiAd/Whitelist.txt");
                 sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandNoIP"));    
             } else {
                 String ip = args[1];
@@ -48,7 +50,7 @@ public class ADCommand implements CommandExecutor {
                     write.newLine();
                     write.flush();
                     write.close();
-                    Core.instance().getConfig().whitelistAdd(ip);
+                    core.getConfig().whitelistAdd(ip);
                     sender.sendMessage(plugin.getColorfullLanguageAndTag("AddCommandAdded"));
                 } catch (IOException ex) {
                     plugin.getLogger().info(plugin.getFromLanguage("whitelistNotFound") + ex.getMessage());

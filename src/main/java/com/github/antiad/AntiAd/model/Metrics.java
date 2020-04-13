@@ -5,7 +5,7 @@ import org.bstats.bukkit.Metrics.SimplePie;
 public class Metrics {
     public Metrics(Core core) {
         int pluginId = 7090;
-        org.bstats.bukkit.Metrics metrics = new org.bstats.bukkit.Metrics(Core.instance().getPlugin(), pluginId))
+        org.bstats.bukkit.Metrics metrics = new org.bstats.bukkit.Metrics(core.getPlugin(), pluginId);
         metrics.addCustomChart(new SimplePie("spam_detection", () -> core.getConfig().isSpamDetection() ? "yes" : "No"));
         metrics.addCustomChart(new SimplePie("spam_detection", () -> core.getConfig().isSpamDetection() ? "yes" : "No"));
         metrics.addCustomChart(new SimplePie("notify_public", () -> core.getConfig().isNotifyMessage() ? "yes" : "No"));

@@ -11,8 +11,9 @@ public class Config {
     private int numbers, procentCapital;
     private ArrayList<String> whitelistLine, whitelistWildCardList;
     private String language;
+    private final Core core;
 
-    public Config(boolean spamDetection, boolean urlDetection, boolean IPDetection, boolean log, boolean checkWordLenght, boolean notifyMessage, int numbers, int procentCapital, String whitelistLineLocation, String language) {
+    public Config(Core core,boolean spamDetection, boolean urlDetection, boolean IPDetection, boolean log, boolean checkWordLenght, boolean notifyMessage, int numbers, int procentCapital, String whitelistLineLocation, String language) {
         this.spamDetection = spamDetection;
         this.urlDetection = urlDetection;
         this.IPDetection = IPDetection;
@@ -24,7 +25,8 @@ public class Config {
         whitelistLine = new ArrayList<>();
         whitelistWildCardList = new ArrayList<>();
         this.language = language;
-        Core.instance().setLanguage(getLanguage());
+        this.core = core;
+        core.setLanguage(getLanguage());
     }
 
     public boolean isSpamDetection() {
@@ -86,9 +88,9 @@ public class Config {
             }
 
         } catch (IOException ex) {
-            Core.instance().logMessage(
+            core.logMessage(
                 Level.WARNING,
-                Core.instance().getMessage("whitelistNotFound")
+                core.getMessage("whitelistNotFound")
             );
         }
     }

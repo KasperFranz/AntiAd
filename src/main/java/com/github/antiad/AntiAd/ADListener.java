@@ -1,7 +1,5 @@
 package com.github.antiad.AntiAd;
 
-import java.util.List;
-
 import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +9,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 
+import java.util.List;
+
 /**
  *
  * @author Franz
@@ -18,10 +18,11 @@ import org.bukkit.event.player.PlayerEditBookEvent;
 public class ADListener implements Listener {
 
     private final AntiAd plugin;
+    private final Core core;
 
-    public ADListener(AntiAd plugin) {
-        this.plugin = plugin;
-
+    public ADListener(Core core) {
+        this.core = core;
+        this.plugin = core.getPlugin();
     }
 
     /**
@@ -33,13 +34,13 @@ public class ADListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerChat(AsyncPlayerChatEvent chat) {
-        Core.instance().debug("chat gone?" + chat.isCancelled());
-        Check check = new Check(plugin, chat.getPlayer());
+        core.debug("chat gone?" + chat.isCancelled());
+        Check check = new Check(core, chat.getPlayer());
 
         if (check.check(chat.getMessage(), 1, true)) {
 
-            Core.instance().debug(" " + plugin.getConfig().getBoolean("replaceText.advertisement"));
-            Core.instance().debug(" " + check.isAdvertisement());
+            core.debug(" " + plugin.getConfig().getBoolean("replaceText.advertisement"));
+            core.debug(" " + check.isAdvertisement());
             if (check.isSpam() && plugin.getConfig().getBoolean("replaceText.spam")) {
 
             } else if (
@@ -57,7 +58,7 @@ public class ADListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onSignCreation(SignChangeEvent sign) {
 
-        Check check = new Check(plugin, sign.getPlayer());
+        Check check = new Check(core, sign.getPlayer());
         for (int i = 0; i < sign.getLines().length; i++) {
             if (check.check(sign.getLine(i), 3, false)) {
 
@@ -74,7 +75,7 @@ public class ADListener implements Listener {
         String CL = chat.getMessage().split("\\s+")[0];
         List<String> Commands = plugin.getConfig().getStringList("Detected-Commands");
         if (Commands.contains(CL)) {
-            Check check = new Check(plugin, chat.getPlayer());
+            Check check = new Check(core, chat.getPlayer());
             if (check.check(chat.getMessage(), 2, true)) {
                 chat.setCancelled(true);
             }
@@ -83,7 +84,7 @@ public class ADListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEditBook(PlayerEditBookEvent bookEdit) {
-        Check check = new Check(plugin, bookEdit.getPlayer());
+        Check check = new Check(core, bookEdit.getPlayer());
         for (String page : bookEdit.getNewBookMeta().getPages()) {
             if (check.check(page, 4, true)) {
                 bookEdit.setCancelled(true);

@@ -1,7 +1,12 @@
 package com.github.antiad.AntiAd;
 
 import com.github.antiad.AntiAd.Listeners.UpdateListener;
+import com.github.antiad.AntiAd.model.Core;
 import com.github.antiad.AntiAd.utils.Version;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,10 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * This class is a barebones example of how to use the BukkitDev ServerMods API
@@ -40,27 +41,27 @@ public class Update {
     /**
      * Check for updates anonymously (keyless)
      *
-     * @param plugin the plugin.
+     * @param core the core of the plugin.
      * @param projectID The BukkitDev Project ID, found in the "Facts" panel on
      * the right-side of your project page.
      */
-    public Update(AntiAd plugin, int projectID) {
-        this(plugin, projectID, null);
+    public Update(Core core, int projectID) {
+        this(core, projectID, null);
     }
 
     /**
      * Check for updates using your Curse account (with key)
      *
-     * @param plugin The plugin :)
+     * @param core The core of the plugin
      * @param projectID The BukkitDev Project ID, found in the "Facts" panel on
      * the right-side of your project page.
      * @param apiKey Your ServerMods API key, found at
      * https://dev.bukkit.org/home/servermods-apikey/
      */
-    public Update(AntiAd plugin, int projectID, String apiKey) {
+    public Update(Core core, int projectID, String apiKey) {
         this.projectID = projectID;
         this.apiKey = apiKey;
-        this.plugin = plugin;
+        this.plugin = core.getPlugin();
         this.linkToDev = plugin.getDescription().getWebsite();
         query();
     }

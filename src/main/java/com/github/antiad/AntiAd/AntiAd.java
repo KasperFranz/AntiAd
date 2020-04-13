@@ -31,12 +31,12 @@ public class AntiAd extends JavaPlugin {
 
 
 
-        adfinder = new Adfinder(this);
+        adfinder = new Adfinder(core);
         //Setting op the plugin listener to listen on this :)
-        getServer().getPluginManager().registerEvents(new ADListener(this), this);
+        getServer().getPluginManager().registerEvents(new ADListener(core), this);
 
         //Setting up the command Executer (antiAD)
-        getCommand("antiad").setExecutor(new ADCommand(this));
+        getCommand("antiad").setExecutor(new ADCommand(core));
 
         checkConfig();
 
@@ -59,7 +59,7 @@ public class AntiAd extends JavaPlugin {
         }
         
          if (getConfig().contains("debug")) {
-            this.core.setDebug(this.getConfig().getBoolean("debug"));
+            core.setDebug(this.getConfig().getBoolean("debug"));
             saveConfig();
         }
 
@@ -68,10 +68,9 @@ public class AntiAd extends JavaPlugin {
 
 
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
-        Update update = new Update(this,52014);
 
-
-        Metrics metrics = new Metrics(core);
+        new Update(core, 52014);
+        new Metrics(core);
 
     }
 
@@ -80,7 +79,7 @@ public class AntiAd extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        getLogger().info(Core.instance().getLanguage().getProperty("disable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
+        getLogger().info(core.getLanguage().getProperty("disable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
     }
 
     /**
@@ -113,9 +112,9 @@ public class AntiAd extends JavaPlugin {
                     while ((length = input.read(buf)) > 0) {
                         output.write(buf, 0, length);
                     }
-                    getLogger().info(Core.instance().getLanguage().getProperty("usingDefaultConfig"));
+                    getLogger().info(core.getLanguage().getProperty("usingDefaultConfig"));
                 } catch (IOException e) {
-                    getLogger().warning(Core.instance().getLanguage().getProperty("ERRORLoadingDeafultConfig"));
+                    getLogger().warning(core.getLanguage().getProperty("ERRORLoadingDeafultConfig"));
                 }
             }
         }
@@ -152,7 +151,7 @@ public class AntiAd extends JavaPlugin {
      * @return the colorfull text :)
      */
     public String getColorfullLanguage(String property) {
-        String text = Core.instance().getLanguage().getProperty(property);
+        String text = core.getLanguage().getProperty(property);
         String returnstr = "";
         if(text != null){
             returnstr = colorfull(text);
@@ -166,7 +165,7 @@ public class AntiAd extends JavaPlugin {
      * @return 
      */
     public String getFromLanguage(String property){
-        String text = Core.instance().getLanguage().getProperty(property);
+        String text = core.getLanguage().getProperty(property);
         String returnstr = "";
          if(text != null){
             returnstr = uncolorfull(text);
@@ -175,7 +174,7 @@ public class AntiAd extends JavaPlugin {
     }
     
     public String getFromLanguageAndTag(String property){
-        Properties language = Core.instance().getLanguage();
+        Properties language = core.getLanguage();
         return uncolorfull(language.getProperty("PluginTag") + language.getProperty(property));
     }
 
@@ -186,7 +185,7 @@ public class AntiAd extends JavaPlugin {
      * @return
      */
     public String getColorfullLanguageAndTag(String property) {
-        Properties language = Core.instance().getLanguage();
+        Properties language = core.getLanguage();
         return colorfull(language.getProperty("PluginTag") + language.getProperty(property));
     }
 
@@ -219,10 +218,6 @@ public class AntiAd extends JavaPlugin {
         int numbers = getConfig().getInt("Spam-Number-Letters");
         int procentCapital = getConfig().getInt("Spam-Procent-Capital-Words");
         core.createConfig(spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, "plugins/AntiAd/Whitelist.txt", language);
-    }
-
-    public Core getCore(){
-        return core;
     }
 
     void reload() {

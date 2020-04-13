@@ -1,22 +1,23 @@
 package com.github.antiad.AntiAd;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.github.antiad.AntiAd.model.Core;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class Adfinder {
 
     private final AntiAd plugin;
+    private final Core core;
     // ip pattern NEW PATTERN: https://regexr.com/3lpie OLD PATTERN: http://regexr.com?33l17
     private final Pattern ipPattern = Pattern.compile("(?:\\d{1,3}[.,\\-:;\\/()=?}+ ]{1,4}){3}\\d{1,3}");
     
@@ -27,8 +28,9 @@ public class Adfinder {
     private final String webpatternSimple = "[-a-zA-Z0-9@:%_\\+~#?&//=]{2,256}\\.(com|ru|net|org|de|jp|uk|br|pl|in|it|fr|au|info|nl|cn|ir|es|cz|biz|ca|kr|eu|ua|za|co|gr|ro|se|tw|vn|mx|ch|tr|at|be|hu|dk|tv|me|ar|us|no|sk|fi|id|cl|nz|by|pt)\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)?";
     private HashMap<Player, Integer> warn;
 
-    public Adfinder(AntiAd instance) {
-        plugin = instance;
+    public Adfinder(Core core) {
+        this.core = core;
+        plugin = core.getPlugin();
         startUp();
     }
 
@@ -42,9 +44,9 @@ public class Adfinder {
         boolean spam = false;
 
         for (String word : check.getMessage().split("\\s+")) {
-            if (Core.instance().getConfig().isCheckWordLenght() && word.length() >= Core.instance().getConfig().getNumbers() && Core.instance().getConfig().getNumbers() != 0) {
+            if (core.getConfig().isCheckWordLenght() && word.length() >= core.getConfig().getNumbers() && core.getConfig().getNumbers() != 0) {
                 //Checks if the message is longer than the max allowed, it only does this if the config allows it.
-                Core.instance().debug("this is marked as spam because " + word.length() + ">=" + Core.instance().getConfig().getNumbers());
+                core.debug("this is marked as spam because " + word.length() + ">=" + core.getConfig().getNumbers());
                 spam = true;
                 break;
                 // if the word is 4 or under && it
@@ -59,14 +61,14 @@ public class Adfinder {
         String[] words = check.getMessage().split("\\s+");
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
-            if (word.length() >= 4 && word.equals(word.toUpperCase()) && !isNumbers(word) &&  Core.instance().getConfig().getProcentCapital() != 0) {
-                Core.instance().debug("else if 1");
+            if (word.length() >= 4 && word.equals(word.toUpperCase()) && !isNumbers(word) &&  core.getConfig().getProcentCapital() != 0) {
+                core.debug("else if 1");
                 word = word.toLowerCase();
                 words[i] = word;
                 caps = true;
                 break;
                 //if the words is longer than or 4 long
-            } else if (word.length() >= 4 && Core.instance().getConfig().getProcentCapital()!= 0) {
+            } else if (word.length() >= 4 && core.getConfig().getProcentCapital()!= 0) {
 
                 int upper = 0;
                 char[] charArray = word.toCharArray();
@@ -78,8 +80,8 @@ public class Adfinder {
 
                 }
 
-                if (upper * 100 / charArray.length * 100 >=  Core.instance().getConfig().getProcentCapital() * 100) {
-                    Core.instance().debug("else if 2");
+                if (upper * 100 / charArray.length * 100 >=  core.getConfig().getProcentCapital() * 100) {
+                    core.debug("else if 2");
                     word = word.toLowerCase();
                     words[i] = word;
                     caps = true;
@@ -106,13 +108,13 @@ public class Adfinder {
     public int checkForAdvertising(Check check) {
         int advertising = 0;
         // CHECK FOR IP PATTERN if it's turned on.
-        if (Core.instance().getConfig().isIPDetection()) {
+        if (core.getConfig().isIPDetection()) {
             advertising = checkForIPPattern(check);
-            Core.instance().debug("Checking for IP");
+            core.debug("Checking for IP");
         }
         //if it marks it as advertising on the IP pattern, we don't want to check if for the web pattern
-        if (advertising == 0 && Core.instance().getConfig().isUrlDetection()) {
-            Core.instance().debug("Checking for web");
+        if (advertising == 0 && core.getConfig().isUrlDetection()) {
+            core.debug("Checking for web");
             advertising = checkForWebPattern(check);
         }
 
@@ -130,7 +132,7 @@ public class Adfinder {
      */
     public void sendWarning(Player player, String message, int type, int where) {
         //todo the where makes no sense tbh.
-        Core.instance().debug("SENDING WARNING!!!!");
+        core.debug("SENDING WARNING!!!!");
         //First we gonna warn the admins (ops) about the player and what he chatted. 
         if ((type == 1 && plugin.getConfig().getBoolean("AdWarnAdmins")) || (type == 2 && plugin.getConfig().getBoolean("   SpamWarnAdmins"))) {
             Set<OfflinePlayer> tempOps = Bukkit.getServer().getOperators();
@@ -143,7 +145,7 @@ public class Adfinder {
         }
 
         // Start logging and sending the warning
-        Core.instance().getLogger().log(player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
+        core.getLogger().log(core,player.getDisplayName(),typeToX(type, 1),message,whereToTXT(where));
 
         Bukkit.getServer().getLogger().info(plugin.getFromLanguageAndTag("logWarning").replace("%PLAYER%", player.getDisplayName()).replace("%TYPE%", typeToX(type, 2)).replace("%WHERE%", whereToTXT(where)).replace("%MESSAGE%", message));
         //adding a warning to the player.
@@ -198,7 +200,7 @@ public class Adfinder {
         String broadcastMessage = plugin.getColorfullLanguageAndTag("PlayerActionTaken").replace("%PLAYER%", player.getDisplayName()).replace("%ACTION%", getActionType(command)).replace("%FOR%", typeToX(type, 2));
         command = command.replaceAll("<player>", player.getName()).replaceAll("<time>", plugin.getConfig().getString("Time"));
         warn.remove(player);
-        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, plugin, broadcastMessage, typeToX(type, 2), player.getDisplayName()));
+        plugin.getServer().getScheduler().runTask(plugin, new AdfinderAction(command, core, broadcastMessage, typeToX(type, 2), player.getDisplayName()));
 
     }
 
@@ -324,7 +326,7 @@ public class Adfinder {
             //We catch this but does nothing to it because we dont need to :)
             //Because if the Double.ParseDouble throws the exception then it can't parse it.
         }
-        Core.instance().debug("isNumbers: " + rtnbool);
+        core.debug("isNumbers: " + rtnbool);
         return rtnbool;
     }
 
@@ -344,10 +346,10 @@ public class Adfinder {
             if (regexMatcher.group().length() != 0) {
                 if (ipPattern.matcher(message).find()) {
                     String advertisement = regexMatcher.group().trim();
-                    Core.instance().debug(regexMatcher.group());
-                    if (!Core.instance().getConfig().getWhitelistLine().contains(advertisement)) {
+                    core.debug(regexMatcher.group());
+                    if (!core.getConfig().getWhitelistLine().contains(advertisement)) {
                         advertising = 1;
-                        Core.instance().debug("found in ip pattern!");
+                        core.debug("found in ip pattern!");
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                     } else {
@@ -369,17 +371,17 @@ public class Adfinder {
         int advertising = 0;
         String message = check.getMessage().toLowerCase();
         Matcher regexMatcherurl = webpattern.matcher(message);
-        Core.instance().debug("Message: " + message);
+        core.debug("Message: " + message);
 
         while (regexMatcherurl.find()) {
             String advertisement = regexMatcherurl.group().trim().replaceAll("www.", "").replaceAll("http://", "").replaceAll("https://", "");
 
-            Core.instance().debug(advertisement + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
+            core.debug(advertisement + "g" + "reg:" + regexMatcherurl.group().length() + " group lenght" + regexMatcherurl.group().length());
             if (regexMatcherurl.group().length() != 0 && advertisement.length() != 0) {
-                Core.instance().debug(regexMatcherurl.group().trim() + " + test");
+                core.debug(regexMatcherurl.group().trim() + " + test");
                 if (webpattern.matcher(message).find()) {
                     if (checkInWhitelist(advertisement)) {
-                        Core.instance().debug("for this" + advertisement);
+                        core.debug("for this" + advertisement);
                         message = message.replace(advertisement, "Advertisement");
                         check.setMessage(message);
                         advertising = 1;
@@ -395,24 +397,24 @@ public class Adfinder {
 
     public boolean checkInWhitelist(String text) {
         boolean advertised = true;
-        if (Core.instance().getConfig().getWhitelistLine().contains(text)) {
+        if (core.getConfig().getWhitelistLine().contains(text)) {
             advertised = false;
         } else {
-            if (Core.instance().getConfig().getWhitelistLine().size() > 0) {
-                for (String whitelistItem : Core.instance().getConfig().getWhitelistLine()) {
+            if (core.getConfig().getWhitelistLine().size() > 0) {
+                for (String whitelistItem : core.getConfig().getWhitelistLine()) {
                     if (whitelistItem.startsWith("*") && whitelistItem.endsWith("*")) {
                         advertised = !text.contains(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.startsWith("*")) {
                         advertised = !text.endsWith(whitelistItem.replace("*", ""));
                     } else if (whitelistItem.endsWith("*")) {
                         advertised = !text.startsWith(whitelistItem.replace("*", ""));
-                        Core.instance().debug(advertised ? "true" : "false");
+                        core.debug(advertised ? "true" : "false");
                     }
                     if (!advertised) {
-                        Core.instance().debug("Found it!");
+                        core.debug("Found it!");
                         break;
                     }
-                    Core.instance().debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
+                    core.debug("looking at " + whitelistItem + (advertised ? " true" : " false"));
                 }
             }
         }
@@ -428,10 +430,10 @@ public class Adfinder {
 
         if (plugin.getConfig().getBoolean("useSimpleWebPattern")) {
             webpattern = Pattern.compile(webpatternSimple);
-            Core.instance().debug("Simple pattern loaded");
+            core.debug("Simple pattern loaded");
         } else {
             webpattern = Pattern.compile(webpatternAdvanced);
-            Core.instance().debug("Advanced pattern loaded");
+            core.debug("Advanced pattern loaded");
         }
     }
 

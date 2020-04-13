@@ -16,25 +16,11 @@ public class Core {
     private Properties language;
     private boolean DEBUG = true;
 
-    private static Core instance;
-
 
     public Core(AntiAd plugin){
-        instance = this;
         this.plugin = plugin;
-
         logger = new Logger();
     }
-
-
-
-
-
-
-    public static Core instance() {
-        return instance;
-    }
-
 
     public Config getConfig(){
         return config;
@@ -42,7 +28,7 @@ public class Core {
 
     public void createConfig(boolean spamDetection, boolean urlDetection, boolean IPDetection, boolean log, boolean checkWordLenght, boolean notifyMessage, int numbers, int procentCapital, String whitelistLineLocation, String language) {
 
-        this.config = new Config(spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, whitelistLineLocation, language);
+        this.config = new Config(this, spamDetection, urlDetection, IPDetection, log, checkWordLenght, notifyMessage, numbers, procentCapital, whitelistLineLocation, language);
         setLanguage(config.getLanguage());
 
         config.loadWhitelist(whitelistLineLocation);

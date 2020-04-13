@@ -5,10 +5,10 @@
  */
 package com.github.antiad.AntiAd;
 
-import java.text.Normalizer;
-
 import com.github.antiad.AntiAd.model.Core;
 import org.bukkit.entity.Player;
+
+import java.text.Normalizer;
 
 /**
  * @author Franz
@@ -16,12 +16,14 @@ import org.bukkit.entity.Player;
 public class Check {
 
     private final Adfinder adfinder;
+    private final Core core;
     private final Player player;
     private boolean spam, advertisement, caps;
     private String message;
 
-    public Check(AntiAd plugin, Player player) {
-        this.adfinder = plugin.getAdfinder();
+    public Check(Core core, Player player) {
+        this.adfinder = core.getPlugin().getAdfinder();
+        this.core = core;
         this.player = player;
     }
 
@@ -31,10 +33,10 @@ public class Check {
         this.message = message;
         boolean rtnbool = false;
         int ad = 0;
-        Core.instance().debug("We are testing player " + player.getName() + " Msg: " + message + "  type: " + type + "    checkSpam" + checkForSpam);
+        core.debug("We are testing player " + player.getName() + " Msg: " + message + "  type: " + type + "    checkSpam" + checkForSpam);
         // if the player hasn't permission the bypass advertising then we check if for advertising.
         if (!player.hasPermission("antiad.bypass.ad")) {
-            Core.instance().debug("Checking for advertising.");
+            core.debug("Checking for advertising.");
             ad = adfinder.checkForAdvertising(this);
         }
 
@@ -44,7 +46,7 @@ public class Check {
             rtnbool = true;
         } else if (ad == 0) {
             //if it's not advertising then check for spam
-            if (Core.instance().getConfig().isSpamDetection() && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
+            if (core.getConfig().isSpamDetection() && checkForSpam && !player.hasPermission("antiad.bypass.spam")) {
                 spam = adfinder.checkForSpam(this);
                 if (spam) {
                     adfinder.sendWarning(player, message, 2, type);

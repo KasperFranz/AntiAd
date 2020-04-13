@@ -19,9 +19,9 @@ public class Logger {
      * @param message The message the player is spamming/ advertisement)
      * @param where Where was it spammed, so we can see that for future problems.
      */
-    public void log(String player,String type,String message,String where) {
-        Core.instance().debug("Begin to log:" + message);
-        if(Core.instance().getConfig().getLog()){
+    public void log(Core core,String player,String type,String message,String where) {
+        core.debug("Begin to log:" + message);
+        if(core.getConfig().getLog()){
             try {
                 try (BufferedWriter write = new BufferedWriter(new FileWriter("plugins/AntiAd/Log.txt", true))) {
                     write.append(now("[yyyy-MM-dd HH:mm:ss]"))
@@ -37,7 +37,7 @@ public class Logger {
                     write.flush();
                 }
             } catch (IOException ex) {
-                Core.instance().logMessage(Level.WARNING,Core.instance().getMessage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
+                core.logMessage(Level.WARNING,core.getMessage("ERRORLogSave").replace("%MESSAGE%", ex.getMessage()));
             }
         }
     }
