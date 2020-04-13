@@ -1,14 +1,16 @@
 package com.github.antiad.AntiAd;
 
+import com.github.antiad.AntiAd.model.Core;
+import com.github.antiad.AntiAd.model.Metrics;
+import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
-import com.github.antiad.AntiAd.model.Core;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The main class for this bukkit plugin :)
@@ -67,6 +69,10 @@ public class AntiAd extends JavaPlugin {
 
         getLogger().info(getFromLanguage("enable").replaceAll("%PLUGIN%", getDescription().getName()).replaceAll("%VERSION%", getDescription().getVersion()));
         Update update = new Update(this,52014);
+
+
+        Metrics metrics = new Metrics(core);
+
     }
 
     /**
