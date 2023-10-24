@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20230618</version>
+            <version>20231013</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
